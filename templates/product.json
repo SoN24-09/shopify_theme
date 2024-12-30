@@ -45,6 +45,13 @@
             "custom_liquid": "<p class=\"product__date\">製造期間： </p>"
           }
         },
+        "custom_variant_picker_UJxfLL": {
+          "type": "custom-variant_picker",
+          "settings": {
+            "color_option_name": "レバーの色",
+            "color_mappings": "{\"ディープブラウン色（旧ウェンゲブラック/ダークブラウン色）\":\"#FFCCFF\",\n\"パールホワイト色\":\"#33CCFF\"}"
+          }
+        },
         "variant-picker": {
           "type": "variant_picker",
           "settings": {
@@ -102,6 +109,7 @@
         "price",
         "sku_JHbkpY",
         "custom_liquid_T9qVXj",
+        "custom_variant_picker_UJxfLL",
         "variant-picker",
         "quantity-selector",
         "buy_buttons",

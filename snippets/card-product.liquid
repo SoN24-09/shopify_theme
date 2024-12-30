@@ -126,7 +126,8 @@
         assign qty_rules = true
       endif
     -%}
-    {%- if card_product.variants.size > 1 or qty_rules -%}
+    {% comment %} 
+     {%- if card_product.variants.size > 1 or qty_rules -%}
       <modal-opener data-modal="#QuickAdd-{{ card_product.id }}">
         <button
           id="{{ product_form_id }}-submit"
@@ -165,8 +166,25 @@
           <div id="QuickAddInfo-{{ card_product.id }}" class="quick-add-modal__content-info"></div>
         </div>
       </quick-add-modal>
-    {%- else -%}
+    {%- else -%} 
+     {% endcomment %}
+     <div class="cart-area-wrap">
+      <button class="toggle-cart">カートに入れる</button>
+      <div class="cart-area">
+        {% comment %}<button class="add-to-cart">カートに追加する</button> {% endcomment %}
       <product-form data-section-id="{{ section.id }}">
+        <script type="application/json">{{ card_product.variants | json }}</script>
+          {% if card_product.variants.size > 1 %}
+            <span>オプションを選択してください</span>
+            {% for option in card_product.options_with_values %}
+              <span>{{ option.name }}</span>
+              <select class="dropdown-select" data-option="{{ forloop.index }}">
+                {% for value in option.values %}
+                  <option value="{{ value }}">{{ value }}</option>
+                {% endfor %}
+              </select>
+            {% endfor %}
+          {% endif %}
         {%- form 'product',
           card_product,
           id: product_form_id,
@@ -183,6 +201,11 @@
               disabled
             {% endif %}
           >
+            <div class="quantity-container">
+              <button class="quantity-btn" type="button" onclick="this.nextElementSibling.stepDown()">-</button>
+              <input type="number" name="quantity" class="quantity-input" value="1" min="1">
+              <button class="quantity-btn" type="button" onclick="this.previousElementSibling.stepUp()">+</button>
+            </div>
           <button
             id="{{ product_form_id }}-submit"
             type="submit"
@@ -215,7 +238,9 @@
           </button>
         {%- endform -%}
       </product-form>
-    {%- endif -%}
+    </div>
+  </div>
+    {% comment %} {%- endif -%} {% endcomment %}
   </div>
 {%- else -%}
   {%- liquid

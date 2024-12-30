@@ -68,7 +68,7 @@
     </div>
   {%- endfor -%}
 
-  <select name="id" data-variant-select>
+  <select name="id" class="hidden" data-variant-select>
     {% for variant in product.variants %}
       <option 
         value="{{ variant.id }}"

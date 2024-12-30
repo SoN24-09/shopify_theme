@@ -37,7 +37,6 @@
     if value.available
       assign option_disabled = false
     endif
-
   -%}
 
   {%- capture input_id -%}
@@ -114,7 +113,7 @@
       {% if option_disabled -%}
         {{- 'products.product.value_unavailable' | t: option_value: value -}}
       {%- else -%}
-         {{- value-}}
+        {{- value -}}
       {%- endif %}
     </option>
   {%- endif -%}
