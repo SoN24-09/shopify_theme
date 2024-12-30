@@ -1,0 +1,28 @@
+<div class="filter-section {% unless mobile %}small-hide{% endunless %}">
+    <h3 class="filter-title">カテゴリから探す</h3>
+    <ul class="category-list">
+      {% assign categories = collections %}
+      {% for category in categories %}
+        {% if category.metafields.custom.level == 1 %}
+          <li style="order: {{ category.metafields.custom.sort }}">
+            <div class="sub-accordion {% if category.metafields.custom.children != blank %}has-children{% endif %}" data-toggle="cat{{ category.handle }}">
+              {% if category.featured_image != blank %}
+                <img src="{{ category.featured_image | image_url }}" alt="カテゴリアイコン">{{ category.title }}
+              {% endif %}
+            </div>
+            {% if category.metafields.custom.children != blank %}
+              <div id="cat{{ category.handle }}" class="sub-panel">
+                <ul>
+                  {% for child_category in category.metafields.custom.children.value %}
+                    <li>
+                      <a href="{{ child_category.url }}">{{ child_category.title }}</a>
+                    </li>
+                  {% endfor %}
+                </ul>
+              </div>
+            {% endif %}
+          </li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  </div>

@@ -11,10 +11,16 @@ if (!customElements.get('product-form')) {
         this.cart = document.querySelector('cart-notification') || document.querySelector('cart-drawer');
         this.submitButton = this.querySelector('[type="submit"]');
         this.submitButtonText = this.submitButton.querySelector('span');
+        this.selectOptions = this.querySelectorAll('.dropdown-select');
+        this.variants = JSON.parse(this.querySelector('[type="application/json"]').innerHTML)
 
         if (document.querySelector('cart-drawer')) this.submitButton.setAttribute('aria-haspopup', 'dialog');
 
         this.hideErrors = this.dataset.hideErrors === 'true';
+
+        this.selectOptions.forEach(opt => {
+          opt.addEventListener('change', this.onSelectChange.bind(this));
+        })
       }
 
       onSubmitHandler(evt) {
@@ -115,6 +121,33 @@ if (!customElements.get('product-form')) {
         }
       }
 
+      onSelectChange(e){
+        function arraysAreEqual(arr1, arr2) {
+          if (arr1.length !== arr2.length) {
+            return false;
+          }
+        
+          for (let i = 0; i < arr1.length; i++) {
+            if (arr1[i] !== arr2[i]) {
+              return false;
+            }
+          }
+        
+          return true;
+        }
+        var options = [];
+        this.selectOptions.forEach(o => options.push(o.value));
+        var selected_variant = this.variants.find(v => {
+          return arraysAreEqual(v.options, options);
+        })
+        this.form.querySelector('[name=id]').value = selected_variant.id
+        if(selected_variant.featured_image != null){
+          this.closest('.product-item').querySelector('.cate-item-img a img').src = selected_variant.featured_image.src
+          this.closest('.product-item').querySelector('.cate-item-img a img').setAttribute('srcset',selected_variant.featured_image.src)
+        }
+        this.closest('.product-item').querySelector('.period').innerText = selected_variant.sku
+      }
+
       toggleSubmitButton(disable = true, text) {
         if (disable) {
           this.submitButton.setAttribute('disabled', 'disabled');
@@ -131,3 +164,68 @@ if (!customElements.get('product-form')) {
     }
   );
 }
+
+document.querySelectorAll('.toggle-cart').forEach(button => {
+  button.addEventListener('click', () => {
+    const cartArea = button.nextElementSibling;
+    const isVisible = cartArea.style.display === 'block';
+    document.querySelectorAll('.cart-area').forEach(area => area.style.display = 'none');
+    cartArea.style.display = isVisible ? 'none' : 'block';
+  });
+});
+
+document.addEventListener('click', (event) => {
+  const isClickInside = event.target.closest('.cart-area-wrap');
+  if (!isClickInside) {
+    document.querySelectorAll('.cart-area').forEach(area => area.style.display = 'none');
+  }
+});
+
+
+/*カスタムドロップダウン*/
+// ドロップダウンのすべてのボタンにクリックイベントを設定
+document.querySelectorAll('.dropdown-button').forEach((button) => {
+  button.addEventListener('click', function () {
+    const dropdown = this.nextElementSibling;
+
+    // 他のドロップダウンを閉じる
+    document.querySelectorAll('.dropdown-menu').forEach((menu) => {
+      if (menu !== dropdown) {
+        menu.style.display = 'none';
+      }
+    });
+
+    // 現在のドロップダウンを切り替え
+    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+  });
+});
+
+// 各ドロップダウンのアイテムにクリックイベントを設定
+document.querySelectorAll('.dropdown-item').forEach((item) => {
+  item.addEventListener('click', function () {
+    const dropdownMenu = this.closest('.dropdown-menu');
+    const dropdownButton = dropdownMenu.previousElementSibling;
+
+    // 選択された値をボタンに反映
+    const selectedText = this.querySelector('span').textContent;
+    dropdownButton.textContent = selectedText;
+
+    // ドロップダウンを閉じる
+    dropdownMenu.style.display = 'none';
+
+    // 必要なら選択された値を処理
+    console.log('選択された値:', this.getAttribute('data-value'));
+  });
+});
+
+// ページのどこかをクリックしたときにドロップダウンを閉じる
+document.addEventListener('click', function (event) {
+  const isDropdown = event.target.closest('.custom-dropdown');
+
+  if (!isDropdown) {
+    document.querySelectorAll('.dropdown-menu').forEach((menu) => {
+      menu.style.display = 'none';
+    });
+  }
+});
+
