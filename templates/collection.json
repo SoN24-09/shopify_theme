@@ -20,11 +20,6 @@
     },
     "product-grid": {
       "type": "main-collection-product-grid",
-      "custom_css": [
-        ".grid {column-gap: 0; row-gap: 0;}",
-        ".cate_leftmenu {margin-right: 30px;}",
-        ".grid--4-col-desktop .grid__item {width: calc(25% - 0px * 3 / 4); max-width: calc(25% - 0px * 3 / 4);}"
-      ],
       "settings": {
         "products_per_page": 16,
         "columns_desktop": 4,

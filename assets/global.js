@@ -472,12 +472,10 @@ class MenuDrawer extends HTMLElement {
       setTimeout(() => {
         detailsElement.classList.add('menu-opening');
         summaryElement.setAttribute('aria-expanded', true);
-        if (!document.body.classList.contains('collection')) {
-          parentMenuElement && parentMenuElement.classList.add('submenu-open');
-          !reducedMotion || reducedMotion.matches
-            ? addTrapFocus()
-            : summaryElement.nextElementSibling.addEventListener('transitionend', addTrapFocus);
-        }
+        parentMenuElement && parentMenuElement.classList.add('submenu-open');
+        !reducedMotion || reducedMotion.matches
+          ? addTrapFocus()
+          : summaryElement.nextElementSibling.addEventListener('transitionend', addTrapFocus);
       }, 100);
     }
   }
@@ -637,12 +635,10 @@ class ModalDialog extends HTMLElement {
 
   hide() {
 
-    const excludedIds = ['next-btn', 'prev-btn'];
-    const targetId = event.target.id;
-    if (excludedIds.includes(targetId)) {
-        return;
+    if (event && event.target) {
+      const button = event.target.closest('button');
+      if (button && (button.id === 'next-btn' || button.id === 'prev-btn')) return;
     }
-
     document.body.classList.remove('overflow-hidden');
     document.body.dispatchEvent(new CustomEvent('modalClosed'));
     this.removeAttribute('open');
@@ -1280,10 +1276,10 @@ if (!customElements.get('bulk-add')) {
 class Calendar extends HTMLElement {
   constructor() {
     super();
-    this.calendar = new Date(this.dataset.year, parseInt(this.dataset.month) - 1);
-    this.localDate = new Date(this.dataset.year, parseInt(this.dataset.month) - 1);
+    this.calendar = new Date(this.dataset.year,parseInt(this.dataset.month)-1);
+    this.localDate = new Date(this.dataset.year,parseInt(this.dataset.month)-1);
     this.prevMonthLastDate = null;
-    this.calWeekDays = ["日", "月", "火", "水", "木", "金", "土"];
+    this.calWeekDays = ["日","月", "火", "水", "木", "金", "土"];
     this.calMonthName = [
       "1月",
       "2月",
@@ -1344,7 +1340,7 @@ class Calendar extends HTMLElement {
     );
   }
   plotSelectors() {
-    this.innerHTML += `<div class="calendar-inner">
+      this.innerHTML += `<div class="calendar-inner">
       <div class="calendar-today-date">
         ${this.localDate.getFullYear()}年${this.calMonthName[this.localDate.getMonth()]} 
       </div>
@@ -1481,8 +1477,8 @@ document.querySelectorAll('.custom-dropdown').forEach((box) => {
     menu.classList.toggle('active');
   })
 })
-document.addEventListener('click', (e) => {
-  if (!e.target.classList.contains('dropdown-button')) {
+document.addEventListener('click',(e) => {
+  if(!e.target.classList.contains('dropdown-button')){
     document.querySelectorAll('.custom-dropdown').forEach((box) => {
       var menu = box.querySelector('.dropdown-menu');
       menu.classList.remove('active')

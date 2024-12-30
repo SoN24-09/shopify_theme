@@ -59,25 +59,6 @@
         "padding_bottom": 0
       }
     },
-    "custom_liquid_ULj9Yg": {
-      "type": "custom-liquid",
-      "disabled": true,
-      "settings": {
-        "custom_liquid": "<div class=\"header-login-wrapper\">\n    <div class=\"page-width page-width-desktop\">\n      <div class=\"sp_only\"><a href=\"/account/register\"><img src=\"/cdn/shop/files/regist_10_off_sp.png\" alt=\"新規会員登録で10％ｵﾌ\"></a></div>    \n    <div class=\"header-login__buttons\">\n      <ul>\n        <li class=\"pc_only\"><a href=\"/account/register\"><img src=\"/cdn/shop/files/regist_10_off.png\" alt=\"新規会員登録で10％ｵﾌ\"></a></li>\n        <li><button type=\"submit\" class=\"button_regist\"><a href=\"/account/register\"><span>新規会員登録</span></a></button></li>\n        <li><button type=\"submit\" class=\"button_login\"><a href=\"/account/login\"><span>ログイン</span></a></button></li>\n      </ul>\n    </div>\n  </div>",
-        "color_scheme": "",
-        "padding_top": 0,
-        "padding_bottom": 0
-      }
-    },
-    "custom_liquid_gBRfFj": {
-      "type": "custom-liquid",
-      "settings": {
-        "custom_liquid": "<div class=\"header-login-wrapper\">\n    <div class=\"page-width page-width-desktop\">\n     \n    <div class=\"header-login__buttons\">\n      <ul>\n        <li><button type=\"submit\" class=\"button_mypage\"><a href=\"/account\"><span>マイページ</span></a></button></li>\n        <li><button type=\"submit\" class=\"button_logout\"><a href=\"/account/logout\"><span>ログアウト</span></a></button></li>\n      </ul>\n    </div>\n  </div>",
-        "color_scheme": "",
-        "padding_top": 0,
-        "padding_bottom": 0
-      }
-    },
     "top_news_GbkUgr": {
       "type": "top-news",
       "settings": {
@@ -96,8 +77,6 @@
   "order": [
     "announcement-bar",
     "header",
-    "custom_liquid_ULj9Yg",
-    "custom_liquid_gBRfFj",
     "top_news_GbkUgr",
     "search_bar_dfajYV"
   ]

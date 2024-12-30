@@ -129,9 +129,9 @@
                     id="Details-{{ filter.param_name | escape }}-{{ section.id }}"
                     class="{% if filter_type == 'horizontal' %}disclosure-has-popup facets__disclosure{% else %} facets__disclosure-vertical{% endif %} js-filter"
                     data-index="{{ forloop.index }}"
-                    {% comment %} {% if filter_type == 'vertical' and forloop.index == 1 %}
+                    {% if filter_type == 'vertical' and forloop.index == 1 %}
                       open
-                    {% endif %} {% endcomment %}
+                    {% endif %}
                   >
                     <summary
                       class="facets__summary caption-large focus-offset"
@@ -300,9 +300,9 @@
                     id="Details-{{ filter.param_name | escape }}-{{ section.id }}"
                     class="{% if filter_type == 'horizontal' %}disclosure-has-popup facets__disclosure{% else %} facets__disclosure-vertical{% endif %} js-filter"
                     data-index="{{ forloop.index }}"
-                    {% comment %} {% if filter_type == 'vertical' and forloop.index == 1 %}
+                    {% if filter_type == 'vertical' and forloop.index == 1 %}
                       open
-                    {% endif %} {% endcomment %}
+                    {% endif %}
                   >
                     <summary class="facets__summary caption-large focus-offset">
                       <div>
@@ -508,13 +508,6 @@
               class="mobile-facets__main has-submenu gradient"
             >
               {%- if enable_filtering -%}
-                <div class="filter-section">
-                  <div class="search-box">
-                      <input type="text" name="q" class="search-input" placeholder="例：JA-128DOA">
-                      <button type="button" class="search-button"></button>
-                  </div>
-                  <p class="info-text"><a href="#">ロットNoについて</a></p>
-                </div>
                 {%- for filter in results.filters -%}
                   {% liquid
                     assign presentation = filter.presentation | default: default_presentation
@@ -536,7 +529,7 @@
                           <div>
                             <span>{{ filter.label | escape }}</span>
                             <span class="mobile-facets__arrow">
-                              {{- 'icon-chevron.svg' | inline_asset_content -}}
+                              {{- 'icon-arrow.svg' | inline_asset_content -}}
                             </span>
                           </div>
                         </summary>
@@ -678,7 +671,7 @@
                           <div>
                             <span>{{ filter.label | escape }}</span>
                             <span class="mobile-facets__arrow">
-                              {{- 'icon-chevron.svg' | inline_asset_content -}}
+                              {{- 'icon-arrow.svg' | inline_asset_content -}}
                             </span>
                           </div>
                         </summary>
@@ -721,7 +714,6 @@
                       </details>
                   {% endcase %}
                 {%- endfor -%}
-                {% render 'filter-by-category',mobile: true %}
               {%- endif -%}
 
               {%- if enable_sorting -%}

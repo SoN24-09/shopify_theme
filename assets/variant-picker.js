@@ -32,12 +32,30 @@ class VariantSelectors extends HTMLElement {
     if (variantId && this.variantSelect) {
       const option = Array.from(this.variantSelect.options).find(opt => opt.value === variantId);
       if (option) {
-        Array.from(this.variantSelect.options).forEach(opt => opt.selected = false);
-        option.selected = true;
-        
+        this.variantSelect.value = variantId;
         const variantTitle = option.text;
         const variantValues = variantTitle.split(' / ');
-        this.updateButtonsAndDropdowns(variantValues);
+        console.log("buttons",this.buttons);
+        
+        this.buttons.forEach((button, index) => {
+          const textElement = button.querySelector('[data-option-text]');
+          if (textElement && variantValues[index]) {
+            textElement.textContent = variantValues[index].trim();
+            console.log("textElement[index]",textElement);
+            
+            const activeColorElement = button.querySelector('[data-color]');
+            if (activeColorElement) {
+              const color = this.getColorForValue(variantValues[index]);
+              if (color) {
+                activeColorElement.style.backgroundColor = color;
+              } else {
+                activeColorElement.style.backgroundColor = 'transparent';
+              }
+            }
+          }
+        });
+        
+        this.renderVariantSection(variantId);
       }
     }
   }
@@ -61,7 +79,9 @@ class VariantSelectors extends HTMLElement {
       const colorValue = colorElement.getAttribute('data-color-value');
       const color = this.getColorForValue(colorValue);
       if (color) {
-        colorElement.style.setProperty('--variant-color', color);
+        colorElement.style.backgroundColor = color;
+      } else {
+        colorElement.style.backgroundColor = 'transparent';
       }
     });
 
@@ -71,19 +91,15 @@ class VariantSelectors extends HTMLElement {
         const currentVariantColor = button.querySelector('[data-option-text]')?.textContent.trim();
         const color = this.getColorForValue(currentVariantColor);
         if (color) {
-          activeColorElement.style.setProperty('--variant-color', color);
+          activeColorElement.style.backgroundColor = color;
+        } else {
+          activeColorElement.style.backgroundColor = 'transparent';
         }
       }
     });
   }
 
   setupEventListeners() {
-    // Close dropdowns when clicking outside
-    document.addEventListener('click', () => {
-      this.closeAllDropdowns();
-    });
-
-    // Button click handlers
     this.buttons.forEach(button => {
       button.addEventListener('click', (event) => {
         event.stopPropagation();
@@ -98,7 +114,6 @@ class VariantSelectors extends HTMLElement {
       });
     });
 
-    // Option click handlers
     this.dropdowns.forEach((dropdown, index) => {
       const button = dropdown.previousElementSibling;
       const options = dropdown.querySelectorAll('.variant-selector__option');
@@ -113,12 +128,11 @@ class VariantSelectors extends HTMLElement {
           if (activeColorElement) {
             const color = this.getColorForValue(selectedValue);
             if (color) {
-              activeColorElement.style.setProperty('--variant-color', color);
+              activeColorElement.style.backgroundColor = color;
+            } else {
+              activeColorElement.style.backgroundColor = 'transparent';
             }
           }
-
-          options.forEach(opt => opt.classList.remove('selected'));
-          option.classList.add('selected');
 
           this.updateVariantSelection(index, selectedValue);
           dropdown.classList.remove('is-open');
@@ -126,23 +140,15 @@ class VariantSelectors extends HTMLElement {
       });
     });
 
-    // Listen for variant:changed event
-    document.addEventListener('variant:changed', (event) => {
-      if (event.detail.variant && this.variantSelect) {
-        const variantId = event.detail.variantId;
-        const option = Array.from(this.variantSelect.options).find(opt => opt.value === variantId);
-        
-        if (option) {
-          Array.from(this.variantSelect.options).forEach(opt => opt.selected = false);
-          option.selected = true;
-          
-          const variantValues = option.text.split(' / ');
-          this.updateButtonsAndDropdowns(variantValues);
-        }
-      }
+    document.addEventListener('click', () => {
+      this.closeAllDropdowns();
     });
 
-    // Handle select change
+    document.addEventListener('variant:changed', (event) => {
+      if (event.target !== this) {
+        this.onVariantChanged(event.detail);
+      }
+    });
     this.variantSelect.addEventListener('change', (event) => {
       const selectedOption = event.target.options[event.target.selectedIndex];
       const variantValues = selectedOption.text.split(' / ');
@@ -160,34 +166,180 @@ class VariantSelectors extends HTMLElement {
     const selections = Array.from(this.buttons).map(button => 
       button.querySelector('[data-option-text]').textContent.trim()
     );
+    
     selections[optionIndex] = value;
 
-    const matchingOption = Array.from(this.variantSelect.options).find(option => {
-      const variantValues = option.text.split(' / ');
-      return variantValues.every((val, index) => val.trim() === selections[index]);
-    });
+    if (this.variantSelect) {
+      const option = Array.from(this.variantSelect.options).find(option => {
+        const variantTitle = option.text;
+        const variantValues = variantTitle.split(' / ');
+        console.log("variantValues",value);
+        return variantValues[optionIndex].trim() === value;
+      });
 
-    if (matchingOption) {
-      Array.from(this.variantSelect.options).forEach(opt => opt.selected = false);
-      matchingOption.selected = true;
+      if (option) {
+        this.variantSelect.value = option.value;
+        const variantInputs = document.querySelectorAll('input[name="id"]');
+        variantInputs.forEach(input => {
+          input.value = option.value;
+        });
+        
+        const productForms = document.querySelectorAll('form[action*="/cart/add"]');
+        productForms.forEach(form => {
+          const currentAction = new URL(form.action, window.location.origin);
+          if (currentAction.searchParams.has('variant')) {
+            currentAction.searchParams.set('variant', option.value);
+          }
+          form.action = currentAction.toString();
+        });
 
-      if (history.replaceState) {
-        const url = new URL(window.location.href);
-        url.searchParams.set('variant', matchingOption.value);
-        window.history.replaceState({ path: url.href }, '', url.href);
+        const changeEvent = new CustomEvent('change', {
+          bubbles: true,
+          detail: {
+            variant: {
+              id: option.value,
+              title: option.text,
+              available: !option.disabled,
+              optionValues: selections
+            }
+          }
+        });
+        this.variantSelect.dispatchEvent(changeEvent);
+
+        if (history.replaceState) {
+          const url = new URL(window.location.href);
+          url.searchParams.set('variant', option.value);
+          window.history.replaceState({ path: url.href }, '', url.href);
+        }
+
+        this.renderVariantSection(option.value);
+      }
+    }
+  }
+
+  async renderVariantSection(variantId) {
+    const productInfo = this.closest('product-info');
+    if (!productInfo) return;
+
+    const sectionId = productInfo.dataset.section;
+    const productUrl = window.location.pathname;
+
+    try {
+      const response = await fetch(`${productUrl}?variant=${variantId}&section_id=${sectionId}`);
+      if (!response.ok) throw new Error(response.statusText);
+
+      const html = await response.text();
+      const parser = new DOMParser();
+      const newDocument = parser.parseFromString(html, 'text/html');
+      
+      this.updatePriceElement(newDocument, sectionId);
+      this.updateVariantInfo(newDocument, sectionId);
+      this.updateInventoryStatus(newDocument, sectionId);
+      this.updateMediaGallery(newDocument, sectionId);
+      
+      this.dispatchVariantChangeEvent(newDocument, sectionId, variantId);
+    } catch (error) {
+      console.error('Error updating variant:', error);
+    }
+  }
+
+  updatePriceElement(newDocument, sectionId) {
+    this.updateElement('price', newDocument, sectionId);
+    this.updateElement('compare-price', newDocument, sectionId);
+    this.updateElement('unit-price', newDocument, sectionId);
+  }
+
+  updateVariantInfo(newDocument, sectionId) {
+    this.updateElement('Sku', newDocument, sectionId);
+    this.updateElement('variant-title', newDocument, sectionId);
+    this.updateElement('variant-barcode', newDocument, sectionId);
+  }
+
+  updateInventoryStatus(newDocument, sectionId) {
+    this.updateElement('Inventory', newDocument, sectionId);
+    this.updateElement('available', newDocument, sectionId);
+  }
+
+  updateElement(elementId, newDocument, sectionId) {
+    const currentElement = document.getElementById(`${elementId}-${sectionId}`);
+    const newElement = newDocument.getElementById(`${elementId}-${sectionId}`);
+    
+    if (currentElement && newElement) {
+      currentElement.innerHTML = newElement.innerHTML;
+      if (newElement.classList.contains('hidden')) {
+        currentElement.classList.add('hidden');
+      } else {
+        currentElement.classList.remove('hidden');
+      }
+    }
+  }
+
+  updateMediaGallery(newDocument, sectionId) {
+    const mediaGallery = document.querySelector('media-gallery');
+    if (!mediaGallery) return;
+
+    const mediaGallerySource = mediaGallery.querySelector('ul');
+    const mediaGalleryDestination = newDocument.querySelector('media-gallery ul');
+
+    if (mediaGallerySource && mediaGalleryDestination) {
+      mediaGallerySource.innerHTML = mediaGalleryDestination.innerHTML;
+
+      const variant = this.getSelectedVariantData(newDocument);
+      if (variant?.featured_media?.id) {
+        mediaGallery.setActiveMedia(`${sectionId}-${variant.featured_media.id}`, true);
       }
 
-      const changeEvent = new CustomEvent('change', {
-        bubbles: true,
-        detail: {
-          variant: {
-            id: matchingOption.value,
-            title: matchingOption.text,
-            optionValues: selections
+      const modalContent = document.querySelector(`#ProductModal-${this.dataset.section} .product-media-modal__content`);
+      const newModalContent = newDocument.querySelector('product-modal .product-media-modal__content');
+      if (modalContent && newModalContent) {
+        modalContent.innerHTML = newModalContent.innerHTML;
+      }
+    }
+  }
+
+  getSelectedVariantData(content) {
+    const variantData = content.querySelector('[data-selected-variant]')?.innerHTML;
+    try {
+      return variantData ? JSON.parse(variantData) : null;
+    } catch (e) {
+      console.error('Error parsing variant data:', e);
+      return null;
+    }
+  }
+
+  dispatchVariantChangeEvent(newDocument, sectionId, variantId) {
+    const event = new CustomEvent('variant:changed', {
+      bubbles: true,
+      detail: {
+        html: newDocument,
+        sectionId: sectionId,
+        variant: this.getSelectedVariantData(newDocument),
+        variantId: variantId
+      }
+    });
+    this.dispatchEvent(event);
+  }
+
+  onVariantChanged(detail) {
+    if (detail.variant && detail.variant.optionValues) {
+      this.buttons.forEach((button, index) => {
+        const value = detail.variant.optionValues[index];
+        const textElement = button.querySelector('[data-option-text]');
+        if (textElement) {
+          textElement.textContent = value;
+        }
+
+        // Update color when variant changes
+        const colorElement = button.querySelector('[data-color]');
+        if (colorElement) {
+          const color = this.getColorForValue(value);
+          if (color) {
+            colorElement.style.backgroundColor = color;
+          } else {
+            colorElement.style.backgroundColor = 'transparent';
           }
         }
       });
-      this.variantSelect.dispatchEvent(changeEvent);
     }
   }
 
@@ -207,7 +359,9 @@ class VariantSelectors extends HTMLElement {
       if (colorElement) {
         const color = this.getColorForValue(selectedValue);
         if (color) {
-          colorElement.style.setProperty('--variant-color', color);
+          colorElement.style.backgroundColor = color;
+        } else {
+          colorElement.style.backgroundColor = 'transparent';
         }
       }
 
@@ -216,6 +370,19 @@ class VariantSelectors extends HTMLElement {
       const options = dropdown.querySelectorAll('.variant-selector__option');
       options.forEach(option => {
         const value = option.getAttribute('data-value');
+        
+        // Update option color
+        const optionColorElement = option.querySelector('[data-color-value]');
+        if (optionColorElement) {
+          const optionColor = this.getColorForValue(value);
+          if (optionColor) {
+            optionColorElement.style.backgroundColor = optionColor;
+          } else {
+            optionColorElement.style.backgroundColor = 'transparent';
+          }
+        }
+        
+        // Update selected state
         if (value === selectedValue) {
           option.classList.add('selected');
         } else {
@@ -225,5 +392,7 @@ class VariantSelectors extends HTMLElement {
     });
   }
 }
+
+
 
 customElements.define('variant-selectors', VariantSelectors);

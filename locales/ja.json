@@ -283,7 +283,7 @@
       }
     },
     "cart": {
-      "title": "ショッピングカート",
+      "title": "あなたのカート",
       "caption": "カートアイテム",
       "remove_title": "{{ title }}を削除する",
       "note": "注文に関する特別な指示・備考",
@@ -434,7 +434,7 @@
     "log_out": "ログアウト",
     "login_page": {
       "cancel": "キャンセル",
-      "create_account": "新規会員登録",
+      "create_account": "アカウントを作成する",
       "email": "メール",
       "forgot_password": "パスワードをお忘れですか?",
       "guest_continue": "続行",
@@ -461,12 +461,12 @@
       "success": "パスワードを更新するためのリンクが記載されたメールを送信しました。"
     },
     "register": {
-      "title": "新規会員登録",
+      "title": "アカウントを作成する",
       "first_name": "名",
       "last_name": "姓",
       "email": "メール",
       "password": "パスワード",
-      "submit": "同意して会員登録する"
+      "submit": "作成する"
     },
     "reset_password": {
       "title": "アカウントのパスワードをリセットする",
