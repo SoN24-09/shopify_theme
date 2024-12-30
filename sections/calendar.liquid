@@ -1,0 +1,141 @@
+{{ 'calendar.css' | asset_url | stylesheet_tag }}
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+<div class="color-{{ section.settings.color_scheme }} gradient isolate">
+  <div class="page-width section-{{ section.id }}-padding">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="collage-wrapper-title inline-richtext {{ section.settings.heading_size }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+        {{ section.settings.heading }}
+      </h2>
+    {%- endif -%}
+    <div class="calendars">
+        {% for block in section.blocks %}
+            {% assign days_off = block.settings.days_off | strip | split: '|' %}
+            {% for day in days_off %}
+                {% style %}
+                    .number-item[data-num="{{ day }}"][data-month="{{ block.settings.month }}"][data-year="{{ block.settings.year }}"]{
+                        background: #e88d58;
+                        color: #fff;
+                    }
+                {% endstyle %}
+            {% endfor %}
+            <calendar-element data-year="{{ block.settings.year }}" data-month="{{ block.settings.month }}" class="calendar"></calendar-element>
+        {% endfor %}
+    </div>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Calendar",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "default": "t:sections.collage.settings.heading.default",
+      "label": "営業日カレンダー"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        {
+          "value": "h2",
+          "label": "t:sections.all.heading_size.options__1.label"
+        },
+        {
+          "value": "h1",
+          "label": "t:sections.all.heading_size.options__2.label"
+        },
+        {
+          "value": "h0",
+          "label": "t:sections.all.heading_size.options__3.label"
+        },
+        {
+          "value": "hxl",
+          "label": "t:sections.all.heading_size.options__4.label"
+        },
+        {
+          "value": "hxxl",
+          "label": "t:sections.all.heading_size.options__5.label"
+        }
+      ],
+      "default": "h1",
+      "label": "t:sections.all.heading_size.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
+    }
+  ],
+  "max_blocks": 2,
+  "blocks": [
+    {
+      "name": "Month",
+      "type": "month",
+      "settings": [
+        {
+            "type": "number",
+            "id": "year",
+            "label": "Year",
+            "default": 2025
+        },
+        {
+            "type": "range",
+            "id": "month",
+            "min": 1,
+            "max": 12,
+            "step": 1,
+            "unit": "M",
+            "label": "Month",
+            "default": 1
+        },
+        {
+            "type": "textarea",
+            "id": "days_off",
+            "label": "Days off",
+            "default": "1|5",
+            "info": "Days are separated by |"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Calendar"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,298 @@
+{{ 'section-collection-list.css' | asset_url | stylesheet_tag }}
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-slider.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+{%- endstyle -%}
+
+{%- liquid
+  assign card_color_scheme = settings.card_color_scheme
+  assign card_style = settings.card_style
+  if wrapper_class == null or wrapper_class == 'none'
+    assign card_color_scheme = settings.collection_card_color_scheme
+    assign card_style = settings.collection_card_style
+  endif
+-%}
+
+<div class="section-{{ section.id }}-padding">
+  <div class="color-{{ section.settings.color_scheme }} gradient">
+    <div class="collection-list-wrapper page-width isolate{% if show_mobile_slider %} page-width-desktop{% endif %}{% if section.settings.title == blank %} no-heading{% endif %}{% if section.settings.show_view_all == false or section.blocks.size > collections.size %} no-mobile-link{% endif %} section-{{ section.id }}-padding">
+    {% if section.settings.title != blank%}
+      <div class="title-wrapper-with-link title-wrapper--self-padded-mobile">
+        <h2 class="title {{ section.settings.heading_size }}">
+          {{ section.settings.title }}
+        </h2>
+      </div>
+    {% endif %}
+    <slider-component class="slider-mobile-gutter{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+    <ul class="collection-list grid grid--{{ section.settings.columns }}-col-desktop grid--{{ section.settings.columns_mobile }}-col-tablet-down" role="list">
+      {%- for block in section.blocks -%}
+        <li class="collection-list__item grid__item" {{ block.shopify_attributes }}>
+          <div class="card-wrapper animate-arrow collection-card-wrapper">
+            <div class="card card--{{ section.settings.card_style }} 
+              {% if block.settings.collection.featured_image %} card--media{% else %} card--text{% endif %}
+              {% if section.settings.card_style == 'card' %} color-{{ section.settings.color_scheme }} gradient{% endif %}
+              {% if section.settings.extend_height %} card--extend-height{% endif %}
+              {% if block.settings.collection.featured_image == nil and section.settings.card_style == 'card' %} ratio{% endif %}"
+              style="--ratio-percent: 100%;">
+              <div class="card__inner {% if section.settings.card_style == 'standard' %}color-{{ section.settings.color_scheme }} gradient{% endif %}
+                {% if block.settings.collection.featured_image or section.settings.card_style == 'standard' %} ratio{% endif %}"
+                style="--ratio-percent: 38%;">
+                {%- if block.settings.collection.featured_image -%}
+                  <div class="card__media">
+                    <div class="media media-img media--transparent media--hover-effect">
+                      <img
+                        srcset="{%- if block.settings.collection.featured_image.width >= 165 -%}{{ block.settings.collection.featured_image | image_url: width: 165 }} 165w,{%- endif -%}
+                          {%- if block.settings.collection.featured_image.width >= 330 -%}{{ block.settings.collection.featured_image | image_url: width: 330 }} 330w,{%- endif -%}
+                          {%- if block.settings.collection.featured_image.width >= 535 -%}{{ block.settings.collection.featured_image | image_url: width: 535 }} 535w,{%- endif -%}
+                          {%- if block.settings.collection.featured_image.width >= 750 -%}{{ block.settings.collection.featured_image | image_url: width: 750 }} 750w,{%- endif -%}
+                          {%- if block.settings.collection.featured_image.width >= 1000 -%}{{ block.settings.collection.featured_image | image_url: width: 1000 }} 1000w,{%- endif -%}
+                          {%- if block.settings.collection.featured_image.width >= 1500 -%}{{ block.settings.collection.featured_image | image_url: width: 1500 }} 1500w,{%- endif -%}
+                          {{ block.settings.collection.featured_image | image_url }} {{ block.settings.collection.featured_image.width }}w"
+                        src="{{ block.settings.collection.featured_image | image_url: width: 1500 }}"
+                    
+                        alt="{{ block.settings.collection.featured_image.alt | escape }}"
+                        height="{{ block.settings.collection.featured_image.height }}"
+                        width="{{ block.settings.collection.featured_image.width }}"
+                        loading="lazy"
+                        class="motion-reduce"> 
+                    </div>
+                  </div>
+                {%- endif -%}
+                {%- if block.settings.collection == blank -%}
+                  <div class="card__media">
+                    {{ placeholder_image }}
+                  </div>
+                {%- else -%}
+                  <div class="card__content">
+                    <div class="card__information">
+                      <h3 class="card__heading">
+                        {{ block.settings.collection.metafield.custom.redirect_link }}
+                        <a class="full-unstyled-link" 
+                          {% if block.settings.collection == blank %}
+                            role="link" aria-disabled="true"
+                          {% else %}
+                            href= {{ block.settings.collection.metafields.custom.redirect_link.value }}
+                          {% endif %}
+                        > 
+                        </a>
+                      </h3>
+                    </div>
+                  </div>
+                {%- endif -%}
+              </div>
+              
+              {%- if block.settings.collection != blank and section.settings.card_style == 'card' or block.settings.collection.featured_image -%}
+                <div class="card__content">
+                  <div class="card__information">
+                    <h3 class="card__heading">
+                      <a {% if block.settings.collection == blank %} 
+                        role="link" aria-disabled="true"{% else %}
+                        href= {{section.settings.href}}
+                      {% endif %} class="full-unstyled-link">
+                        {%- if block.settings.collection.title != blank and section.settings.show_title -%}
+                          {{- block.settings.collection.title | escape -}}
+                        {%- endif -%}
+                      </a>
+                    </h3>
+                    {%- if section.settings.show_description and block.settings.collection.description != blank -%}
+                      <p class="card__caption">
+                        {{- block.settings.collection.description | strip_html | truncatewords: 12 -}}
+                      </p>
+                    {%- endif -%}
+                  </div>
+                </div>
+              {%- endif -%}
+            </div>
+          </div>
+        </li>
+      {%- endfor -%}
+    </ul>
+    </slider-component>
+    </div>
+  </div>
+</div>
+
+
+{% schema %}
+{
+  "name": "Collection Link List",
+  "tag": "section",
+  "class": "section section-collection-list",
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        {
+          "value": "h2",
+          "label": "t:sections.all.heading_size.options__1.label"
+        },
+        {
+          "value": "h1",
+          "label": "t:sections.all.heading_size.options__2.label"
+        },
+        {
+          "value": "h0",
+          "label": "t:sections.all.heading_size.options__3.label"
+        },
+        {
+          "value": "hxl",
+          "label": "t:sections.all.heading_size.options__4.label"
+        },
+        {
+          "value": "hxxl",
+          "label": "t:sections.all.heading_size.options__5.label"
+        }
+      ],
+      "default": "h1",
+      "label": "t:sections.all.heading_size.label"
+    },
+    {
+      "type": "select",
+      "id": "columns",
+      "options": [
+        {
+          "value": "1",
+          "label": "1 Columns"
+        },
+        {
+          "value": "2",
+          "label": "2 Columns"
+        }
+      ],
+      "default": "1",
+      "label": "Columns"
+    },
+
+    {
+      "type": "checkbox",
+      "id": "show_title",
+      "default": false,
+      "label": "Display Title"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "default": false,
+      "label": "Display Description"
+    },
+    {
+      "type": "url",
+      "id": "href",
+      "label": "Link LP"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "info": "t:sections.all.colors.has_cards_info",
+      "default": "scheme-1"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "default": false,
+      "label": "t:sections.collection-list.settings.show_view_all.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.collection-list.settings.header_mobile.content"
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "options": [
+        {
+          "value": "1",
+          "label": "t:sections.collection-list.settings.columns_mobile.options__1.label"
+        },
+        {
+          "value": "2",
+          "label": "t:sections.collection-list.settings.columns_mobile.options__2.label"
+        },
+        {
+          "value": "3",
+          "label": "t:sections.collection-list.settings.columns_mobile.options__3.label"
+        }
+      ],
+      "default": "1",
+      "label": "t:sections.collection-list.settings.columns_mobile.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "swipe_on_mobile",
+      "default": false,
+      "label": "t:sections.collection-list.settings.swipe_on_mobile.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "featured_collection",
+      "name": "t:sections.collection-list.blocks.featured_collection.name",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "t:sections.collection-list.blocks.featured_collection.settings.collection.label"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection Link List",
+      "blocks": [
+        {
+          "type": "featured_collection"
+        },
+        {
+          "type": "featured_collection"
+        },
+      ]
+    }
+  ]
+}
+{% endschema %}

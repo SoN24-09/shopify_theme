@@ -1,0 +1,607 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero-slideshow": {
+      "type": "slideshow",
+      "settings": {
+        "layout": "full_bleed",
+        "slide_height": "small",
+        "slider_visual": "dots",
+        "auto_rotate": false,
+        "change_slides_speed": 5,
+        "image_behavior": "none",
+        "show_text_below": true,
+        "accessibility_info": "ブランドについてのスライドショー"
+      }
+    },
+    "all-products": {
+      "type": "featured-collection",
+      "disabled": true,
+      "settings": {
+        "title": "特集コレクション",
+        "heading_size": "h2",
+        "description": "",
+        "show_description": true,
+        "description_style": "subtitle",
+        "collection": "all",
+        "products_to_show": 24,
+        "columns_desktop": 6,
+        "full_width": false,
+        "show_view_all": true,
+        "view_all_style": "solid",
+        "enable_desktop_slider": false,
+        "color_scheme": "scheme-1",
+        "image_ratio": "adapt",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "none",
+        "columns_mobile": "2",
+        "swipe_on_mobile": false,
+        "padding_top": 24,
+        "padding_bottom": 24
+      }
+    },
+    "rich_text_daqpCk": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_Fjj6EE": {
+          "type": "heading",
+          "settings": {
+            "heading": "CATEGORY",
+            "heading_size": "h2"
+          }
+        },
+        "text_4VmDfX": {
+          "type": "text",
+          "settings": {
+            "text": "<p>カテゴリー</p>"
+          }
+        }
+      },
+      "block_order": [
+        "heading_Fjj6EE",
+        "text_4VmDfX"
+      ],
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 0
+      }
+    },
+    "collection-list": {
+      "type": "collection-list",
+      "blocks": {
+        "collection-0": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "浄水カートリッジ"
+          }
+        },
+        "featured_collection_XiQ6iV": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "インテリアドア"
+          }
+        },
+        "collection-1": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "キッチン"
+          }
+        },
+        "collection-2": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "フローリング"
+          }
+        },
+        "collection-3": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "洗面化粧台"
+          }
+        },
+        "featured_collection_CAcnQF": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "収納-棚板"
+          }
+        },
+        "featured_collection_gLdgAe": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "室内窓"
+          }
+        },
+        "featured_collection_yeGji8": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "階段部材"
+          }
+        },
+        "featured_collection_LNfV47": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "浴室"
+          }
+        },
+        "featured_collection_LxTbkq": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "エクステリア"
+          }
+        },
+        "featured_collection_8VU4cg": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "補修材"
+          }
+        },
+        "featured_collection_FGqKX8": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "その他造作材"
+          }
+        }
+      },
+      "block_order": [
+        "collection-0",
+        "featured_collection_XiQ6iV",
+        "collection-1",
+        "collection-2",
+        "collection-3",
+        "featured_collection_CAcnQF",
+        "featured_collection_gLdgAe",
+        "featured_collection_yeGji8",
+        "featured_collection_LNfV47",
+        "featured_collection_LxTbkq",
+        "featured_collection_8VU4cg",
+        "featured_collection_FGqKX8"
+      ],
+      "custom_css": [
+        ".collection-list-wrapper {max-width: 1000px;}",
+        ".card__media img {padding: 30px;}",
+        ".card__heading {font-size: 1rem; text-align: center;}",
+        "@media screen and (max-width: 790px) {.card__media img {padding: 7px; } .card__heading {font-size: 1.3rem; }}"
+      ],
+      "settings": {
+        "title": "",
+        "heading_size": "h2",
+        "image_ratio": "square",
+        "columns_desktop": 6,
+        "color_scheme": "scheme-1",
+        "show_view_all": false,
+        "columns_mobile": "3",
+        "swipe_on_mobile": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "collection_link_list_JVXiLx": {
+      "type": "collection-link-list",
+      "blocks": {
+        "featured_collection_iQPwmb": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "簡単-お悩み解決ガイド"
+          }
+        }
+      },
+      "block_order": [
+        "featured_collection_iQPwmb"
+      ],
+      "settings": {
+        "title": "",
+        "heading_size": "h1",
+        "columns": "1",
+        "show_title": false,
+        "show_description": false,
+        "href": "",
+        "color_scheme": "",
+        "show_view_all": false,
+        "columns_mobile": "1",
+        "swipe_on_mobile": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "rich_text_4iDH9q": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_x9FeWU": {
+          "type": "heading",
+          "settings": {
+            "heading": "CAMPAIGN",
+            "heading_size": "h2"
+          }
+        },
+        "text_i4QqJY": {
+          "type": "text",
+          "settings": {
+            "text": "<p>特集一覧</p>"
+          }
+        }
+      },
+      "block_order": [
+        "heading_x9FeWU",
+        "text_i4QqJY"
+      ],
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 0
+      }
+    },
+    "custom_collection_jgNEaK": {
+      "type": "custom-collection",
+      "blocks": {
+        "featured_collection_bfXeik": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "新規会員登録で10-off"
+          }
+        },
+        "featured_collection_anBXBc": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "サンディング始めました"
+          }
+        },
+        "featured_collection_JycNWm": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "浄水器カートリッジお知らせサービス"
+          }
+        },
+        "featured_collection_eyhRpN": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "出張メンテナンスもおまかせ"
+          }
+        }
+      },
+      "block_order": [
+        "featured_collection_bfXeik",
+        "featured_collection_anBXBc",
+        "featured_collection_JycNWm",
+        "featured_collection_eyhRpN"
+      ],
+      "disabled": true,
+      "settings": {
+        "title": "",
+        "heading_size": "h1",
+        "columns": "2",
+        "show_title": false,
+        "show_description": false,
+        "hide_on_desktop": false,
+        "hide_on_mobile": false,
+        "href": "",
+        "color_scheme": "",
+        "show_view_all": false,
+        "columns_mobile": "1",
+        "swipe_on_mobile": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "collection_link_list_ch6qXz": {
+      "type": "collection-link-list",
+      "blocks": {
+        "featured_collection_J7g3z6": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "新規会員登録で10-off"
+          }
+        },
+        "featured_collection_RTjDVY": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "サンディング始めました"
+          }
+        },
+        "featured_collection_UVHcja": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "浄水器カートリッジお知らせサービス"
+          }
+        },
+        "featured_collection_dGKGRa": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "出張メンテナンスもおまかせ"
+          }
+        },
+        "featured_collection_zmtJQH": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": ""
+          }
+        }
+      },
+      "block_order": [
+        "featured_collection_J7g3z6",
+        "featured_collection_RTjDVY",
+        "featured_collection_UVHcja",
+        "featured_collection_dGKGRa",
+        "featured_collection_zmtJQH"
+      ],
+      "settings": {
+        "title": "",
+        "heading_size": "h1",
+        "columns": "2",
+        "show_title": false,
+        "show_description": false,
+        "href": "",
+        "color_scheme": "",
+        "show_view_all": false,
+        "columns_mobile": "1",
+        "swipe_on_mobile": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "rich_text_H7LA9M": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_GPrzx9": {
+          "type": "heading",
+          "settings": {
+            "heading": "PICKUP ITEM",
+            "heading_size": "h2"
+          }
+        },
+        "text_BPeP7X": {
+          "type": "text",
+          "settings": {
+            "text": "<p>おすすめ商品</p>"
+          }
+        }
+      },
+      "block_order": [
+        "heading_GPrzx9",
+        "text_BPeP7X"
+      ],
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 0
+      }
+    },
+    "custom_collection_WUtyJK": {
+      "type": "custom-collection",
+      "blocks": {
+        "featured_collection_bA4nUE": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "仕上げてる棚板"
+          }
+        },
+        "featured_collection_AHrezc": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "ダストボックス"
+          }
+        },
+        "featured_collection_FwRRTb": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "68"
+          }
+        },
+        "featured_collection_NgtJW6": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "取手"
+          }
+        }
+      },
+      "block_order": [
+        "featured_collection_bA4nUE",
+        "featured_collection_AHrezc",
+        "featured_collection_FwRRTb",
+        "featured_collection_NgtJW6"
+      ],
+      "disabled": true,
+      "settings": {
+        "title": "",
+        "heading_size": "h1",
+        "columns": "2",
+        "show_title": false,
+        "show_description": false,
+        "hide_on_desktop": false,
+        "hide_on_mobile": false,
+        "href": "",
+        "color_scheme": "",
+        "show_view_all": false,
+        "columns_mobile": "1",
+        "swipe_on_mobile": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "collection_pickup_list_eeERVq": {
+      "type": "collection-pickup-list",
+      "blocks": {
+        "featured_collection_9y9cTN": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "仕上げてる棚板"
+          }
+        },
+        "featured_collection_tpYkPz": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "ダストボックス"
+          }
+        },
+        "featured_collection_RzBKQw": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "68"
+          }
+        },
+        "featured_collection_y3yCWf": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "取手"
+          }
+        }
+      },
+      "block_order": [
+        "featured_collection_9y9cTN",
+        "featured_collection_tpYkPz",
+        "featured_collection_RzBKQw",
+        "featured_collection_y3yCWf"
+      ],
+      "settings": {
+        "title": "",
+        "heading_size": "h1",
+        "columns": "2",
+        "show_title": false,
+        "show_description": true,
+        "href": "",
+        "color_scheme": "",
+        "show_view_all": false,
+        "columns_mobile": "1",
+        "swipe_on_mobile": false,
+        "padding_top": 36,
+        "padding_bottom": 16
+      }
+    },
+    "rich_text_bEU83i": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_D7hQRh": {
+          "type": "heading",
+          "settings": {
+            "heading": "―　新着情報　―",
+            "heading_size": "h1"
+          }
+        }
+      },
+      "block_order": [
+        "heading_D7hQRh"
+      ],
+      "disabled": true,
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 0,
+        "padding_bottom": 40
+      }
+    },
+    "custom_banner_yd3HQL": {
+      "type": "custom-banner",
+      "disabled": true,
+      "settings": {
+        "banner1_image": "shopify://shop_images/another-bnr2_f7500771-e09b-441f-9f0c-d9d223e2d1f0.jpg",
+        "banner1_image_url": "one's store / TOPページ",
+        "banner1_alt_text": "",
+        "banner2_image": "shopify://shop_images/another-bnr1_69f13f21-7530-48d0-8e04-ae312454c75b.jpg",
+        "banner2_image_url": "",
+        "banner2_alt_text": "",
+        "border_radius": 0,
+        "color_scheme": "",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "collection_related_site_list_rF7G4X": {
+      "type": "collection-related-site-list",
+      "blocks": {
+        "featured_collection_GbrYqa": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "ones-store"
+          }
+        },
+        "featured_collection_MYGMR9": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "itaya"
+          }
+        }
+      },
+      "block_order": [
+        "featured_collection_GbrYqa",
+        "featured_collection_MYGMR9"
+      ],
+      "settings": {
+        "title": "関連サイト",
+        "heading_size": "h2",
+        "columns": "2",
+        "show_title": false,
+        "show_description": false,
+        "href": "",
+        "color_scheme": "",
+        "show_view_all": false,
+        "columns_mobile": "1",
+        "swipe_on_mobile": false,
+        "padding_top": 16,
+        "padding_bottom": 16
+      }
+    },
+    "blogs_aVWbQD": {
+      "type": "blogs",
+      "disabled": true,
+      "settings": {
+        "title": "―　新着情報　―",
+        "blog": "news",
+        "display_limit": 2,
+        "post_limit": 4,
+        "open_new_tab": false,
+        "color_scheme": "",
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
+    "custom_liquid_96RnNk": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<style>\n  /* Top Page Topics */\n  .top-topics-wrapper {\n    text-align: center;\n  }\n\n  .top-topics-wrapper h3.heading span {\n    font-size: 1rem;\n    font-weight: 300;\n    display: block;\n    padding-top: 10px;\n  }\n\n  .top-topics-wrapper ul {\n    padding: 0;\n    margin: 0;\n    list-style: none;\n  }\n\n  .top-topics-wrapper li {\n    padding: 10px 0;\n    border-bottom: 1px solid #ccc;\n    text-align: left;\n    font-size: 1.4rem;\n  }\n\n  .top-topics-wrapper .topics_day {\n    color: #999;\n    font-weight: 400;\n    display: inline-block;\n    padding-right: 10px;\n    font-size: 1.2rem;\n  }\n\n  .top-topics-wrapper .button {\n    margin-top: 40px;\n    font-size: 1.2rem;\n    background: #fff;\n    color: #000;\n  }\n\n  /*トピックスアコーディオン*/\n  .top-topics-wrapper .accordion-section {\n    width: 80%;\n    margin: 0 auto;\n    text-align: left;\n  }\n\n  .top-topics-wrapper .accordion-content {\n    max-height: 8.9em;\n    /* 初期表示で2行分の高さに設定 */\n    overflow: hidden;\n    transition: max-height 0.5s ease-in-out;\n  }\n\n  .top-topics-wrapper .read-more-button {\n    background-color: transparent;\n    cursor: pointer;\n    transition: background-color 0.3s ease, color 0.3s ease;\n  }\n\n  .top-topics-wrapper .read-more-button:hover {\n    background-color: #000;\n    color: #fff;\n  }\n\n  /*トピックス注意事項*/\n  .topics-attention {\n    margin: 20px auto;\n    border: 1px solid #000000;\n    text-align: left;\n  }\n\n  .topics-attention .accordion-title {\n    cursor: pointer;\n    padding: 4px 10px 7px;\n    margin-bottom: 0;\n    transition: background-color 0.3s ease;\n    font-size: 1.4rem;\n    position: relative;\n  }\n\n  .topics-attention .accordion-title:hover {\n    opacity: 0.7;\n  }\n\n  .topics-attention .accordion-title::after {\n    content: '+';\n    position: absolute;\n    right: 15px;\n    top: 4px;\n    transition: transform 0.3s ease;\n    font-size: 13px;\n  }\n\n  .accordion-toggle.active .accordion-title::after {\n    content: '-';\n    position: absolute;\n    right: 15px;\n    top: 4px;\n  }\n\n  .topics-attention .accordion-content {\n    max-height: 0;\n    overflow: hidden;\n    transition: max-height 0.5s ease;\n    margin-bottom: 10px;\n  }\n\n  .topics-attention .accordion-content p {\n    margin: 5px 0;\n    font-size: 1.2rem;\n    padding: 0 20px;\n  }\n\n  .topics-attention .accordion-toggle .accordion-content {\n    max-height: 0;\n    /* アコーディオンを閉じた状態 */\n  }\n\n  .topics-attention .accordion-toggle.active .accordion-content {\n    max-height: 300px;\n    /* アコーディオンを展開した時の最大高さ */\n  }\n\n  @media only screen and (max-width: 768px) {\n    .top-topics-wrapper {\n      padding: 0 3%;\n    }\n\n    .top-topics-wrapper .topics_day {\n      display: block;\n    }\n\n    .top-topics-wrapper .accordion-section {\n      width: 95%;\n      /* 横幅を少し縮める */\n    }\n\n    .top-topics-wrapper .accordion-content {\n      max-height: 12em;\n      /* 2行分の高さに調整 (モバイルのフォントサイズに合わせて) */\n    }\n\n    .top-topics-wrapper .read-more-button {\n      font-size: 14px;\n      /* モバイル用にボタンの文字サイズを調整 */\n    }\n\n    .topics-attention .accordion-section {\n      width: 95%;\n    }\n\n    .topics-attention .accordion-title {\n      font-size: 1.2rem;\n    }\n\n    .topics-attention .accordion-content {\n      max-height: 0;\n    }\n\n    .top-topics-wrapper h3.heading_s {\n      font-size: 1.7rem;\n    }\n  }\n</style>\n\n\n<div id=\"top_topics\" class=\"top-topics-wrapper page-width page-width-desktop accordion-section\">\n  <h3 class=\"heading\">TOPICS<span>お知らせ</span></h3>\n\n  <div class=\"accordion-content\" id=\"accordion-content-2\">\n    <ul class=\"no-bullet\">\n      {% assign news_articles = blogs.news.articles %}\n      {% if news_articles.size > 0 %}\n      {% for article in news_articles limit: 5 %}\n      <li>\n        <a class=\"full-unstyled-link\" href=\"{{ article.url }}\">\n          <span class=\"topics_day\">{{ article.published_at | date: '%Y年%m月%d日' }}</span>\n          {{ article.title }}\n        </a>\n      </li>\n      {% endfor %}\n      {% else %}\n      <p class=\"article-template__no-articles\">{{ 'お知らせはまだありません。' }}</p>\n      {% endif %}\n    </ul>\n  </div>\n  <div class=\"button-wrapper\">\n    <button class=\"read-more-button button button--primary\" id=\"read-more-button-top\">さらに読む ↓</button>\n  </div>\n\n</div>\n\n\n<!--アコーディオンjs-->\n<script type=\"text/javascript\">\n  document.getElementById('read-more-button-top').addEventListener('click', function () {\n    var content = document.getElementById('accordion-content-2');\n    var button = document.getElementById('read-more-button-top');\n\n    // アコーディオンが閉じている場合\n    if (content.style.maxHeight === '8.9em' || content.style.maxHeight === '12em' || content.style.maxHeight === '') {\n      content.style.maxHeight = content.scrollHeight + 'px'; // コンテンツ全体を表示\n      button.textContent = '閉じる  ↑'; // ボタンのテキストを変更\n    } else {\n      content.style.maxHeight = window.innerWidth <= 768 ? '12em' : '8.9em'; // 画面幅によって2行表示の高さを設定\n      button.textContent = 'さらに読む  ↓'; // ボタンのテキストを元に戻す\n    }\n  });\n  // 注意事項\n  document.querySelector('.accordion-toggle .accordion-title').addEventListener('click', function () {\n    const currentItem = this.parentNode;\n\n    // アクティブ状態のトグル\n    if (currentItem.classList.contains('active')) {\n      currentItem.classList.remove('active');\n    } else {\n      currentItem.classList.add('active');\n    }\n  });\n\n</script>",
+        "color_scheme": "",
+        "padding_top": 60,
+        "padding_bottom": 52
+      }
+    }
+  },
+  "order": [
+    "hero-slideshow",
+    "all-products",
+    "rich_text_daqpCk",
+    "collection-list",
+    "collection_link_list_JVXiLx",
+    "rich_text_4iDH9q",
+    "custom_collection_jgNEaK",
+    "collection_link_list_ch6qXz",
+    "rich_text_H7LA9M",
+    "custom_collection_WUtyJK",
+    "collection_pickup_list_eeERVq",
+    "rich_text_bEU83i",
+    "custom_banner_yd3HQL",
+    "collection_related_site_list_rF7G4X",
+    "blogs_aVWbQD",
+    "custom_liquid_96RnNk"
+  ]
+}

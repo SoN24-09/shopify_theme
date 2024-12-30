@@ -1,0 +1,508 @@
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: calc({{ section.settings.padding_top }}px * 0.75);
+    padding-bottom: calc({{ section.settings.padding_bottom }}px * 0.75);
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+<div class="color-{{ section.settings.color_scheme }} gradient">
+  <div class="section-{{ section.id }}-padding">
+    <div class="collections-container">
+  {% render 'cate-menu' %}
+
+  <div class="collection">
+    <div class="product-list">
+      <ul class="grid product-grid grid--2-col-tablet-down grid--4-col-desktop">
+        <li class="product-item grid__item">
+          <div class="cate-item-img">
+            <button class="favorite-button">
+              <img src="https://cdn.shopify.com/s/files/1/0915/4474/8324/files/header_icon_favorite.png" alt="ハートアイコン" class="heart-icon" width="16" height="16">
+            </button>
+            <a href="#">
+              <img src="https://cdn.shopify.com/s/files/1/0915/4474/8324/files/image1_65a5df10-639a-4b53-8799-169f50b2ae3f.jpg" alt="商品画像">
+            </a>
+          </div>
+          <div class="card__content">
+            <div class="list-product-labels">
+              <div class="product-label">
+                <span class="icon-compatible" style="background: #51b3a7;color: #ffffff">互換商品あり</span>
+              </div>
+            </div>
+            <h3 class="card__heading">
+              <a href="#">レバーハンドルセット　J型（シルバー）　在庫限り</a>
+            </h3>
+            <div class="part-number">品番：ZH11XC</div>
+            <div class="period">製造期間： 2021/6 ～</div>
+            <div class="color-swatch-list">
+              <div class="custom-dropdown">
+                <button class="dropdown-button">カラーを選択してください</button>
+                <ul class="dropdown-menu">
+                  <li class="dropdown-item" data-value="option1">
+                    <div class="color-swatch__item" style="background-color: #ffffff" title="パールホワイト">●</div>
+                    <span>パールホワイト</span>
+                  </li>
+                  <li class="dropdown-item" data-value="option2">
+                    <div class="color-swatch__item" style="background-color: #f4f0ea" title="ホワイト">●</div>
+                    <span>ホワイト</span>
+                  </li>
+                  <li class="dropdown-item" data-value="option3">
+                    <div class="color-swatch__item" style="background-color: #e7dfc5" title="ペール">●</div>
+                    <span>ペール</span>
+                  </li>
+                  <li class="dropdown-item" data-value="option4">
+                    <div class="color-swatch__item" style="background-color: #d5aa75" title="ナチュラルピンク">●</div>
+                    <span>ナチュラルピンク</span>
+                  </li>
+                  <li class="dropdown-item" data-value="option5">
+                    <div class="color-swatch__item" style="background-color: #ac7b3f" title="ライトクリア">●</div>
+                    <span>ライトクリア</span>
+                  </li>
+                  <li class="dropdown-item" data-value="option6">
+                    <div class="color-swatch__item" style="background-color: #a06d30" title="ライトブラウン">●</div>
+                    <span>ライトブラウン</span>
+                  </li>
+                  <li class="dropdown-item" data-value="option7">
+                    <div class="color-swatch__item" style="background-color: #5d3b11" title="ダークブラウン">●</div>
+                    <span>ダークブラウン</span>
+                  </li>
+                  <li class="dropdown-item" data-value="option8">
+                    <div class="color-swatch__item" style="background-color: #311d04" title="ディープブラウン">●</div>
+                    <span>ディープブラウン</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="price">
+              <p class="product-price">4,180円～5,280円</p>
+            </div>
+          </div>
+          <div class="cart-area-wrap">
+            <button class="toggle-cart">カートに入れる</button>
+            <div class="cart-area">
+              <span><span>オプションを選択してください</span></span>
+              <select class="dropdown-select">
+                <option value="option1">空錠</option>
+                <option value="option2">表示錠</option>
+                <option value="option3">間仕切り錠</option>
+                <option value="option3">鍵付錠</option>
+              </select>
+
+              <div class="quantity-container">
+                <button class="quantity-btn" onclick="this.nextElementSibling.stepDown()">-</button>
+                <input type="number" class="quantity-input" value="1" min="1">
+                <button class="quantity-btn" onclick="this.previousElementSibling.stepUp()">+</button>
+              </div>
+              <button class="add-to-cart">カートに追加する</button>
+            </div>
+          </div>
+        </li>
+
+        <li class="product-item grid__item">
+          <div class="cate-item-img">
+            <button class="favorite-button">
+              <img src="https://cdn.shopify.com/s/files/1/0915/4474/8324/files/header_icon_favorite.png" alt="ハートアイコン" class="heart-icon" width="16" height="16">
+            </button>
+            <a href="#">
+              <img src="https://cdn.shopify.com/s/files/1/0915/4474/8324/files/image1_65a5df10-639a-4b53-8799-169f50b2ae3f.jpg" alt="商品画像">
+            </a>
+          </div>
+          <div class="card__content">
+            <div class="list-product-labels">
+              <div class="product-label">
+                <span class="icon-compatible" style="background: #ee4613;color: #e3f50b">期間限定 20％OFF中 在庫限</span>
+              </div>
+            </div>
+            <h3 class="card__heading">
+              <a href="#">レバーハンドルセット　J型（シルバー）　在庫限り</a>
+            </h3>
+            <div class="part-number">品番：ZH11XC</div>
+            <div class="period">製造期間： 2021/6 ～</div>
+            <div class="color-swatch-list">
+              <div class="custom-dropdown">
+                <button class="dropdown-button">カラーを選択してください</button>
+                <ul class="dropdown-menu">
+                  <li class="dropdown-item" data-value="option1">
+                    <div class="color-swatch__item" style="background-color: #ffffff" title="パールホワイト">●</div>
+                    <span>パールホワイト</span>
+                  </li>
+                  <li class="dropdown-item" data-value="option2">
+                    <div class="color-swatch__item" style="background-color: #f4f0ea" title="ホワイト">●</div>
+                    <span>ホワイト</span>
+                  </li>
+                  <li class="dropdown-item" data-value="option3">
+                    <div class="color-swatch__item" style="background-color: #e7dfc5" title="ペール">●</div>
+                    <span>ペール</span>
+                  </li>
+                  <li class="dropdown-item" data-value="option4">
+                    <div class="color-swatch__item" style="background-color: #d5aa75" title="ナチュラルピンク">●</div>
+                    <span>ナチュラルピンク</span>
+                  </li>
+                  <li class="dropdown-item" data-value="option5">
+                    <div class="color-swatch__item" style="background-color: #ac7b3f" title="ライトクリア">●</div>
+                    <span>ライトクリア</span>
+                  </li>
+                  <li class="dropdown-item" data-value="option6">
+                    <div class="color-swatch__item" style="background-color: #a06d30" title="ライトブラウン">●</div>
+                    <span>ライトブラウン</span>
+                  </li>
+                  <li class="dropdown-item" data-value="option7">
+                    <div class="color-swatch__item" style="background-color: #5d3b11" title="ダークブラウン">●</div>
+                    <span>ダークブラウン</span>
+                  </li>
+                  <li class="dropdown-item" data-value="option8">
+                    <div class="color-swatch__item" style="background-color: #311d04" title="ディープブラウン">●</div>
+                    <span>ディープブラウン</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="price">
+              <p class="product-price">4,180円～5,280円</p>
+            </div>
+          </div>
+          <div class="cart-area-wrap">
+            <button class="toggle-cart">カートに入れる</button>
+            <div class="cart-area">
+              <span>オプションを選択してください</span>
+              <select class="dropdown-select">
+                <option value="option1">オプション1</option>
+                <option value="option2">オプション2</option>
+                <option value="option3">オプション3</option>
+              </select>
+
+              <div class="quantity-container">
+                <button class="quantity-btn" onclick="this.nextElementSibling.stepDown()">-</button>
+                <input type="number" class="quantity-input" value="1" min="1">
+                <button class="quantity-btn" onclick="this.previousElementSibling.stepUp()">+</button>
+              </div>
+              <button class="add-to-cart">カートに追加する</button>
+            </div>
+          </div>
+        </li>
+
+        <li class="product-item grid__item">
+          <div class="cate-item-img">
+            <button class="favorite-button">
+              <img src="https://cdn.shopify.com/s/files/1/0915/4474/8324/files/header_icon_favorite.png" alt="ハートアイコン" class="heart-icon" width="16" height="16">
+            </button>
+            <a href="#">
+              <img src="https://cdn.shopify.com/s/files/1/0915/4474/8324/files/image1_65a5df10-639a-4b53-8799-169f50b2ae3f.jpg" alt="商品画像">
+            </a>
+          </div>
+          <div class="card__content">
+            <div class="list-product-labels">
+              <div class="product-label">
+                <span class="icon-compatible" style="background: #51b3a7;color: #ffffff">互換商品あり</span>
+              </div>
+            </div>
+            <h3 class="card__heading">
+              <a href="#">レバーハンドルセット　J型（シルバー）　在庫限り</a>
+            </h3>
+            <div class="part-number">品番：ZH11XC</div>
+            <div class="period">製造期間： 2021/6 ～</div>
+            <div class="product-item__swatch-list"></div>
+            <div class="price">
+              <p class="product-price">4,180円～5,280円</p>
+            </div>
+          </div>
+          <div class="cart-area-wrap">
+            <button class="toggle-cart">カートに入れる</button>
+            <div class="cart-area">
+              <span>オプションを選択してください</span>
+              <select class="dropdown-select">
+                <option value="option1">オプション1</option>
+                <option value="option2">オプション2</option>
+                <option value="option3">オプション3</option>
+              </select>
+
+              <div class="quantity-container">
+                <button class="quantity-btn" onclick="this.nextElementSibling.stepDown()">-</button>
+                <input type="number" class="quantity-input" value="1" min="1">
+                <button class="quantity-btn" onclick="this.previousElementSibling.stepUp()">+</button>
+              </div>
+              <button class="add-to-cart">カートに追加する</button>
+            </div>
+          </div>
+        </li>
+
+        <li class="product-item grid__item">
+          <div class="cate-item-img">
+            <button class="favorite-button">
+              <img src="https://cdn.shopify.com/s/files/1/0915/4474/8324/files/header_icon_favorite.png" alt="ハートアイコン" class="heart-icon" width="16" height="16">
+            </button>
+            <a href="#">
+              <img src="https://cdn.shopify.com/s/files/1/0915/4474/8324/files/image1_65a5df10-639a-4b53-8799-169f50b2ae3f.jpg" alt="商品画像">
+            </a>
+          </div>
+          <div class="card__content">
+            <div class="list-product-labels">
+              <div class="product-label">
+                <span class="icon-compatible" style="background: #51b3a7;color: #ffffff">互換商品あり</span>
+              </div>
+            </div>
+            <h3 class="card__heading">
+              <a href="#">レバーハンドルセット　J型（シルバー）　在庫限り</a>
+            </h3>
+            <div class="part-number">品番：ZH11XC</div>
+            <div class="period">製造期間： 2021/6 ～</div>
+            <div class="product-item__swatch-list"></div>
+            <div class="price">
+              <p class="product-price">4,180円～5,280円</p>
+            </div>
+          </div>
+          <div class="cart-area-wrap">
+            <button class="toggle-cart">カートに入れる</button>
+            <div class="cart-area">
+              <span>オプションを選択してください</span>
+              <select class="dropdown-select">
+                <option value="option1">オプション1</option>
+                <option value="option2">オプション2</option>
+                <option value="option3">オプション3</option>
+              </select>
+
+              <div class="quantity-container">
+                <button class="quantity-btn" onclick="this.nextElementSibling.stepDown()">-</button>
+                <input type="number" class="quantity-input" value="1" min="1">
+                <button class="quantity-btn" onclick="this.previousElementSibling.stepUp()">+</button>
+              </div>
+              <button class="add-to-cart">カートに追加する</button>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  // メインアコーディオンの制御（常にオープンのセクションはスクリプト対象外）
+  document.querySelectorAll(".accordion").forEach(div => {
+    div.addEventListener("click", () => {
+      const panel = document.getElementById(div.dataset.toggle);
+      const isOpen = panel.classList.contains("open");
+
+      // 他のメインパネルを閉じる
+      document.querySelectorAll(".panel").forEach(p => p.classList.remove("open"));
+      document.querySelectorAll(".accordion").forEach(b => b.classList.remove("open"));
+
+      // 選択されたパネルを切り替え
+      if (!isOpen) {
+        panel.classList.add("open");
+        div.classList.add("open");
+      }
+    });
+  });
+
+  // サブカテゴリアコーディオンの制御
+  document.querySelectorAll(".sub-accordion").forEach(div => {
+    div.addEventListener("click", () => {
+      const subPanel = document.getElementById(div.dataset.toggle);
+      const isSubOpen = subPanel.classList.contains("open");
+
+      // サブパネルを切り替え
+      if (isSubOpen) {
+        subPanel.classList.remove("open");
+        div.classList.remove("open");
+      } else {
+        subPanel.classList.add("open");
+        div.classList.add("open");
+      }
+    });
+  });
+
+  document.querySelectorAll('.toggle-cart').forEach(button => {
+    button.addEventListener('click', () => {
+      const cartArea = button.nextElementSibling;
+      const isVisible = cartArea.style.display === 'block';
+      document.querySelectorAll('.cart-area').forEach(area => area.style.display = 'none');
+      cartArea.style.display = isVisible ? 'none' : 'block';
+    });
+  });
+
+  document.addEventListener('click', (event) => {
+    const isClickInside = event.target.closest('.cart-area-wrap');
+    if (!isClickInside) {
+      document.querySelectorAll('.cart-area').forEach(area => area.style.display = 'none');
+    }
+  });
+
+  /*カスタムドロップダウン*/
+  // ドロップダウンのすべてのボタンにクリックイベントを設定
+  document.querySelectorAll('.dropdown-button').forEach((button) => {
+    button.addEventListener('click', function () {
+      const dropdown = this.nextElementSibling;
+
+      // 他のドロップダウンを閉じる
+      document.querySelectorAll('.dropdown-menu').forEach((menu) => {
+        if (menu !== dropdown) {
+          menu.style.display = 'none';
+        }
+      });
+
+      // 現在のドロップダウンを切り替え
+      dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+    });
+  });
+
+  // 各ドロップダウンのアイテムにクリックイベントを設定
+  document.querySelectorAll('.dropdown-item').forEach((item) => {
+    item.addEventListener('click', function () {
+      const dropdownMenu = this.closest('.dropdown-menu');
+      const dropdownButton = dropdownMenu.previousElementSibling;
+    })
+  })
+</script>
+
+<script type="text/javascript">
+  // メインアコーディオンの制御（常にオープンのセクションはスクリプト対象外）
+  document.querySelectorAll(".accordion").forEach(div => {
+    div.addEventListener("click", () => {
+      const panel = document.getElementById(div.dataset.toggle);
+      const isOpen = panel.classList.contains("open");
+
+      // 他のメインパネルを閉じる
+      document.querySelectorAll(".panel").forEach(p => p.classList.remove("open"));
+      document.querySelectorAll(".accordion").forEach(b => b.classList.remove("open"));
+
+      // 選択されたパネルを切り替え
+      if (!isOpen) {
+        panel.classList.add("open");
+        div.classList.add("open");
+      }
+    });
+  });
+
+  // サブカテゴリアコーディオンの制御
+  document.querySelectorAll(".sub-accordion").forEach(div => {
+    div.addEventListener("click", () => {
+      const subPanel = document.getElementById(div.dataset.toggle);
+      const isSubOpen = subPanel.classList.contains("open");
+
+      // サブパネルを切り替え
+      if (isSubOpen) {
+        subPanel.classList.remove("open");
+        div.classList.remove("open");
+      } else {
+        subPanel.classList.add("open");
+        div.classList.add("open");
+      }
+    });
+  });
+
+</script>
+<script type="text/javascript">
+    document.querySelectorAll('.toggle-cart').forEach(button => {
+      button.addEventListener('click', () => {
+        const cartArea = button.nextElementSibling;
+        const isVisible = cartArea.style.display === 'block';
+        document.querySelectorAll('.cart-area').forEach(area => area.style.display = 'none');
+        cartArea.style.display = isVisible ? 'none' : 'block';
+      });
+    });
+
+    document.addEventListener('click', (event) => {
+      const isClickInside = event.target.closest('.cart-area-wrap');
+      if (!isClickInside) {
+        document.querySelectorAll('.cart-area').forEach(area => area.style.display = 'none');
+      }
+    });
+
+
+    /*カスタムドロップダウン*/
+    // ドロップダウンのすべてのボタンにクリックイベントを設定
+    document.querySelectorAll('.dropdown-button').forEach((button) => {
+      button.addEventListener('click', function () {
+        const dropdown = this.nextElementSibling;
+
+        // 他のドロップダウンを閉じる
+        document.querySelectorAll('.dropdown-menu').forEach((menu) => {
+          if (menu !== dropdown) {
+            menu.style.display = 'none';
+          }
+        });
+
+        // 現在のドロップダウンを切り替え
+        dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+      });
+    });
+
+    // 各ドロップダウンのアイテムにクリックイベントを設定
+    document.querySelectorAll('.dropdown-item').forEach((item) => {
+      item.addEventListener('click', function () {
+        const dropdownMenu = this.closest('.dropdown-menu');
+        const dropdownButton = dropdownMenu.previousElementSibling;
+
+        // 選択された値をボタンに反映
+        const selectedText = this.querySelector('span').textContent;
+        dropdownButton.textContent = selectedText;
+
+        // ドロップダウンを閉じる
+        dropdownMenu.style.display = 'none';
+
+        // 必要なら選択された値を処理
+        console.log('選択された値:', this.getAttribute('data-value'));
+      });
+    });
+
+    // ページのどこかをクリックしたときにドロップダウンを閉じる
+    document.addEventListener('click', function (event) {
+      const isDropdown = event.target.closest('.custom-dropdown');
+
+      if (!isDropdown) {
+        document.querySelectorAll('.dropdown-menu').forEach((menu) => {
+          menu.style.display = 'none';
+        });
+      }
+    });
+
+</script>
+
+
+{% schema %}
+{
+  "name": "Custom Collection Product",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 40
+    }, {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 52
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Collection Product"
+    }
+  ]
+}{% endschema %}

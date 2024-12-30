@@ -1,0 +1,195 @@
+{%- style -%}
+    .section-{{ section.id }}-padding {
+      padding-top: calc({{ section.settings.padding_top }}px * 0.75);
+      padding-bottom: calc({{ section.settings.padding_bottom }}px * 0.75);
+    }
+  
+    @media screen and (min-width: 750px) {
+      .section-{{ section.id }}-padding {
+        padding-top: {{ section.settings.padding_top }}px;
+        padding-bottom: {{ section.settings.padding_bottom }}px;
+      }
+    }
+  
+    .dual-banner {
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+      min-height: 300px;
+    }
+  
+    .dual-banner__item {
+      flex: 1 1 300px;
+      min-width: 300px;
+    }
+  
+    .dual-banner__link {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+  
+    .dual-banner__image {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: {{ section.settings.border_radius }}px;
+    }
+  
+    @media screen and (max-width: 749px) {
+      .dual-banner {
+        gap: 16px;
+      }
+    }
+  {%- endstyle -%}
+  
+  <div class="color-{{ section.settings.color_scheme }} gradient">
+    <div class="page-width section-{{ section.id }}-padding">
+      <div class="dual-banner">
+        <div class="dual-banner__item">
+          {%- if section.settings.banner1_link != blank -%}
+            <a href="{{ section.settings.banner1_link }}" class="dual-banner__link">
+          {%- endif -%}
+            {%- if section.settings.banner1_image != blank -%}
+              <img
+                src="{{ section.settings.banner1_image | image_url: width: 750 }}"
+                alt="{{ section.settings.banner1_image.alt | escape }}"
+                loading="lazy"
+                class="dual-banner__image"
+              >
+            {%- elsif section.settings.banner1_image_url != blank -%}
+              <img
+                src="{{ section.settings.banner1_image_url }}"
+                alt="{{ section.settings.banner1_alt_text }}"
+                loading="lazy"
+                class="dual-banner__image"
+              >
+            {%- endif -%}
+          {%- if section.settings.banner1_link != blank -%}
+            </a>
+          {%- endif -%}
+        </div>
+  
+        <div class="dual-banner__item">
+          {%- if section.settings.banner2_link != blank -%}
+            <a href="{{ section.settings.banner2_link }}" class="dual-banner__link">
+          {%- endif -%}
+            {%- if section.settings.banner2_image != blank -%}
+              <img
+                src="{{ section.settings.banner2_image | image_url: width: 750 }}"
+                alt="{{ section.settings.banner2_image.alt | escape }}"
+                loading="lazy"
+                class="dual-banner__image"
+              >
+            {%- elsif section.settings.banner2_image_url != blank -%}
+              <img
+                src="{{ section.settings.banner2_image_url }}"
+                alt="{{ section.settings.banner2_alt_text }}"
+                loading="lazy"
+                class="dual-banner__image"
+              >
+            {%- endif -%}
+          {%- if section.settings.banner2_link != blank -%}
+            </a>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  {% schema %}
+  {
+    "name": "WoodOne Image banner",
+    "tag": "section",
+    "class": "section",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Banner 1"
+      },
+      {
+        "type": "image_picker",
+        "id": "banner1_image",
+        "label": "Image Upload"
+      },
+      {
+        "type": "text",
+        "id": "banner1_image_url",
+        "label": "Image URL",
+        "info": "Enter an external image URL"
+      },
+      {
+        "type": "text",
+        "id": "banner1_alt_text",
+        "label": "Alt text",
+        "info": "Descriptive alt text for image URL"
+      },
+      {
+        "type": "header",
+        "content": "Banner 2"
+      },
+      {
+        "type": "image_picker",
+        "id": "banner2_image",
+        "label": "Image Upload"
+      },
+      {
+        "type": "text",
+        "id": "banner2_image_url",
+        "label": "Image URL",
+        "info": "Enter an external image URL"
+      },
+      {
+        "type": "text",
+        "id": "banner2_alt_text",
+        "label": "Alt text",
+        "info": "Descriptive alt text for image URL"
+      },
+      {
+        "type": "range",
+        "id": "border_radius",
+        "min": 0,
+        "max": 20,
+        "step": 1,
+        "unit": "px",
+        "label": "Border radius",
+        "default": 0
+      },
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "Color scheme",
+        "default": "background-1"
+      },
+      {
+        "type": "header",
+        "content": "Section padding"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "Top padding",
+        "default": 36
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "Bottom padding",
+        "default": 36
+      }
+    ],
+    "presets": [
+      {
+        "name": "WoodOne Image banner "
+      }
+    ]
+  }
+  {% endschema %}

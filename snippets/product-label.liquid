@@ -1,0 +1,26 @@
+<div class="list-product-labels">
+{% for label in product.metafields.custom.label.value %}
+    <div class="product-label">
+    {% case label %}
+        {% comment %} 1 {% endcomment %}
+        {% when '受注終了' %}
+            <span class="icon-order" style="background: #c63535;color: #ffffff">受注終了</span>
+            {% comment %} 2 {% endcomment %}
+        {% when '廃番' %}
+            <span class="icon-sold-out" style="background: #edae00;color: #ffffff">廃番</span>
+            {% comment %} 10 {% endcomment %}
+        {% when 'New' %}
+            <span class="icon-compatible" style="background: #d5f110;color: #f9030c">New</span>
+            {% comment %} 4 {% endcomment %}
+        {% when '互換商品あり' %}
+            <span class="icon-compatible" style="background: #51b3a7;color: #ffffff">互換商品あり</span>
+            {% comment %} 13 {% endcomment %}
+        {% when '廃番　購入可' %}
+            <span class="icon-compatible" style="background: #edae00;color: #ffffff">廃番　購入可</span>
+            {% comment %} 13 {% endcomment %}
+        {% when '期間限定 20％OFF中 在庫限' %}
+            <span class="icon-compatible" style="background: #ee4613;color: #e3f50b">期間限定 20％OFF中 在庫限</span>
+    {% endcase %}
+    </div>
+{% endfor %}
+</div>

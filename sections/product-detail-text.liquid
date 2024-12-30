@@ -1,0 +1,106 @@
+<div class="page-width">
+  <style>
+    .item-detail-text {
+      padding: 25px 0;
+      border-top: solid 1px #ddd;
+    }
+    .item-detail-table {
+      border-top: solid 1px #ddd;
+      margin: 0 0 80px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border-spacing: 0;
+      empty-cells: show;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      -ms-box-sizing: border-box;
+      -o-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+    .item-detail-table th {
+      width: 120px;
+      padding-right: 10px;
+      font-weight: bold;
+    }
+    .item-detail-table th,
+    .item-detail-table td {
+      border-bottom: solid 1px #ddd;
+      padding: 25px 0;
+      text-align: left;
+      vertical-align: top;
+    }
+    .item-detail-table th,
+    .item-detail-table td {
+      border-bottom: solid 1px #ddd;
+      padding: 25px 0;
+      text-align: left;
+      vertical-align: top;
+    }
+  </style>
+  {% if product.description != blank %}
+    <div class="item-detail-text" bis_skin_checked="1">
+      {{ product.description }}
+    </div>
+  {% endif %}
+  <div class="item-detail-table" bis_skin_checked="1">
+    <table>
+      <tbody>
+        {% if product.metafields.custom.product_name != blank %}
+          <tr>
+            <th>商品名</th>
+            <td>{{ product.metafields.custom.product_name | metafield_tag }}</td>
+          </tr>
+        {% endif %}
+        {% if product.metafields.custom.part_number != blank %}
+          <tr>
+            <th>品番</th>
+            <td>{{ product.metafields.custom.part_number | metafield_tag }}</td>
+          </tr>
+        {% endif %}
+        {% if product.metafields.custom.manufacturing_period != blank %}
+          <tr>
+            <th>製造期間</th>
+            <td>{{ product.metafields.custom.manufacturing_period | metafield_tag }}</td>
+          </tr>
+        {% endif %}
+        {% if product.metafields.custom.package_contents != blank %}
+          <tr>
+            <th>梱包内容</th>
+            <td>{{ product.metafields.custom.package_contents | metafield_tag }}</td>
+          </tr>
+        {% endif %}
+        {% if product.metafields.custom.tools_and_equipment_to_be_used != blank %}
+          <tr>
+            <th>使用する道具・備品</th>
+            <td>{{ product.metafields.custom.tools_and_equipment_to_be_used | metafield_tag }}</td>
+          </tr>
+        {% endif %}
+        {% if product.metafields.custom.remarks != blank %}
+          <tr>
+            <th>備考</th>
+            <td>{{ product.metafields.custom.remarks | metafield_tag }}</td>
+          </tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+  <div class="category-detail-discription clearfix pc-only page-layout-5">{{ product.metafields.custom.detail_description }}</div>
+</div>
+{% schema %}
+{
+  "name": "Product detail text",
+  "limit": 1,
+  "settings": [],
+  "presets": [
+    {
+      "name": "Product detail text",
+      "settings": {}
+    }
+  ],
+  "enabled_on": {
+    "templates": ["product"]
+  }
+}
+{% endschema %}

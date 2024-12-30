@@ -1,0 +1,162 @@
+{%- style -%}
+    .section-{{ section.id }}-padding {
+      padding-top: calc({{ section.settings.padding_top }}px * 0.75);
+      padding-bottom: calc({{ section.settings.padding_bottom }}px * 0.75);
+    }
+
+    @media screen and (min-width: 750px) {
+      .section-{{ section.id }}-padding {
+        padding-top: {{ section.settings.padding_top }}px;
+        padding-bottom: {{ section.settings.padding_bottom }}px;
+      }
+    }
+    .woodone-blog-posts{
+        overflow: unset !important;
+    }
+
+    .top-news-wrapper{
+        background: none;
+    }
+  {%- endstyle -%}
+  
+  {%- liquid
+    assign blog = blogs[section.settings.blog]
+    assign post_limit = section.settings.post_limit
+    assign display_limit = section.settings.display_limit
+  -%}
+  
+  <div class="color-{{ section.settings.color_scheme }} gradient">
+    <div class="section-{{ section.id }}-padding">
+      <div class="top-news-wrapper">
+        <div class="page-width page-width-desktop">
+          <div id="featured_blog_{{ section.id }}" class="top-topics-wrapper page-width page-width-desktop accordion-section">
+            {%- if section.settings.title != blank -%}
+              <h2 class="section-heading">{{ section.settings.title }}</h2>
+            {%- endif -%}
+  
+            <div class="accordion-content woodone-blog-posts" id="accordion-content-{{ section.id }}">
+              {%- if blog != blank and blog.articles_count > 0 -%}
+                <ul class="no-bullet">
+                  {%- for article in blog.articles limit: post_limit -%}
+                    <li class="{% if forloop.index > display_limit %}hidden{% endif %}">
+                      <a class="full-unstyled-link" href="{{ article.url }}" {% if section.settings.open_new_tab %}target="_blank"{% endif %}>
+                        <span class="topics_day">{{ article.published_at | date: "%Y.%m.%d" }}</span>
+                        {{ article.title }}
+                      </a>
+                    </li>
+                  {%- endfor -%}
+                </ul>
+                <div class="button-wrapper">
+                  <button class="read-more-button button button--primary" id="show-more-btn-{{ section.id }}">さらに読む  ↓</button>
+                </div>
+              {%- else -%}
+                <p>No articles found.</p>
+              {%- endif -%}
+            </div>
+          </div>
+
+          <script type="text/javascript">
+            document.addEventListener('DOMContentLoaded', function() {
+                const showMoreBtn = document.getElementById('show-more-btn-{{ section.id }}');
+                showMoreBtn.addEventListener('click', function() {
+                const hiddenPosts = document.querySelectorAll('#featured_blog_{{ section.id }} .hidden');
+                if (hiddenPosts.length > 0) {
+                    hiddenPosts.forEach(post => post.classList.remove('hidden'));
+                    hiddenPosts.forEach(post => post.classList.add('woodone-show'));
+                    showMoreBtn.textContent = '閉じる  ↑';
+                } else {
+                  const showPosts = document.querySelectorAll('#featured_blog_{{ section.id }} .woodone-show');
+                  showPosts.forEach(post => post.classList.add('hidden'));
+                  showMoreBtn.textContent = 'さらに読む  ↓';
+                }
+              });
+            });
+          </script>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  {% schema %}
+  {
+    "name": "WoodOne Blog posts",
+    "tag": "section",
+    "class": "section",
+    "settings": [
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Title",
+        "default": "Blog posts"
+      },
+      {
+        "type": "blog",
+        "id": "blog",
+        "label": "Blogs"
+      },
+      {
+        "type": "range",
+        "id": "display_limit",
+        "min": 2,
+        "max": 12,
+        "step": 1,
+        "default": 5,
+        "label": "Display Post"
+      },
+      {
+        "type": "range",
+        "id": "post_limit",
+        "min": 2,
+        "max": 12,
+        "step": 1,
+        "default": 5,
+        "label": "Limit Post"
+      },
+      {
+        "type": "checkbox",
+        "id": "open_new_tab",
+        "default": false,
+        "label": "Open Tab"
+      },
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "t:sections.all.colors.label",
+        "default": "scheme-1"
+      },
+      {
+        "type": "header",
+        "content": "t:sections.all.padding.section_padding_heading"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "t:sections.all.padding.padding_top",
+        "default": 40
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "t:sections.all.padding.padding_bottom",
+        "default": 52
+      }
+    ],
+    "presets": [
+      {
+        "name": "WoodOne Blog posts",
+        "settings": {
+          "blog": "News",
+          "post_limit": 5
+        }
+      }
+    ]
+  }
+  {% endschema %}

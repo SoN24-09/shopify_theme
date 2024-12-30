@@ -1,0 +1,200 @@
+{% comment %}
+  Renders a product media modal with smooth image navigation
+{% endcomment %}
+
+<product-modal id="ProductModal-{{ section.id }}" class="product-media-modal media-modal">
+  <div
+    class="product-media-modal__dialog color-{{ section.settings.color_scheme }} gradient"
+    role="dialog"
+    aria-label="{{ 'products.modal.label' | t }}"
+    aria-modal="true"
+    tabindex="-1"
+  >
+    <div
+      class="product-media-modal__content color-{{ section.settings.color_scheme }} gradient"
+      role="document"
+      aria-label="{{ 'products.modal.label' | t }}"
+      tabindex="0"
+    >
+      <div id="media-container" class="media-container">
+        {%- for media in product.media limit: 1 -%}
+          {%- liquid
+            if section.settings.hide_variants and variant_images contains media.src or variant_images contains media.id
+              assign variant_image = true
+            else
+              assign variant_image = false
+            endif
+
+            unless media.id == product.selected_or_first_available_variant.featured_media.id
+              render 'product-media', media: media, loop: section.settings.enable_video_looping, variant_image: variant_image
+            endunless
+          -%}
+        {%- endfor -%}
+      </div>
+      <div class="navigation-buttons">
+        <button type="button" id="prev-btn" class="navigation-button left-button">
+          {{ 'icon-prev.svg' | inline_asset_content }} 
+        </button>
+        <button
+          id="ModalClose-{{ section.id }}"
+          type="button"
+          class="navigation-button center-button navigation-button"
+          aria-label="{{ 'accessibility.close' | t }}"
+        >
+          {{ 'icon-close.svg' | inline_asset_content }}
+        </button>
+        <button type="button" id="next-btn" class="navigation-button right-button">
+
+          {{'icon-next.svg' | inline_asset_content}}
+        </button>
+      </div>
+    </div>
+  </div>
+</product-modal>
+
+<style>
+  .navigation-button svg {
+  pointer-events: none;
+}
+  .center-button {
+  background-color: white;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(246, 244, 244, 0.896);
+  cursor: pointer;
+  z-index: 10;
+}
+
+  .navigation-buttons {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    bottom: 3%;
+    left: 50%;
+    transform: translateX(-50%);
+    gap: 16px;
+  }
+
+  .navigation-button {
+    background-color: white;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border-color: black;
+  }
+
+  .media-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .media-container img {
+    top: 0;
+    left: 0;
+    opacity: 1;
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  .media-container img.fade-out {
+    opacity: 0;
+  }
+
+  .media-container img.fade-in {
+    opacity: 1;
+  }
+
+  .navigation-button {
+    z-index: 2;
+    position: relative;
+  }
+
+  .media-container img {
+    max-height: 100vh;
+    max-width: 100%;
+    object-fit: contain;
+    margin: auto;
+    display: block;
+    overflow: hidden;
+  }
+
+  .product-media-modal__content {
+    overflow: hidden;
+  }
+</style>
+
+<script> 
+document.addEventListener('DOMContentLoaded', function(event) {
+   let currentIndex = 0;   
+   const mediaContainer = document.getElementById('media-container');   
+   const mediaItems = {{ product.media | json }};   
+   const totalItems = mediaItems.length;    
+
+   function createMediaElement(media, className = '') {     
+      const variantImage = {{ section.settings.hide_variants | json }} &&        
+         ({{ variant_images | json }}.includes(media.src) || {{ variant_images | json }}.includes(media.id));          
+      
+      const img = document.createElement('img');     
+      img.className = `global-media-settings global-media-settings--no-shadow ${variantImage ? 'product__media-item--variant' : ''} ${className}`;     
+      img.srcset = `${media.preview_image.src} ${media.preview_image.width}w`;     
+      img.sizes = "(min-width: 750px) calc(100vw - 22rem), 900px";     
+      img.src = media.preview_image.src;     
+      img.alt = media.alt || '';     
+      img.loading = "lazy";        
+      img.dataset.mediaId = media.id;          
+      return img;   
+   }    
+
+   async function transitionToNewImage(newIndex) {     
+      const currentImg = mediaContainer.querySelector('img:not(.fade-out)');     
+      const newMedia = mediaItems[newIndex];          
+   
+      const newImg = createMediaElement(newMedia, 'fade-out');     
+      mediaContainer.appendChild(newImg);      
+   
+      newImg.offsetHeight;      
+ 
+      if (currentImg) {       
+         currentImg.classList.add('fade-out');     
+      }      
+   
+      newImg.classList.remove('fade-out');      
+ 
+      await new Promise(resolve => setTimeout(resolve, 300));      
+  
+      if (currentImg) {       
+         currentImg.remove();     
+      }   
+   }    
+
+   document.getElementById('next-btn').addEventListener('click', function(event) {     
+         
+      event.stopPropagation();     
+      const nextIndex = (currentIndex + 1) % totalItems;     
+      transitionToNewImage(nextIndex);     
+      currentIndex = nextIndex;   
+   });    
+
+   document.getElementById('prev-btn').addEventListener('click', function(event) {     
+          
+      event.stopPropagation();     
+      const prevIndex = (currentIndex - 1 + totalItems) % totalItems;     
+      transitionToNewImage(prevIndex);     
+      currentIndex = prevIndex;   
+   });    
+
+   if (mediaItems.length > 0) {     
+      const initialImg = createMediaElement(mediaItems[0]);     
+      mediaContainer.appendChild(initialImg);   
+   } 
+});
+</script>
