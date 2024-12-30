@@ -1,0 +1,31 @@
+<div class="top-search-wrapper" bis_skin_checked="1">
+    <div class="page-width page-width-desktop" bis_skin_checked="1">
+      <div class="search-container" bis_skin_checked="1">
+        <form action="{{ routes.search_url }}" method="get" role="search" >
+          <input type="text" name="q" class="search-input" placeholder="商品名・キーワード・品番を入力">
+          <button type="submit" class="search-button"></button>
+        </form>
+        <div class="more-search" bis_skin_checked="1">
+          <a href="#">ロットNoから年代検索</a>
+        </div>
+      </div>
+    </div>
+</div>
+{% schema %}
+{
+  "name": "Search bar",
+  "limit": 1,
+  "settings": [
+    
+  ],
+  "presets": [
+    {
+      "name": "Search bar"
+    }
+  ],
+  "enabled_on": {
+    "templates": ["*"],
+    "groups": ["header"]
+  }
+}
+{% endschema %}

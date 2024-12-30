@@ -1,0 +1,101 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "name": "t:sections.footer.name",
+  "type": "footer",
+  "sections": {
+    "custom_liquid_QXBNAj": {
+      "type": "custom-liquid",
+      "custom_css": [
+        "h2 {font-size: 1.8rem; text-align: center;}"
+      ],
+      "settings": {
+        "custom_liquid": "<h2>―　営業日カレンダー　―</h2>",
+        "color_scheme": "",
+        "padding_top": 40,
+        "padding_bottom": 24
+      }
+    },
+    "calendar_RCNVGq": {
+      "type": "calendar",
+      "blocks": {
+        "month_N8CPXp": {
+          "type": "month",
+          "settings": {
+            "year": 2024,
+            "month": 12,
+            "days_off": "25|31"
+          }
+        },
+        "month_7Vwx6D": {
+          "type": "month",
+          "settings": {
+            "year": 2025,
+            "month": 1,
+            "days_off": "1|2|3|13"
+          }
+        }
+      },
+      "block_order": [
+        "month_N8CPXp",
+        "month_7Vwx6D"
+      ],
+      "settings": {
+        "heading": "",
+        "heading_size": "h1",
+        "padding_top": 0,
+        "padding_bottom": 36
+      }
+    },
+    "custom_liquid_myRPky": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<div class=\"footer-contents-wrapper\">\n  <div class=\"page-width page-width-desktop\">\n<div class=\"contact-box\">\n  <div class=\"contact-icons\">\n      <div class=\"icon tools\"></div>\n  </div>\n  <p class=\"contact-text\">お施主様からの有料部品<br>交換などのご依頼はこちらへ</p>\n  <div class=\"contact-phone\">\n      <p class=\"phone-number\">0120-813-331</p>\n      <p class=\"business-hours\">\n        営業時間: 平日8:30～17:00<br>\n        休日: 土日・祝日・GW・年末年始・夏季休業\n    </p>\n  </div>\n  <div class=\"contact-btn\">\n  <a href=\"#\" class=\"contact-button\">お問い合わせフォームへ</a>\n</div>\n</div>\n</div>\n</div>",
+        "color_scheme": "",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "custom_liquid_wf8aCD": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<footer class=\"footer\">\n    <div class=\"footer-pc\">\n      <div class=\"footer__content\">\n        <!-- PC用フッター -->\n\n        <div class=\"footer-logo\">\n          <img src=\"/cdn/shop/files/logo-foot.png?v=1733361523\" alt=\"WOODONEロゴ\">\n\n        </div>\n\n        <div class=\"footer-links\">\n          <h3>商品カテゴリー</h3>\n          <ul>\n            <li><a href=\"/collections\">すべての商品</a></li>\n            <li><a href=\"/collections/浄水カートリッジ\">浄水カートリッジ</a></li>\n            <li><a href=\"/collections/インテリアドア\">インテリアドア</a></li>\n            <li><a href=\"/collections/キッチン\">キッチン</a></li>\n            <li><a href=\"/collections/フローリング\">フローリング</a></li>\n            <li><a href=\"/collections/収納・棚板\">収納・棚板</a></li>\n          </ul>\n          <ul>\n            <li><a href=\"/collections/室内窓\">室内窓</a></li>\n            <li><a href=\"/collections/階段部分\">階段部分</a></li>\n            <li><a href=\"/collections/浴室\">浴室</a></li>\n            <li><a href=\"/collections/エクステリア\">エクステリア</a></li>\n            <li><a href=\"/collections/補修材\">補修材</a></li>\n            <li><a href=\"/collections/その他造作材\">その他造作材</a></li>\n          </ul>\n          <h3>ご利用ガイド</h3>\n          <ul>\n            <li><a href=\"/pages/ご利用ガイド\">お買い物の流れ</a></li>\n            <li><a href=\"/pages/ご利用ガイド\">お支払いについて</a></li>\n            <li><a href=\"/pages/ご利用ガイド\">送料について</a></li>\n            <li><a href=\"/pages/ご利用ガイド\">返品交換について</a></li>\n          </ul>\n          <h3>その他</h3>\n          <ul>\n            <li><a href=\"/pages/よくあるご質問\">よくあるご質問</a></li>\n            <li><a href=\"/pages/会社概要\">会社概要</a></li>\n            <li><a href=\"/pages/contact\">お問い合わせ</a></li>\n          </ul>\n        </div>\n      </div>\n      <div class=\"footer-bottom\">\n        <ul>\n          <li><a href=\"/pages/特定商取引法に基づく表記\">特定商品取引法の表記</a></li>\n          <li><a href=\"/pages/個人情報保護方針\">個人情報保護方針</a></li>\n          <li><a href=\"/pages/sitemap\">サイトマップ</a></li>\n        </ul>\n        <p>&copy;WOOD ONE CO.,LTD. All Rights Reserved.</p>\n      </div>\n\n    </div>\n\n    <!-- スマホ用フッター -->\n    <div class=\"footer-sp\">\n      <div class=\"footer__content\">\n\n        <div class=\"footer-logo\">\n          <img src=\"/cdn/shop/files/logo-foot.png?v=1733361523\" alt=\"WOODONEロゴ\">\n\n        </div>\n        <div class=\"footer-links\">\n          <ul>\n            <li><a href=\"/pages/ご利用ガイド\">ご利用ガイド</a></li>\n            <li><a href=\"/pages/よくあるご質問\">よくあるご質問</a></li>\n            <li><a href=\"/pages/会社案内\">会社案内</a></li>\n            <li><a href=\"/pages/お問い合わせ\">お問い合わせ</a></li>\n          </ul>\n        </div>\n        <div class=\"footer-bottom\">\n          <ul>\n            <li><a href=\"/pages/特定商取引法に基づく表記\">特定商品取引法の表記</a></li>\n            <li><a href=\"/pages/個人情報保護方針\">個人情報保護方針</a></li>\n          </ul>\n          <p>&copy;WOOD ONE CO.,LTD. All Rights Reserved.</p>\n        </div>\n      </div>\n    </div>\n  </footer>",
+        "color_scheme": "scheme-1",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "footer": {
+      "type": "footer",
+      "disabled": true,
+      "settings": {
+        "color_scheme": "scheme-4",
+        "newsletter_enable": false,
+        "newsletter_heading": "",
+        "enable_follow_on_shop": false,
+        "show_social": true,
+        "enable_country_selector": false,
+        "enable_language_selector": false,
+        "payment_enable": false,
+        "show_policy": false,
+        "margin_top": 0,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "custom_liquid_QXBNAj",
+    "calendar_RCNVGq",
+    "custom_liquid_myRPky",
+    "custom_liquid_wf8aCD",
+    "footer"
+  ]
+}

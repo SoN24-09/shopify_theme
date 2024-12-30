@@ -1,0 +1,15 @@
+# Ignore environment and temporary files
+.env
+node_modules/
+*.log
+*.tmp
+# Ignore custom config files
+config/custom-settings.json
+# Ignore temporary assets
+assets/temp/
+assets/*.bak
+# Ignore MacOS and system files
+.DS_Store
+Thumbs.db
+# Exclude theme dev tools
+tools/

@@ -1,0 +1,91 @@
+<div class="cate_leftmenu">
+  <div class="filter-container">
+    <h2 class="filter-title">商品を絞り込む</h2>
+    <!-- 常にオープンの「ロットNoから年代検索」 -->
+    <div class="filter-section">
+      <div class="accordion open" data-toggle="section1">ロットNoから年代検索</div>
+      <div class="panel open" id="section1">
+        <div class="search-box">
+          <form action="/search" method="get" role="search">
+            <input type="text" name="q" class="search-input" placeholder="例：JA-128DOA">
+            <button type="submit" class="search-button"></button>
+          </form>
+        </div>
+        <p class="info-text"><a href="#">ロットNoについて</a></p>
+      </div>
+    </div>
+
+    {% render 'facets',
+      results: collection,
+      enable_filtering: section.settings.enable_filtering,
+      enable_sorting: section.settings.enable_sorting,
+      filter_type: section.settings.filter_type,
+      paginate: paginate
+    %}
+
+    <!-- 常にオープンの「カテゴリから探す」 -->
+    <div class="filter-section">
+      <h3 class="filter-title">カテゴリから探す</h3>
+      <ul class="category-list">
+        {% for category in collections %}
+          {% if category.metafields.custom.level == 1 %}
+            <li>
+              <div class="sub-accordion {% if category.metafields.custom.children != blank %}has-children{% endif %}" data-toggle="cat{{ category.handle }}">
+                {% if category.featured_image != blank %}
+                  <img src="{{ category.featured_image | image_url }}" alt="カテゴリアイコン">{{ category.title }}
+                {% endif %}
+              </div>
+              {% if category.metafields.custom.children != blank %}
+                <div id="cat{{ category.handle }}" class="sub-panel">
+                  <ul>
+                    {% for child_category in category.metafields.custom.children.value %}
+                      <li>
+                        <a href="{{ child_category.url }}">{{ child_category.title }}</a>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              {% endif %}
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  // メインアコーディオンの制御（常にオープンのセクションはスクリプト対象外）
+  document.querySelectorAll('.accordion').forEach((div) => {
+    div.addEventListener('click', () => {
+      const panel = document.getElementById(div.dataset.toggle);
+      const isOpen = panel.classList.contains('open');
+
+      // 他のメインパネルを閉じる
+      document.querySelectorAll('.panel').forEach((p) => p.classList.remove('open'));
+      document.querySelectorAll('.accordion').forEach((b) => b.classList.remove('open'));
+
+      // 選択されたパネルを切り替え
+      if (!isOpen) {
+        panel.classList.add('open');
+        div.classList.add('open');
+      }
+    });
+  });
+
+  // サブカテゴリアコーディオンの制御
+  document.querySelectorAll('.sub-accordion').forEach((div) => {
+    div.addEventListener('click', () => {
+      const subPanel = document.getElementById(div.dataset.toggle);
+      const isSubOpen = subPanel.classList.contains('open');
+
+      // サブパネルを切り替え
+      if (isSubOpen) {
+        subPanel.classList.remove('open');
+        div.classList.remove('open');
+      } else {
+        subPanel.classList.add('open');
+        div.classList.add('open');
+      }
+    });
+  });
+</script>
