@@ -312,7 +312,9 @@
     {% sections 'header-group' %}
 
     <main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1">
-      {% include 'breadcrumbs' %}
+      {% if request.page_type != "collection" %}
+      {% render 'breadcrumbs' %}
+      {% endif  %}
       {{ content_for_layout }}
     </main>
 
@@ -378,5 +380,6 @@
     {{ 'shopify-money.js' | asset_url | script_tag }}
     {{ 'cart-total.js' | asset_url | script_tag }}
     {{ 'variant-picker.js' | asset_url | script_tag }}
+    {{ 'keyno-data.js' | asset_url | script_tag }}
   </body>
 </html>

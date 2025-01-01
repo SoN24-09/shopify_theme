@@ -1482,3 +1482,29 @@ document.addEventListener('click', (e) => {
     })
   }
 })
+// メインアコーディオンの制御（常にオープンのセクションはスクリプト対象外）
+document.querySelectorAll('.accordion').forEach((div) => {
+  div.addEventListener('click', () => {
+    const panel = document.getElementById(div.dataset.toggle);
+    const isOpen = panel.classList.contains('open');
+
+    // 他のメインパネルを閉じる
+    document.querySelectorAll('.panel').forEach((p) => p.classList.remove('open'));
+    document.querySelectorAll('.accordion').forEach((b) => b.classList.remove('open'));
+
+    // 選択されたパネルを切り替え
+    if (!isOpen) {
+      panel.classList.add('open');
+      div.classList.add('open');
+    }
+  });
+});
+
+// サブカテゴリアコーディオンの制御
+document.querySelectorAll('.sub-accordion').forEach((div) => {
+  div.addEventListener('click', () => {
+    const subPanel = div.parentNode.querySelector('.sub-panel');
+    subPanel.classList.toggle('open');
+    div.classList.toggle('open');
+  });
+});

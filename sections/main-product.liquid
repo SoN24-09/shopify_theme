@@ -37,6 +37,61 @@
         padding-bottom: {{ section.settings.padding_bottom }}px;
       }
     }
+
+    .check-button {
+      display: none;
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .check-button.show {
+      display: block;
+    }
+
+  .input-container {
+    display: flex;
+    align-items: baseline; 
+    gap: 10px; 
+  }
+
+  .input-container label {
+      font-weight: bold;
+    }
+
+    .input-container input[type="text"] {
+      padding: 5px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+      width: 200px;
+    }
+
+    .input-container input[type="hidden"] {
+      display: none;
+    }
+
+    .input-container button {
+      padding: 8px 15px;
+      background-color: orange;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s ease;
+    }
+
+    .input-container button:hover {
+      background-color: darkorange;
+    }
+
+    .input-container   button:focus {
+      outline: 2px solid #ffa500;
+    }
+
   {%- endstyle -%}
 
   <script src="{{ 'product-info.js' | asset_url }}" defer="defer"></script>
@@ -139,15 +194,37 @@
                   {%- assign product_form_installment_id = 'product-form-installment-' | append: section.id -%}
                   {%- form 'product', product, id: product_form_installment_id, class: 'installment caption-large' -%}
                     <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+                    
                     {{ form | payment_terms }}
+                  
                   {%- endform -%}
+                  <div class="input-container">
+                    <label for="nameInput">Keyno: </label>
+                    <input
+                      type="text"
+                      name="properties[Keyno]"
+                      placeholder="名前を入力してください"
+                      form="product-form-{{ section.id }}"
+                      id="nameInput"
+                    > 
+                    <input
+                      type="hidden"
+                      name="properties[Image]"
+                      form="product-form-{{ section.id }}"
+                      id="image"
+                    >
+                  
+                    <button type="button" id="checkButton" class="check-button">
+                      Check Keyno
+                    </button>
+                  </div>
                 </div>
               {%- when 'inventory' -%}
                 <p
                   class="product__inventory{% if block.settings.text_style == 'uppercase' %} caption-with-letter-spacing{% elsif block.settings.text_style == 'subtitle' %} subtitle{% endif %}{% if product.selected_or_first_available_variant.inventory_management != 'shopify' %} visibility-hidden{% endif %}"
-                  {{ block.shopify_attributes }}
                   id="Inventory-{{ section.id }}"
                   role="status"
+                  {{ block.shopify_attributes }}
                 >
                   {%- if product.selected_or_first_available_variant.inventory_management == 'shopify' -%}
                     {%- if product.selected_or_first_available_variant.inventory_quantity > 0 -%}
