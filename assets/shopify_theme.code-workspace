@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"path": "../../shopify_theme_pdr"
+		},
+		{
+			"path": "../../shopify_app"
+		}
+	],
+	"settings": {}
+}

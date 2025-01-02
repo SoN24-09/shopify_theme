@@ -198,26 +198,29 @@
                     {{ form | payment_terms }}
                   
                   {%- endform -%}
-                  <div class="input-container">
-                    <label for="nameInput">Keyno: </label>
-                    <input
-                      type="text"
-                      name="properties[Keyno]"
-                      placeholder="名前を入力してください"
-                      form="product-form-{{ section.id }}"
-                      id="nameInput"
-                    > 
-                    <input
-                      type="hidden"
-                      name="properties[Image]"
-                      form="product-form-{{ section.id }}"
-                      id="image"
-                    >
-                  
-                    <button type="button" id="checkButton" class="check-button">
-                      Check Keyno
-                    </button>
-                  </div>
+                  {% if product.metafields.custom.keyno %}
+                    <div class="input-container">
+                      <label for="nameInput">Keyno: </label>
+                      <input
+                        type="text"
+                        name="properties[Keyno]"
+                        placeholder="名前を入力してください"
+                        form="product-form-{{ section.id }}"
+                        id="nameInput"
+                      > 
+                      <input
+                        type="hidden"
+                        name="properties[Image]"
+                        form="product-form-{{ section.id }}"
+                        id="image"
+                      >
+                    
+                      <button type="button" id="checkButton" class="check-button">
+                        Check Keyno
+                      </button>
+                    </div>
+                  {% endif %}
+                 
                 </div>
               {%- when 'inventory' -%}
                 <p
