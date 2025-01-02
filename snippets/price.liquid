@@ -103,9 +103,9 @@
           <span>
             {% if template == 'product' and price_max != price_min -%}
               {{- money_price_min }} ～ {{ money_price_max }}
-              <span class="price-item-vat">(税抜)</span> | 送料別
+              <span class="price-item-vat">(税込)</span> | 送料別
             {%  else  %}
-                {{- money_price_min }}<span class="price-item-vat"> (税抜)</span> | 送料別
+                {{- money_price_min }}<span class="price-item-vat"> (税込)</span> | 送料別
             {%- endif %}
           </span>
         {%- endif -%}
@@ -131,9 +131,9 @@
         <span>
           {% if template == 'product' and price_max != price_min -%}
             {{- money_price_min }} ～ {{ money_price_max -}}
-            <span class="price-item-vat">(税抜)</span> | 送料別
+            <span class="price-item-vat">(税込)</span> | 送料別
           {%  else  %}
-              {{- money_price_min }}<span class="price-item-vat"> (税抜)</span> | 送料別
+              {{- money_price_min }}<span class="price-item-vat"> (税込)</span> | 送料別
           {%- endif %}
         </span>
       </div>
