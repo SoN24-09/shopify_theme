@@ -190,10 +190,16 @@
                             <dd class="price price--end">
                               {{ item.final_line_price | money }}
                             </dd>
+                            <dd class="price price--includes-tax">
+                              (税込 {{ item.original_line_price | times: 1.1 | money }})
+                            </dd>
                           </dl>
                         {%- else -%}
                           <span class="price price--end">
                             {{ item.original_line_price | money }}
+                          </span>
+                          <span class="price price--includes-tax">
+                            (税込 {{ item.original_line_price | times: 1.1 | money }})
                           </span>
                         {%- endif -%}
 
@@ -406,10 +412,16 @@
                             <dd class="price price--end">
                               {{ item.final_line_price | money }}
                             </dd>
+                            <dd class="price price--includes-tax">
+                              (税込 {{ item.original_line_price | times: 1.1 | money }})
+                            </dd>
                           </dl>
                         {%- else -%}
                           <span class="price price--end">
                             {{ item.original_line_price | money }}
+                          </span>
+                          <span class="price price--includes-tax">
+                            (税込 {{ item.original_line_price | times: 1.1 | money }})
                           </span>
                         {%- endif -%}
 

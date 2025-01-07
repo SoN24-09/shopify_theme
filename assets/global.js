@@ -1176,10 +1176,16 @@ class AccountIcon extends HTMLElement {
     super();
 
     this.icon = this.querySelector('.icon');
+    this.parent = this.parentNode;
   }
 
   connectedCallback() {
     document.addEventListener('storefront:signincompleted', this.handleStorefrontSignInCompleted.bind(this));
+    this.parent.addEventListener('click', this.openPopupAccount.bind(this))
+  }
+
+  openPopupAccount(){
+    document.querySelector('.header-account-btns').classList.toggle('hidden');
   }
 
   handleStorefrontSignInCompleted(event) {

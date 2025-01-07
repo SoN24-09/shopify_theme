@@ -65,7 +65,7 @@
 
 {% assign results_count = search.results_count %}
 {% for item in search.results %}
-  {% if item.type == 'sanding' or item.type == 'keyno' %}
+  {% if item.type == 'sanding' and item.type == 'sustainability' %}
     {% assign results_count = results_count | minus: 1 %}
     {% break %}
   {% endif %}
@@ -278,7 +278,7 @@
                   >
                     {%- case item.object_type -%}
                       {%- when 'product' -%}
-                        {% if item.type != "sanding" or item.type != "keyno" %}
+                        {% if item.type != "sanding" and item.type != "sustainability" %}
                           {%- capture product_settings -%}{%- if section.settings.product_show_vendor -%}vendor,{%- endif -%}title,price{%- endcapture -%}
                           {% render 'card-product',
                             card_product: item,

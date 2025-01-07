@@ -92,6 +92,10 @@
       outline: 2px solid #ffa500;
     }
 
+    .buy-button--hidden {
+      display: none;
+    }
+
   {%- endstyle -%}
 
   <script src="{{ 'product-info.js' | asset_url }}" defer="defer"></script>
@@ -286,13 +290,13 @@
                   role="status"
                   {{ block.shopify_attributes }}
                 >
-                  <span class="visually-hidden">{{ 'products.product.sku' | t }}:</span>
+                品番:  <span class="visually-hidden">{{ 'products.product.sku' | t }}:</span>
                   {{- product.selected_or_first_available_variant.sku -}}
                 </p>
               {%- when 'custom_liquid' -%}
-                {{ block.settings.custom_liquid }}
-              {% when 'production_period' %}
-                <p class="product__date">製造期間： {{ product.metafields.custom.manufacturing_period }}</p>
+                {{ block.settings.custom_liquid }}  
+              {% when 'production_period' %}  
+                <p class="product__date">製造期間: {{ product.metafields.custom.manufacturing_period }}</p>
                 {%- when 'custom-variant_picker' -%}
                   {%  if product.has_only_default_variant  %}  
                       <div></div>
@@ -310,7 +314,7 @@
                  
               {%- when 'pdf_link' -%}
                 <div class="pdf-guide">
-                  <a href="{{ block.settings.pdf_text }}" target="_blank">
+                  <a href="{{ product.metafields.custom.link_instruction_manual }}" target="_blank">
                     {{ block.settings.name }}
                   </a>
                 </div>
@@ -569,13 +573,25 @@
               {%- when 'variant_picker' -%}
                 {% render 'product-variant-picker', product: product, block: block, product_form_id: product_form_id %}
               {%- when 'buy_buttons' -%}
-                {%- render 'buy-buttons',
-                  block: block,
-                  product: product,
-                  product_form_id: product_form_id,
-                  section_id: section.id,
-                  show_pickup_availability: true
-                -%}
+                {%- if product.metafields.custom.keyno -%}
+                  <div id="buyButtonContainer" class="buy-button--hidden">
+                    {%- render 'buy-buttons',
+                      block: block,
+                      product: product,
+                      product_form_id: product_form_id,
+                      section_id: section.id,
+                      show_pickup_availability: true
+                    -%}
+                  </div>
+                {%- else -%}
+                  {%- render 'buy-buttons',
+                    block: block,
+                    product: product, 
+                    product_form_id: product_form_id,
+                    section_id: section.id,
+                    show_pickup_availability: true
+                  -%}
+                {%- endif -%}
               {%- when 'rating' -%}
                 {%- if product.metafields.reviews.rating.value != blank -%}
                   <div class="rating-wrapper">
@@ -1089,18 +1105,13 @@
     },
     {
       "type": "pdf_link",
-      "name": "Custom PDF Link",
+      "name": "Woodone Instruction",
       "settings": [
         {
           "type": "text",
           "id": "name",
           "label": "PDF Name",
           "default": "取扱説明書はこちら"
-        },
-        {
-          "type": "url",
-          "id": "pdf_text",
-          "label": "PDF link"
         }
       ]
     },
