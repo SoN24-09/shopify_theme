@@ -204,16 +204,35 @@
                   {%- endform -%}
                   {% if product.metafields.custom.keyno %}
                     <div class="input-container">
+<<<<<<< HEAD
                       <label for="nameInput">KeyNo: </label>
                       <input
                         type="text"
                         name="properties[KeyNo]"
+=======
+                      <label for="nameInput">Keyno: </label>
+                      <input
+                        type="text"
+                        name="properties[Keyno]"
+>>>>>>> e27a3c42c3ddba3375ef18f01ba3ade29fed8209
                         placeholder="名前を入力してください"
                         form="product-form-{{ section.id }}"
                         id="nameInput"
                       > 
+<<<<<<< HEAD
                       <button type="button" id="checkButton" class="check-button">
                         Check KeyNo
+=======
+                      <input
+                        type="hidden"
+                        name="properties[Image]"
+                        form="product-form-{{ section.id }}"
+                        id="image"
+                      >
+                    
+                      <button type="button" id="checkButton" class="check-button">
+                        Check Keyno
+>>>>>>> e27a3c42c3ddba3375ef18f01ba3ade29fed8209
                       </button>
                     </div>
                   {% endif %}

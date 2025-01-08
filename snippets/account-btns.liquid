@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <div class="page-width">
     <div class="header-account-btns hidden" bis_skin_checked="1">
         {% unless customer %}
@@ -20,4 +21,28 @@
             {%- endif -%}
         </ul>
       </div>
+=======
+<div class="page-width">
+    <div class="header-account-btns hidden" bis_skin_checked="1">
+        {% unless customer %}
+            <div class="account-banner">
+                <img class="small-hide" src="{{ 'account-banner.png' | asset_url }}" />
+                <img class="medium-hide large-up-hide" src="{{ 'account-banner-sp.png' | asset_url }}" />
+            </div>
+        {% endunless %}
+        <ul>
+            {%- if customer -%}
+                <li><a href="/account"><span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 36 36">
+                    <path fill="currentColor" d="M30.61 24.52a17.16 17.16 0 0 0-25.22 0a1.5 1.5 0 0 0-.39 1v6A1.5 1.5 0 0 0 6.5 33h23a1.5 1.5 0 0 0 1.5-1.5v-6a1.5 1.5 0 0 0-.39-.98" class="clr-i-solid clr-i-solid-path-1"></path>
+                    <circle cx="18" cy="10" r="7" fill="currentColor" class="clr-i-solid clr-i-solid-path-2"></circle>
+                    <path fill="none" d="M0 0h36v36H0z"></path>
+                    </svg></span><span>マイページ</span></a></li>
+                <li><a href="/account/logout"><span>{{ 'icon-lock.svg' | inline_asset_content }}</span><span>ログアウト</span></a></li>
+            {%- else -%}
+                <li><a href="/account/register"><span>{{ 'icon-shield.svg' | inline_asset_content }}</span><span>新規会員登録</span></a></li>
+                <li><a href="/account/login"><span>{{ 'icon-lock.svg' | inline_asset_content }}</span><span>ログイン</span></a></li>
+            {%- endif -%}
+        </ul>
+      </div>
+>>>>>>> e27a3c42c3ddba3375ef18f01ba3ade29fed8209
 </div>
