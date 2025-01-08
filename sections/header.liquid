@@ -255,9 +255,9 @@
       {% endif %}
 
       {%- if shop.customer_accounts_enabled -%}
-        <a
+        <div
           href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
-          class="header__icon header__icon--account link focus-inset{% if section.settings.menu != blank %} small-hide{% endif %}"
+          class="header__icon header__icon--account link focus-inset"
           rel="nofollow"
         >
           {%- if section.settings.enable_customer_avatar -%}
@@ -280,7 +280,7 @@
               endif
             -%}
           </span>
-        </a>
+        </div>
       {%- endif -%}
 
       {%- for block in section.blocks -%}
@@ -289,7 +289,6 @@
             {% render block %}
         {%- endcase -%}
       {%- endfor -%}
-
       <a href="{{ routes.cart_url }}" class="header__icon header__icon--cart link focus-inset" id="cart-icon-bubble">
           {% if cart == empty %}
             {{'icon-cart-black.svg' | inline_asset_content }}
@@ -306,9 +305,10 @@
           </div>
         {%- endif -%}
       </a>
-      <span class="cart-total-price" data-cart-total></span>
+      <span class="cart-total-price small-hide" data-cart-total>Total: {{ cart.total_price | money_with_currency }}</span>
     </div>
   </header>
+
 </{% if section.settings.sticky_header_type != 'none' %}sticky-header{% else %}div{% endif %}>
 
 {%- if settings.cart_type == "notification" -%}

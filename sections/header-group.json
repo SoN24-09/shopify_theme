@@ -72,7 +72,7 @@
     "custom_liquid_gBRfFj": {
       "type": "custom-liquid",
       "settings": {
-        "custom_liquid": "<div class=\"header-login-wrapper\">\n    <div class=\"page-width page-width-desktop\">\n     \n    <div class=\"header-login__buttons\">\n      <ul>\n        <li><button type=\"submit\" class=\"button_mypage\"><a href=\"/account\"><span>マイページ</span></a></button></li>\n        <li><button type=\"submit\" class=\"button_logout\"><a href=\"/account/logout\"><span>ログアウト</span></a></button></li>\n      </ul>\n    </div>\n  </div>",
+        "custom_liquid": "{% render 'account-btns' %}",
         "color_scheme": "",
         "padding_top": 0,
         "padding_bottom": 0

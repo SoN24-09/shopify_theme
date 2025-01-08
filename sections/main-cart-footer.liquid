@@ -60,7 +60,8 @@
 
                 <div class="totals">
                   <h2 class="totals__total">{{ 'sections.cart.estimated_total' | t }}</h2>
-                  <p class="totals__total-value">{{ cart.total_price | money_with_currency }}</p>
+                  <p class="totals__total-value">{{ cart.total_price | money }}</p>
+                  <div style="flex-basis: 100%;text-align: right; margin-top: 10px;">(税込 {{ cart.total_price | times: 1.1 | money }})</div>
                 </div>
 
                 <small class="tax-note caption-large rte">
@@ -93,7 +94,9 @@
                     {%- endif -%}
                   {%- elsif cart.duties_included == false and cart.taxes_included == false -%}
                     {%- if shop.shipping_policy.body == blank -%}
-                      {{ 'sections.cart.taxes_at_checkout_shipping_at_checkout_without_policy' | t }}
+                      <p>税込配送料は購入手続き時に計算されます。</p>
+                      <p>あと5,000円（税込）のお買い上げ送料無料！</p>
+                      {% comment %} {{ 'sections.cart.taxes_at_checkout_shipping_at_checkout_without_policy' | t }} {% endcomment %}
                     {%- else -%}
                       {{
                         'sections.cart.taxes_at_checkout_shipping_at_checkout_with_policy_html'

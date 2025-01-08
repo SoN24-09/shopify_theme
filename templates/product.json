@@ -11,6 +11,7 @@
   "sections": {
     "custom_liquid_dQYTbj": {
       "type": "custom-liquid",
+      "disabled": true,
       "settings": {
         "custom_liquid": "<!--パンクズ//-->\n    <nav class=\"breadcrumb\">\n        <div class=\"page-width\"><a href=\"/\" title=\"Home\">ホーム</a> > \n              <a href=\"/\">カテゴリ</a> > <span>商品名</span>\n        </div>\n      </nav>\n<!--//パンクズ-->",
         "color_scheme": "",
@@ -39,8 +40,13 @@
             "text_style": "body"
           }
         },
+        "production_period_WYRDK3": {
+          "type": "production_period",
+          "settings": {}
+        },
         "custom_liquid_T9qVXj": {
           "type": "custom_liquid",
+          "disabled": true,
           "settings": {
             "custom_liquid": "<p class=\"product__date\">製造期間： </p>"
           }
@@ -54,6 +60,7 @@
         },
         "variant-picker": {
           "type": "variant_picker",
+          "disabled": true,
           "settings": {
             "picker_type": "dropdown",
             "swatch_shape": "circle"
@@ -108,6 +115,7 @@
         "title",
         "price",
         "sku_JHbkpY",
+        "production_period_WYRDK3",
         "custom_liquid_T9qVXj",
         "custom_variant_picker_UJxfLL",
         "variant-picker",
@@ -202,7 +210,8 @@
     "related-products": {
       "type": "related-products",
       "custom_css": [
-        ".card-information {font-size: 1.2rem;}"
+        ".card-information {font-size: 1.2rem;}",
+        "product-recommendations{z-index: 1;}"
       ],
       "settings": {
         "heading": "互換性商品",

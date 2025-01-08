@@ -377,7 +377,7 @@
   z-index: 1;
 }
 
-.product-grid-container .card__heading a::after {
+.product-grid .card__heading a::after {
   bottom: initial;
   content: '';
   left: initial;

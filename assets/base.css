@@ -2575,6 +2575,65 @@ input[type='checkbox'] {
   background: rgba(var(--color-foreground), 0.5);
 }
 
+.header__icon--account{
+  position: relative;
+}
+.header-account-btns{
+  padding: 20px;
+  border-radius: 6px;
+  background-color: #fff;
+  display: flex;
+  justify-content: flex-end;
+  gap: 30px;
+  align-items: center;
+}
+.header-account-btns .account-banner{
+  display: flex;
+  align-items: center;
+}
+.header-account-btns .account-banner img{
+  max-width: 100%;
+}
+@media (max-width: 768px) {
+  .header-account-btns{
+    flex-direction: column;
+  }
+  .header-account-btns ul{
+    justify-content: center;
+  }
+}
+.header-account-btns ul{
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  gap: 10px;
+  justify-content: end;
+  min-width: 275px;
+}
+.header-account-btns ul li a{
+  text-decoration: none;
+  color: #121212;
+  display: flex;
+  align-items: center;
+  border: 2px solid #222;
+  background: transparent;
+  border-radius: 40px;
+  padding: 5px 10px;
+  gap: 5px;
+  font-size: 1.6rem;
+}
+.header-account-btns ul li a span{
+  display: flex;
+  align-items: center;
+}
+.header-account-btns ul li:last-child a{
+  background: #121212;
+  color: #fff;
+}
+.header-account-btns ul li:last-child svg{
+  fill: #fff;
+}
 .header__icon--account shop-user-avatar {
   --shop-avatar-size: 2.8rem;
 }

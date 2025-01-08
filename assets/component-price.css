@@ -22,6 +22,9 @@
   display: inline-block;
   margin: 0 1rem 0 0;
 }
+.price--includes-tax{
+  min-width: max-content;
+}
 
 .price__regular .price-item--regular {
   margin-right: 0;

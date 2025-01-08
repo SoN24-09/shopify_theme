@@ -37,6 +37,65 @@
         padding-bottom: {{ section.settings.padding_bottom }}px;
       }
     }
+
+    .check-button {
+      display: none;
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .check-button.show {
+      display: block;
+    }
+
+  .input-container {
+    display: flex;
+    align-items: baseline; 
+    gap: 10px; 
+  }
+
+  .input-container label {
+      font-weight: bold;
+    }
+
+    .input-container input[type="text"] {
+      padding: 5px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+      width: 200px;
+    }
+
+    .input-container input[type="hidden"] {
+      display: none;
+    }
+
+    .input-container button {
+      padding: 8px 15px;
+      background-color: orange;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s ease;
+    }
+
+    .input-container button:hover {
+      background-color: darkorange;
+    }
+
+    .input-container   button:focus {
+      outline: 2px solid #ffa500;
+    }
+
+    .buy-button--hidden {
+      display: none;
+    }
+
   {%- endstyle -%}
 
   <script src="{{ 'product-info.js' | asset_url }}" defer="defer"></script>
@@ -139,15 +198,33 @@
                   {%- assign product_form_installment_id = 'product-form-installment-' | append: section.id -%}
                   {%- form 'product', product, id: product_form_installment_id, class: 'installment caption-large' -%}
                     <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+                    
                     {{ form | payment_terms }}
+                  
                   {%- endform -%}
+                  {% if product.metafields.custom.keyno %}
+                    <div class="input-container">
+                      <label for="nameInput">KeyNo: </label>
+                      <input
+                        type="text"
+                        name="properties[KeyNo]"
+                        placeholder="名前を入力してください"
+                        form="product-form-{{ section.id }}"
+                        id="nameInput"
+                      > 
+                      <button type="button" id="checkButton" class="check-button">
+                        Check KeyNo
+                      </button>
+                    </div>
+                  {% endif %}
+                 
                 </div>
               {%- when 'inventory' -%}
                 <p
                   class="product__inventory{% if block.settings.text_style == 'uppercase' %} caption-with-letter-spacing{% elsif block.settings.text_style == 'subtitle' %} subtitle{% endif %}{% if product.selected_or_first_available_variant.inventory_management != 'shopify' %} visibility-hidden{% endif %}"
-                  {{ block.shopify_attributes }}
                   id="Inventory-{{ section.id }}"
                   role="status"
+                  {{ block.shopify_attributes }}
                 >
                   {%- if product.selected_or_first_available_variant.inventory_management == 'shopify' -%}
                     {%- if product.selected_or_first_available_variant.inventory_quantity > 0 -%}
@@ -206,13 +283,13 @@
                   role="status"
                   {{ block.shopify_attributes }}
                 >
-                  <span class="visually-hidden">{{ 'products.product.sku' | t }}:</span>
+                品番:  <span class="visually-hidden">{{ 'products.product.sku' | t }}:</span>
                   {{- product.selected_or_first_available_variant.sku -}}
                 </p>
               {%- when 'custom_liquid' -%}
-                {{ block.settings.custom_liquid }}
-              {% when 'production_period' %}
-                <p class="product__date">製造期間： {{ product.metafields.custom.manufacturing_period }}</p>
+                {{ block.settings.custom_liquid }}  
+              {% when 'production_period' %}  
+                <p class="product__date">製造期間: {{ product.metafields.custom.manufacturing_period }}</p>
                 {%- when 'custom-variant_picker' -%}
                   {%  if product.has_only_default_variant  %}  
                       <div></div>
@@ -230,7 +307,7 @@
                  
               {%- when 'pdf_link' -%}
                 <div class="pdf-guide">
-                  <a href="{{ block.settings.pdf_text }}" target="_blank">
+                  <a href="{{ product.metafields.custom.link_instruction_manual }}" target="_blank">
                     {{ block.settings.name }}
                   </a>
                 </div>
@@ -489,13 +566,25 @@
               {%- when 'variant_picker' -%}
                 {% render 'product-variant-picker', product: product, block: block, product_form_id: product_form_id %}
               {%- when 'buy_buttons' -%}
-                {%- render 'buy-buttons',
-                  block: block,
-                  product: product,
-                  product_form_id: product_form_id,
-                  section_id: section.id,
-                  show_pickup_availability: true
-                -%}
+                {%- if product.metafields.custom.keyno -%}
+                  <div id="buyButtonContainer" class="buy-button--hidden">
+                    {%- render 'buy-buttons',
+                      block: block,
+                      product: product,
+                      product_form_id: product_form_id,
+                      section_id: section.id,
+                      show_pickup_availability: true
+                    -%}
+                  </div>
+                {%- else -%}
+                  {%- render 'buy-buttons',
+                    block: block,
+                    product: product, 
+                    product_form_id: product_form_id,
+                    section_id: section.id,
+                    show_pickup_availability: true
+                  -%}
+                {%- endif -%}
               {%- when 'rating' -%}
                 {%- if product.metafields.reviews.rating.value != blank -%}
                   <div class="rating-wrapper">
@@ -1009,18 +1098,13 @@
     },
     {
       "type": "pdf_link",
-      "name": "Custom PDF Link",
+      "name": "Woodone Instruction",
       "settings": [
         {
           "type": "text",
           "id": "name",
           "label": "PDF Name",
           "default": "取扱説明書はこちら"
-        },
-        {
-          "type": "url",
-          "id": "pdf_text",
-          "label": "PDF link"
         }
       ]
     },
