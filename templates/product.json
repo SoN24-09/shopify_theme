@@ -70,6 +70,18 @@
           "type": "quantity_selector",
           "settings": {}
         },
+        "surecust_wishlist_wishlistbutton_4nfhWk": {
+          "type": "shopify://apps/surecust-wishlist/blocks/wishlistbutton/7d64c8b8-e66c-4e93-acb0-18222ec3c427",
+          "settings": {
+            "selectproduct": "",
+            "label1": "お気に入りに追加",
+            "label2": "お気に入り追加済み",
+            "btn_size": "auto",
+            "btn_color": "#121212",
+            "btn_text_color": "#ffffff",
+            "btn_radius": 20
+          }
+        },
         "buy_buttons": {
           "type": "buy_buttons",
           "settings": {
@@ -87,6 +99,7 @@
         },
         "custom_liquid_rTQa8z": {
           "type": "custom_liquid",
+          "disabled": true,
           "settings": {
             "custom_liquid": "<div class=\"pdf-guide\"><a href=\"\" target=\"_blank\">取扱説明書はこちら</a></div>"
           }
@@ -120,6 +133,7 @@
         "custom_variant_picker_UJxfLL",
         "variant-picker",
         "quantity-selector",
+        "surecust_wishlist_wishlistbutton_4nfhWk",
         "buy_buttons",
         "product-inventory",
         "custom_liquid_rTQa8z",
@@ -211,7 +225,7 @@
       "type": "related-products",
       "custom_css": [
         ".card-information {font-size: 1.2rem;}",
-        "product-recommendations{z-index: 1;}"
+        "product-recommendations {z-index: 1;}"
       ],
       "settings": {
         "heading": "互換性商品",

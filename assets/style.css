@@ -7,6 +7,17 @@
   font-size: 2.5rem;
 }
 
+/*横幅共通設定*/
+
+@media screen and (min-width: 990px) {
+
+  .page-width--narrow {
+    max-width: var(--page-width);
+    padding: 0 5rem;
+  }
+}
+
+
 /* Common */
 .sp_only {
   display: none;
@@ -263,6 +274,10 @@
   border: none;
 }
 
+.cate_leftmenu .search-input {
+  border-radius: 0;
+}
+
 .search-input:focus {
   box-shadow: none !important;
 }
@@ -492,7 +507,7 @@
 .cate_leftmenu .filter-container .panel.open {
   display: block;
   /* 常に表示 */
-  padding: 10px;
+  padding: 10px 0;
 }
 
 .cate_leftmenu .filter-container .accordion {
@@ -678,7 +693,7 @@
   list-style: none;
   border-left: 1px solid #efefef;
   border-bottom: 1px solid #efefef;
-  padding: 10px;
+  padding: 12px;
 }
 
 .product-list li:not(.collection .product-list li) {
@@ -737,7 +752,7 @@
 }
 
 .product-list li .card__content {
-  padding: 0 1rem;
+  padding: 0 0.5rem;
   display: block;
 }
 
@@ -759,7 +774,8 @@
 .product-grid h3.card__heading {
   font-weight: 400;
   text-align: left;
-  font-size: 1.3rem;
+  font-size: 1.35rem;
+  line-height: 1.6;
 }
 
 .product-list h3.card__heading a,
@@ -777,7 +793,7 @@
   text-align: left;
   font-weight: 500;
   display: inline-block;
-  margin: 20px 0 10px;
+  margin: 10px 0 10px;
   color: #ee7949;
   font-size: 1.4rem;
 
@@ -792,10 +808,14 @@
   border: none;
   right: 0;
   top: 0;
-  background: #fff;
+  background: none;
   cursor: pointer;
 }
 
+.product-list .favorite-button:hover,
+.product-grid .favorite-button:hover {
+   opacity: 0.8;
+}
 
 .product-list .product-label span {
   font-size: 1.0rem;
@@ -803,7 +823,8 @@
 }
 
 .product-list .part-number,
-.product-list .period {
+.product-list .period,
+.product-list .product__sku {
   font-size: 1.2rem;
 
 }
@@ -897,9 +918,9 @@
 .product-list .cart-area-wrap,
 .product-grid .cart-area-wrap {
   text-align: center;
-  padding: 5px 0;
+  padding: 5px 0 0;
   position: relative;
-  margin: 10px auto;
+  margin: 15px auto 0;
 }
 
 
@@ -1025,6 +1046,10 @@
 
 .product-list .toggle-cart,
 .product-grid .toggle-cart {
+<<<<<<< Updated upstream
+=======
+  width: 90%;
+>>>>>>> Stashed changes
   padding: 10px 20px;
   background-color: black;
   color: white;
@@ -1389,6 +1414,7 @@
 .guide ul {
   list-style: none;
   padding: 0;
+<<<<<<< Updated upstream
 }
 
 .guide .guide_navi ul li {
@@ -1478,13 +1504,301 @@
   color: #333;
   padding: 6px 20px;
   border-radius: 20px;
+=======
+>>>>>>> Stashed changes
 }
 
-.pdf-guide a:hover {
+.guide .guide_navi ul li {
+  display: inline-block;
+  margin: 0 0 0 10px;
+  font-size: 13px;
+  border: none;
+}
+
+.guide .guide_navi ul li a {
+  display: block;
+  padding: 5px 10px;
+  border: solid #ccc 1px;
+  text-decoration: none;
+}
+
+.guide .guide_navi ul li a:hover {
+  background: #efefef;
+}
+
+.guide h2 {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ccc;
+  margin: 40px 0 20px;
+  font-size: 1.8rem;
+}
+
+.guide small {
+  font-size: 1.2rem;
+}
+
+.guide h3 {
+  font-size: 1.6rem;
+  margin: 40px 0 10px;
+}
+
+.guide p {
+  font-size: 1.4rem;
+}
+
+.guide li {
+  border-bottom: 1px solid #eee;
+  padding: 5px 0 15px;
+}
+
+.guide li:last-child {
+  border-bottom: none;
+}
+
+.guide .guide-pay__list-number {
+  display: inline-block;
+  vertical-align: top;
+  width: 5%;
+  margin-top: 15px;
+}
+
+.guide .guide-pay__list-content {
+  display: inline-block;
+  vertical-align: top;
+  padding: 4px 65px 0 25px;
+  width: 90%;
+}
+
+.guide .guide-pay__list-content h4 {
+  padding: 0;
+  margin-top: 15px;
+}
+
+@media screen and (max-width: 767px) {
+  .guide .guide-pay__list-content {
+    display: block;
+    width: 100%;
+    padding: 0 10px;
+  }
+  .guide .guide-pay__list-content h4 span{
+    display: inline !important;
+  }
+}
+
+
+/*会社概要*/
+
+.company-about {
+  font-size: 14px;
+  margin: 20px 0 60px;
+}
+
+.company-about__title {
+  background: #f5f5f5;
+  font-size: 17px;
+  padding: 17px 20px;
+  margin-bottom: 30px;
+}
+
+.company-about__data {
+  border-top: 1px solid #dfdfdf;
+}
+.company-about__data dl {
+  border-bottom: 1px solid #dfdfdf;
+  padding: 20px;
+  display: table;
+  width: 100%;
+  box-sizing: border-box;
+}
+.company-about__data dt {
+  display: table-cell;
+  font-weight: bold;
+  width: 200px;
+}
+.company-about__data dd {
+  display: table-cell;
+}
+
+.company-about__data a {
   text-decoration: underline;
 }
 
+.company-about__data a:hover {
+  text-decoration: none;
+}
 
+.company-access {
+  font-size: 14px;
+  margin: 20px 0 60px;
+}
+.company-access__title {
+  background: #f5f5f5;
+  font-size: 17px;
+  padding: 17px 20px;
+  margin-bottom: 30px;
+}
+.company-access__map iframe {
+  width: 100%;
+  height: 400px;
+}
+
+
+@media screen and (max-width: 767px) {
+
+
+  .company-about {
+    margin: 20px 0 30px;
+  }
+
+  .company-about__title {
+    font-size: 15px;
+    padding: 12px 15px;
+    margin-bottom: 15px;
+  }
+
+  .company-about__data dl {
+    border-bottom: 1px solid #dfdfdf;
+    padding: 10px 0;
+  }
+  .company-about__data dt {
+    display: block;
+    width: auto;
+  }
+  .company-about__data dd {
+    display: block;
+  }
+
+
+  .company-access {
+    margin: 20px 0 30px;
+  }
+  .company-access__title {
+    font-size: 15px;
+    padding: 12px 15px;
+    margin-bottom: 15px;
+  }
+  .company-access__map iframe {
+    height: 200px;
+  }
+}
+
+
+/*よくあるご質問*/
+
+.faq-title {
+  margin: 20px 0 40px;
+  font-size: 15px;
+  font-size: 24px;
+  text-align: center;
+}
+.faq-block {
+  margin-bottom: 50px;
+  font-size: 15px;
+}
+.faq-block .faq-block__question {
+  background: #f5f5f5;
+  font-size: 17px;
+  padding: 17px 20px 17px 60px;
+  margin-bottom: 30px;
+  position: relative;
+}
+.faq-block .faq-block__question-icon {
+  font-size: 30px;
+  display: block;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  vertical-align: middle;
+  box-sizing: border-box;
+  position: absolute;
+  left: 10px;
+  top: 7px;
+}
+.faq-block .faq-block__answer {
+  position: relative;
+  padding-left: 60px;
+}
+.faq-block .faq-block__answer a {
+  text-decoration: underline;
+}
+.faq-block .faq-block__answer a:hover {
+  text-decoration: none;
+}
+@media screen and (min-width: 768px) {
+  .faq-block .faq-block__answer {
+    display: block !important;
+  }
+}
+.faq-block .faq-block__answer-icon {
+  font-size: 30px;
+  display: block;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  vertical-align: middle;
+  box-sizing: border-box;
+  position: absolute;
+  left: 10px;
+  top: 0;
+}
+
+@media screen and (max-width: 767px) {
+  .faq-title {
+    margin: 10px 0 20px;
+    font-size: 18px;
+  }
+  .faq-block {
+    margin-bottom: 10px;
+    font-size: 14px;
+  }
+  .faq-block .faq-block__question {
+    font-size: 14px;
+    padding: 12px 30px 12px 40px;
+    margin-bottom: 15px;
+    line-height: 1.3em;
+  }
+  .faq-block .faq-block__question:before {
+    content: "";
+    display: block;
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    margin-top: -3px;
+    width: 4px;
+    height: 4px;
+    border-bottom: 2px solid;
+    border-right: 2px solid;
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+    display: none;
+  }
+  .faq-block .faq-block__question-icon {
+    font-size: 25px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    left: 7px;
+    top: 7px;
+  }
+  .faq-block .faq-block__answer {
+    position: relative;
+    padding-left: 40px;
+    margin-bottom: 20px;
+    font-size: 14px;
+  }
+  .faq-block .faq-block__answer-icon {
+    font-size: 25px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    left: 7px;
+    top: 0;
+  }
+
+
+}
 
 /*新規会員登録ページ*/
 
@@ -1593,6 +1907,89 @@
   .regist-container .info-box span {
     line-height: 1.4em;
   }
+}
+
+
+/*商品詳細ページ*/
+
+.pdf-guide a {
+  font-size: 1.2rem;
+  text-decoration: none;
+  display: inline-block;
+  border: 1px solid #555;
+  color: #333;
+  padding: 6px 20px;
+  border-radius: 20px;
+}
+
+.pdf-guide a:hover {
+  text-decoration: underline;
+}
+
+
+/*お悩み解決ガイド*/
+.onayami_guide{
+  text-align: center;
+}
+.onayami_guide .onayami_door_wrap ul{
+  padding: 0;
+  list-style: none;
+}
+.onayami_guide .onayami_door_wrap li{
+  position: relative;
+}
+.onayami_guide .onayami_door_wrap li h3{
+  position: absolute;
+  top: 40%; /* 上から40% */
+  left: 20%; /* 左から20% */
+  transform: translate(-20%, -40%); /* 配置を調整 */
+  word-wrap: break-word; /* テキストの改行を許可（必要なら追加） */
+  max-width: 60%; 
+  font-size: 2.4rem;
+}
+@media (max-width: 768px) {
+  .onayami_guide .onayami_door_wrap li h3 {
+    font-size: 1.5rem; /* 小さいデバイスでフォントサイズ調整 */
+    top: 45%; /* 上の位置を微調整 */
+    left: 15%; /* 左の位置を微調整 */
+    max-width: 70%; /* テキスト幅を調整 */
+  }
+}
+.onayami_guide .onayami_door_wrap li img{
+  border: none;
+  width: 50px;
+}
+.onayami_guide .onayami_door_wrap li.door01{
+  background: url('/cdn/shop/files/onayami_door_01.jpg') no-repeat center right;
+  height: 100vh;
+}
+.onayami_guide .onayami_door_wrap li.door01 .fukidashi{
+
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 6px 6px 6px 0px rgba(0, 0, 0, 0.15);
+  position: relative;
+  display: inline-block;
+  margin-left: 34px;
+  padding: 16px 20px;
+  text-align: center;
+  color: #000000;
+}
+
+.onayami_guide .onayami_door_wrap li.door01 .fukidashi::after {
+  content: "";
+  position: absolute;
+  top: 39%;
+  left: 0;
+  border-style: solid;
+  border-width: 0 34px 17px 0;
+  border-color: transparent #ffffff transparent transparent;
+  translate: -100% calc(-50% - 0.1px);
+}
+.onayami_guide .onayami_door_wrap li.door01 .item01{
+  position: absolute;
+  top: 50px;
+  right: 50px;
 }
 
 /*footer_contents*/

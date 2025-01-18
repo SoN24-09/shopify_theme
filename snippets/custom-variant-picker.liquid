@@ -20,7 +20,9 @@
   <!-- Color mappings: {{ color_mappings }} -->
   <!-- Raw mappings: {{ block.settings.color_mappings }} -->
 
+  {% assign color_mapping = shop.metaobjects.product_color_mapping.values %}
   {%- for option in product.options_with_values -%}
+    {% assign option_index = forloop.index0 %}
     <div class="variant-selector" data-option-index="{{ forloop.index0 }}">
       <label class="variant-selector__label">
         {{ option.name }}
@@ -51,14 +53,24 @@
         <ul class="variant-selector__options">
           {%- for value in option.values -%}
             <li 
-              class="variant-selector__option {% if value == current_variant.options[forloop.parent.forloop.index0] %}selected{% endif %}"
+              class="variant-selector__option {% if value == current_variant.options[option_index] %}selected{% endif %}"
               data-value="{{ value | escape }}"
             >
-              {%- if block.settings.color_option_name == option.name -%}
-                <span 
-                  class="variant-selector__color"
-                  data-color-value="{{ value | escape }}"
-                ></span>
+              {% assign has_color = false %}
+              {% assign color_names = settings.color_names | split: ',' %}
+              {% if color_names contains option.name %}
+                {% assign has_color = true %}
+              {% endif %}
+              {%- if has_color -%}
+                {% for color in color_mapping %}
+                  {% if color.color_name == value %} 
+                    <span 
+                      class="variant-selector__color"
+                      data-color-value="{{ color.color_codes | escape }}"
+                      style="background-color: {{ color.color_codes | escape }}"
+                    ></span>
+                  {% endif %}
+                {% endfor %}
               {%- endif -%}
               {{ value }}
             </li>

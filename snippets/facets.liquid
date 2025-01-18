@@ -132,6 +132,9 @@
                     {% comment %} {% if filter_type == 'vertical' and forloop.index == 1 %}
                       open
                     {% endif %} {% endcomment %}
+                     {% if filter.param_name == "filter.p.m.custom.production_period" %}
+                      style="display: none;"
+                     {% endif %}
                   >
                     <summary
                       class="facets__summary caption-large focus-offset"
@@ -510,7 +513,7 @@
               {%- if enable_filtering -%}
                 <div class="filter-section">
                   <div class="search-box">
-                      <input type="text" name="q" class="search-input" placeholder="例：JA-128DOA">
+                      <input type="text" name="q" class="search-input" placeholder="例：JA-128DOA" maxlength="9">
                       <button type="button" class="search-button"></button>
                   </div>
                   <p class="info-text"><a href="#">ロットNoについて</a></p>
@@ -531,6 +534,9 @@
                         id="Details-Mobile-{{ filter.param_name | escape }}-{{ section.id }}"
                         class="mobile-facets__details js-filter"
                         data-index="mobile-{{ forloop.index }}"
+                        {% if filter.param_name == "filter.p.m.custom.production_period" %}
+                          style="display: none;"
+                         {% endif %}
                       >
                         <summary class="mobile-facets__summary focus-inset">
                           <div>

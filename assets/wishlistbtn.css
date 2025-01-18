@@ -1,0 +1,106 @@
+button.onstwishlist-btn {
+  border-radius: 100px !important;
+  position: relative;
+  width: fit-content;
+  display: flex;
+  gap: 12px;
+  border-width: 1px;
+  border-style: solid;
+  padding: 11px 22px;
+  align-items: center;
+  font-size: 1.5rem;
+  cursor: pointer;
+  letter-spacing: 0.1rem;
+  font-family: inherit;
+  justify-content: center;
+}
+
+.onstwishlistbtnbox button {
+    border-radius: 100px !important;
+}
+
+button.onstwishlist-btn span.onstwishlist-btn-icon svg {
+  width: 20px;
+  height: 20px;
+}
+button.onstwishlist-btn span.onstwishlist-btn-icon {
+  display: flex;
+}
+button.onstwishlist-btn.onstwishlist-btn-full {
+  width: 100%;
+  justify-content: center;
+  padding: 15px 22px;
+}
+button.onstwishlist-btn
+  span.onstwishlist-btn-icon.onstwishlist-btn-icon-already,
+button.onstwishlist-btn
+  span.onstwishlist-btn-text.onstwishlist-btn-text-already,
+button.onstwishlist-btn[data-login='already']
+  span.onstwishlist-btn-icon.onstwishlist-btn-icon,
+button.onstwishlist-btn[data-login='already']
+  span.onstwishlist-btn-text.onstwishlist-btn-text {
+  display: none;
+}
+button.onstwishlist-btn[data-login='already']
+  span.onstwishlist-btn-icon.onstwishlist-btn-icon-already,
+button.onstwishlist-btn[data-login='already']
+  span.onstwishlist-btn-text.onstwishlist-btn-text-already {
+  display: flex;
+}
+button.onstwishlist-btn.onstloading span {
+  opacity: 0.3;
+}
+button.onstwishlist-btn.onstloading:after {
+  content: '';
+  width: 25px;
+  height: 25px;
+  position: absolute;
+  border-width: 2px;
+  border-color: #fff;
+  border-style: solid;
+  border-radius: 100%;
+  border-left: 0;
+  animation: onstrotating 0.5s linear infinite;
+}
+@-webkit-keyframes onstrotating {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes onstrotating {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.favorite-button {
+  display: inline-flex;
+  align-items: center;
+  padding: 14px 20px;
+  border: 1px solid #646464;
+  background-color: transparent;
+  color: #646464;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  font-family: inherit;
+}
+
+.favorite-button .heart-icon {
+  margin-left: 10px;
+  /* Space between text and heart */
+  width: 18px;
+  /* Heart icon size */
+  height: 18px;
+}
+
+.favorite-button:hover {
+  opacity: 0.7;
+}
+

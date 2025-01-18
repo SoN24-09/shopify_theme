@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 document.addEventListener('DOMContentLoaded', function() {     
     const nameInput = document.getElementById('nameInput');     
     const checkButton = document.getElementById('checkButton');
@@ -17,26 +18,59 @@ document.addEventListener('DOMContentLoaded', function() {
   
     checkButton.addEventListener('click', function() {         
         const keyno = nameInput.value.trim();              
+=======
+document.addEventListener('DOMContentLoaded', function () {
+    const keyNoInput = document.getElementById('keyNoInput');
+    const hideByButton = document.getElementById('buyButtonContainer');
+    if (!keyNoInput) {
+        return;
+    }
+    // keyNoInput.addEventListener('change', function () {
+    //     const inputValue = this.value.trim();
 
-        fetch('http://localhost:3001/api/get-keyno', {             
-            method: 'GET'         
-        })         
-        .then(response => response.json())         
-        .then(data => {             
-            if (data.image) {                 
-                const productImage = document.querySelector('.product__media.media.media--transparent > img');                 
-                if (productImage) {                     
-                    productImage.setAttribute('srcset', data.image);                 
-                }                  
-              
-                const imageInput = document.getElementById('image');                 
-                if (imageInput) {                     
-                    imageInput.value = data.image;                 
-                }             
-            }         
-        })         
-        .catch(error => {             
-            console.error('Error:', error);         
-        });     
-    }); 
+    //     if (inputValue.length == 8 || inputValue.length == 10) {
+    //         hideByButton.classList.remove('buy-button--hidden');
+    //     } else {
+    //         hideByButton.classList.add('buy-button--hidden');
+    //     }
+    // });
+>>>>>>> Stashed changes
+
+    // keyNoInput.addEventListener('input', function () {
+    //     const inputValue = this.value.trim();
+
+    //     if (inputValue.length == 8 || inputValue.length == 10) {
+    //         hideByButton.classList.remove('buy-button--hidden');
+    //     } else {
+    //         hideByButton.classList.add('buy-button--hidden');
+    //     }
+    // });
+
+   keyNoInput.addEventListener('input', function () {
+        const inputValue = this.value.trim();
+        var match = inputValue.match(/^[0-9]+$/);
+        if (match) {
+            if (inputValue.length == 8 || inputValue.length == 10) {
+                hideByButton.classList.remove('buy-button--hidden');
+            } else {
+                hideByButton.classList.add('buy-button--hidden');
+            }
+            document.getElementById('keyNoInputWarning').style.display = 'none';
+        } else {
+            hideByButton.classList.add('buy-button--hidden');
+            // show warning message
+            document.getElementById('keyNoInputWarning').style.display = 'block';
+        }
+
+        if (inputValue.length == 0) {
+            document.getElementById('keyNoInputWarning').style.display = 'none';
+            hideByButton.classList.add('buy-button--hidden');
+        }
+    });
+
+    document.getElementById('keyNoInput').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+        }
+    });
 });

@@ -36,6 +36,46 @@
   }
 {%- endstyle -%}
 
+<script>
+  function removeProductToWishlist(customer_email, product_id, wishlist_id, shop) {
+     var dataInfo = {
+         "customer": customer_email,
+         "product": product_id,
+         "wishlist": wishlist_id,
+         "shop": shop
+     };
+     return $.ajax({
+       url: 'https://wishlist.onlinestatusindicator.com/api/wishlistremovecust',
+       type: 'POST',
+       data: dataInfo,
+       dataType: 'json',
+       cache: true,
+       success: function(data) {
+         return true;
+       },
+       error: function(xhr, resp, text) {
+         console.log(xhr, resp, text);
+          return false;
+       }
+     })
+   }
+
+   $(document).ready(function() {
+     $('.favorite-button').click(function() {
+       if ($(this).attr('data-login') == 'already') {
+         var customer_email = $(this).attr('data-customer');
+         var product_id = $(this).attr('data-id');
+         var wishlist_id = $(this).next().val();
+         var shop = $(this).next().next().val();
+
+        if (removeProductToWishlist(customer_email, product_id, wishlist_id, shop)) {
+            $(this).attr('data-login', 'wishlist');
+        }
+       }
+     });
+   });
+</script>
+
 <div class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}">
   {%- paginate collection.products by section.settings.products_per_page -%}
     {% comment %} Sort is the first tabbable element when filter type is vertical {% endcomment %}
@@ -133,10 +173,10 @@
               <h2 class="title title--primary">
                 {{ 'sections.collection_template.empty' | t -}}
                 <br>
-                {{
+                {% comment %} {{
                   'sections.collection_template.use_fewer_filters_html'
                   | t: link: collection.url, class: 'underlined-link link'
-                }}
+                }} {% endcomment %}
               </h2>
             </div>
           </div>
@@ -144,6 +184,15 @@
           <div
             class="collection{% if section.settings.filter_type != 'vertical' %} page-width{% endif %}"
           >
+            {% for filter in collection.filters %}
+              {% if filter.param_name == "filter.p.m.custom.production_period" %}
+                {% if filter.active_values.size > 0 %}
+                  {% for active_value in filter.active_values %}
+                    <h2 class="center">{{ active_value.value }} 年に製造の商品です</h2>
+                  {% endfor %}
+                {% endif %}
+              {% endif %}
+            {% endfor %}
             <div class="loading-overlay gradient"></div>
             <ul
               id="product-grid"
@@ -175,7 +224,8 @@
                       lazy_load: lazy_load,
                       skip_styles: skip_card_product_styles,
                       quick_add: section.settings.quick_add,
-                      section_id: section.id
+                      section_id: section.id,
+                      show_favorite: section.settings.show_favorite
                     %}
                   </li>
                   {%- assign skip_card_product_styles = true -%}
@@ -309,6 +359,13 @@
       "default": false,
       "label": "t:sections.main-collection-product-grid.settings.show_rating.label",
       "info": "t:sections.main-collection-product-grid.settings.show_rating.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_favorite",
+      "default": false,
+      "label": "Show favorite button",
+      "info": "Show favorite button"
     },
     {
       "type": "select",

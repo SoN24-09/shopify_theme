@@ -15,7 +15,7 @@ class VariantSelectors extends HTMLElement {
         ])
       );
       
-      this.setInitialColors();
+      // this.setInitialColors();
     } catch (e) {
       console.error('Error parsing color mappings:', e);
       this.normalizedColorMappings = {};
@@ -166,15 +166,22 @@ class VariantSelectors extends HTMLElement {
     const selections = Array.from(this.buttons).map(button => 
       button.querySelector('[data-option-text]').textContent.trim()
     );
-    
     selections[optionIndex] = value;
 
     if (this.variantSelect) {
       const option = Array.from(this.variantSelect.options).find(option => {
         const variantTitle = option.text;
         const variantValues = variantTitle.split(' / ');
-        console.log("variantValues",value);
-        return variantValues[optionIndex].trim() === value;
+        const options_selected = Array.from(this.querySelectorAll('.variant-selector__option.selected')).map(op => op.dataset.value)
+        let match = true;
+        variantValues.forEach((val,i) => {
+          if(i == optionIndex){
+            if(val != value)match = false
+          }else{
+            if(val != options_selected[i])match = false
+          }
+        })
+        return match;
       });
 
       if (option) {

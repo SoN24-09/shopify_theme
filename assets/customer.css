@@ -1,3 +1,10 @@
+#MainContent .login-form {
+  max-width: 50rem;
+}
+
+#register-form{
+  display: none;
+}
 .customer:not(.account):not(.order) {
   margin: 0 auto;
   max-width: 33.4rem;
@@ -8,7 +15,7 @@
 
 @media screen and (min-width: 750px) {
   .customer:not(.account):not(.order) {
-    max-width: 47.8rem;
+    max-width: 96rem;
   }
 }
 

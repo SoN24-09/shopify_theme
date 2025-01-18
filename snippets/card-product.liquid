@@ -16,6 +16,7 @@
   - horizontal_class: {Boolean} Add a card--horizontal class if set to true. Default: false (optional)
   - horizontal_quick_add: {Boolean} Changes the quick add button styles when set to true. Default: false (optional)
   - placeholder_image: {String} The placeholder image to use when no product exists. Default: 'product-apparel-2' (optional)
+  - show_favorite: {Boolean} Show the add to favorites button. Default: false (optional)
 
   Usage:
   {% render 'card-product', show_vendor: section.settings.show_vendor %}
@@ -28,6 +29,10 @@
   {{ 'quick-order-list.css' | asset_url | stylesheet_tag }}
   {{ 'quantity-popover.css' | asset_url | stylesheet_tag }}
 {%- endunless -%}
+
+{{ 'wishlistbtn.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'wishlistbtn.js' | asset_url }}" defer></script>
+
 {%- if card_product and card_product != empty -%}
   {%- liquid
     assign ratio = 1
@@ -41,9 +46,12 @@
     endif
   -%}
   <div class="cate-item-img" bis_skin_checked="1">
-    <button class="favorite-button">
-      <img src="https://cdn.shopify.com/s/files/1/0915/4474/8324/files/header_icon_favorite.png" alt="ハートアイコン" class="heart-icon" width="16" height="16">
-    </button>
+    <!-- <button class="favorite-button">
+      <span class="svg-wrapper">{{'icon-heart-product.svg' | inline_asset_content }}</span>
+    </button> -->
+    {% if show_favorite %}
+      {% render 'button-add-favorite', product: card_product, hiden_border: true, show_text: false %}
+    {% endif %}
     <a href="{{ card_product.url }}">
       {%- if card_product.featured_media -%}
       <img 
@@ -74,51 +82,35 @@
     <h3 class="card__heading">
       <a href="{{ card_product.url }}">{{ card_product.title | escape }}</a>
     </h3>
-    {% if card_product.metafields.custom.manufacturing_period.value != blank %}
-      {% assign period = card_product.selected_or_first_available_variant.sku | split: '-' %}
-      <div class="period" bis_skin_checked="1">製造期間： {{ period[0] }}-{{ period[1] }}</div>
-    {% endif %}
-    {% assign has_color = false %}
-    {% assign color_names = settings.color_names | split: ',' %}
-      {% for option in card_product.options %}
-        {% if color_names contains option %}
-          {% assign has_color = true %}
-        {% endif %}
-      {% endfor %}
-    {% if has_color %}
-      <div class="color-swatch-list" bis_skin_checked="1">
-        <div class="custom-dropdown" bis_skin_checked="1">
-          <button class="dropdown-button">カラーを選択してください</button>
-          <ul class="dropdown-menu">
-            {% for option in card_product.options_with_values %}
-              {% if color_names contains option.name %}
-                {% for value in option.values %}
-                  <li class="dropdown-item" data-value="option1">
-                    {% comment %} <div
-                      class="color-swatch__item"
-                      style="background-color: #ffffff"
-                      title="パールホワイト"
-                      bis_skin_checked="1"
-                    >
-                      ●
-                    </div> {% endcomment %}
-                    <span>{{ value }}</span>
-                  </li>
-                {% endfor %}
-              {% endif %}
-            {% endfor %}
-          </ul>
-        </div>
-      </div>
-    {% endif %}
+
     <div class="price" bis_skin_checked="1">
       {% if card_product.price_varies %}
-        <p class="product-price">{{ card_product.price_min | divided_by: 100 | times: 110 | money_with_currency | replace: shop.currency }}～{{ card_product.price_max | divided_by: 100 | times: 110 | money_with_currency }}</p>
+        <p class="product-price">{{ card_product.price_min | divided_by: 100 | times: 110 | money | replace: shop.currency }} ～ {{ card_product.price_max | divided_by: 100 | times: 110 | money_with_currency }}</p>
       {% else %}
-        <p class="product-price">{{ card_product.price | divided_by: 100 | times: 110 | money_with_currency }}</p>
+        <p class="product-price">{{ card_product.price | divided_by: 100 | times: 110 | money }}</p>
       {% endif %}
     </div>
+
+     {% if card_product.selected_or_first_available_variant.sku %}
+      <div
+        class="product__sku product__sku{% if block.settings.text_style == 'uppercase' %} caption-with-letter-spacing{% elsif block.settings.text_style == 'subtitle' %} subtitle{% endif %}{% if product.selected_or_first_available_variant.sku.size == 0 %} visibility-hidden{% endif %}"
+        role="status"
+        {{ block.shopify_attributes }}
+      >
+      品番: <span class="visually-hidden">{{ 'products.product.sku' | t }}:</span>
+        {{- card_product.selected_or_first_available_variant.sku -}}
+      </div>
+    {% endif %}
+    {% if card_product.metafields.custom.manufacturing_period.value != blank %}
+      {% assign period = card_product.metafields.custom.manufacturing_period.value %}
+      <div class="period" bis_skin_checked="1">製造期間： {{ period }}</div>
+    {% endif %}
   </div>
+
+  {% assign color_mapping = shop.metaobjects.product_color_mapping.values %}
+  {% assign has_color = false %}
+  {% assign color_names = settings.color_names | split: ',' %}
+  {% assign product_form_id = 'quick-add-' | append: section_id | append: card_product.id %}
   <div class="quick-add no-js-hidden">
     {%- liquid
       assign qty_rules = false
@@ -177,12 +169,48 @@
           {% if card_product.variants.size > 1 %}
             <span>オプションを選択してください</span>
             {% for option in card_product.options_with_values %}
-              <span>{{ option.name }}</span>
-              <select class="dropdown-select" data-option="{{ forloop.index }}">
-                {% for value in option.values %}
-                  <option value="{{ value }}">{{ value }}</option>
-                {% endfor %}
-              </select>
+              <span>{{ option.name }} </span>
+
+              {% if color_names contains option.name %}
+                {% assign has_color = true %}
+              {% endif %}
+
+              {% if has_color %}
+                <div class="color-swatch-list" bis_skin_checked="1">
+                 <div class="custom-dropdown" bis_skin_checked="1">
+                   <button class="dropdown-button">
+                    色を選択してください
+                   </button>
+                   <ul class="dropdown-menu">
+                      {% for value in option.values %}
+                         <li class="dropdown-item color"  data-color="{{ color.color_codes }}" >
+                           {% if color_names contains option.name %}
+                              {% for color in color_mapping %}
+                                {% if color.color_name == value %} 
+                                  <div class="color-swatch__item" style="background-color:{{ color.color_codes }}; ">●</div>
+                                {% endif %}
+                              {% endfor %}
+                            {% endif %}
+                           <span>{{ value }}</span>
+                         </li>
+                     {% endfor %} 
+                   </ul>
+                   <select class="dropdown-select hidden" data-option="{{ forloop.index }}">
+                    {% for value in option.values %}
+                      <option value="{{ value }}">{{ value }}</option>
+                    {% endfor %}
+                  </select>
+                 </div>
+               </div> 
+              {% else %}
+                
+                <select class="dropdown-select" data-option="{{ forloop.index }}">
+                  {% for value in option.values %}
+                    <option value="{{ value }}">{{ value }}</option>
+                  {% endfor %}
+                </select>
+              {% endif %}
+              {% assign has_color = flase %}
             {% endfor %}
           {% endif %}
         {%- form 'product',
@@ -215,7 +243,7 @@
             aria-labelledby="{{ product_form_id }}-submit title-{{ section_id }}-{{ card_product.id }}"
             aria-live="polite"
             data-sold-out-message="true"
-            {% if card_product.selected_or_first_available_variant.available == false %}
+            {% if card_product.available == false %}
               disabled
             {% endif %}
           >

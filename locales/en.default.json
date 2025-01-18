@@ -489,6 +489,7 @@
     },
     "register": {
       "title": "Create account",
+      "description": "Please fill in the following items and press the 'Agree and proceed to confirmation screen' button.* indicates required fields. Please make sure to enter them.",
       "first_name": "First name",
       "last_name": "Last name",
       "email": "Email",

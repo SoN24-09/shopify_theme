@@ -1,0 +1,46 @@
+{% layout none %}
+{%- assign page_url = content_for_header | split:'"pageurl":"' | last | split:'"' | first | split: request.host | last | replace:'\/','/' | replace:'%20',' ' | replace:'\u0026','&'  -%}
+{% assign keyno = blank %}
+
+{%- for i in (1..1) -%}
+
+  {%- unless page_url contains "?" -%}{% break %}{%- endunless -%}
+  {%- assign query_string = page_url | split:'?' | last -%}
+  {%- assign qry_parts= query_string | split:'&' -%}
+
+  {%- for part in qry_parts -%}
+    {%- assign key_and_value = part | split:'=' -%}
+    {%- if key_and_value.size > 1 -%}
+      {% if key_and_value[0] == 'keyno' %}
+        {% assign keyno = key_and_value[1] | strip %}
+      {% endif %}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endfor -%}
+{% assign time = '' %}
+{{ keyno | replace: 'JA-128', '' | }}
+<ul
+    class="grid product-grid  grid--2-col-tablet-down grid--4-col-desktop"
+    role="list"
+  >
+    {% assign product = all_products['445'] %}
+    {% if product.metafields.custom.production_period != '' && product.metafields.custom.production_period != blank %}
+        {% if product.metafields.custom.production_period contains ' to ' %}
+            {% assign production_period = product.metafields.custom.production_period | split: ' to ' | first %}
+        {% else %}
+            {% assign production_period = product.metafields.custom.production_period %}
+        {% endif %}
+        {% assign production_period = production_period | date: '%s' %}
+        {% if production_period > keyno %}
+            <li
+            class="grid__item"
+            >
+                {% if product.type != "sanding" and product.type != "sustainability" %}
+                    {% render 'card-product',
+                        card_product: product
+                    %}
+                {% endif %}
+            </li>
+        {% endif %}
+    {% endif %}
+</ul>

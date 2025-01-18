@@ -42,6 +42,15 @@
   endif
 -%}
 
+<script>
+  $(document).ready(function() {
+    var mediaCount = $('.product__media-list').children().length;
+    if (mediaCount == 1) {
+      // $('.thumbnail-slider').hide();
+    }
+  });
+</script>
+
 <media-gallery
   id="MediaGallery-{{ section.id }}"
   role="region"

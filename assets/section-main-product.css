@@ -1,3 +1,74 @@
+.section-{{ section.id }}-padding {
+  padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+  padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+}
+
+@media screen and (min-width: 750px) {
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+}
+
+.check-button {
+  display: none;
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.check-button.show {
+  display: block;
+}
+
+.input-container {
+display: flex;
+align-items: baseline; 
+gap: 10px; 
+}
+
+.input-container label {
+  font-weight: bold;
+}
+
+.input-container input[type="text"] {
+  padding: 5px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  width: 200px;
+}
+
+.input-container input[type="hidden"] {
+  display: none;
+}
+
+.input-container button {
+  padding: 8px 15px;
+  background-color: orange;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.input-container button:hover {
+  background-color: darkorange;
+}
+
+.input-container   button:focus {
+  outline: 2px solid #ffa500;
+}
+
+.buy-button--hidden {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
 product-info {
   display: block;
 }
@@ -180,7 +251,7 @@ product-info {
 .product-form__input {
   flex: 0 0 100%;
   padding: 0;
-  margin: 0 0 1.2rem 0;
+  margin: 1.5rem 0 2rem 0 !important;
   max-width: 44rem;
   min-width: fit-content;
   border: none;
@@ -199,7 +270,7 @@ product-info {
 }
 
 .product-form__submit {
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
 }
 
 .product-form__submit[aria-disabled='true'] + .shopify-payment-button .shopify-payment-button__button[disabled],
@@ -237,7 +308,7 @@ product-info {
 .product__info-container .product-form,
 .product__info-container .product__description,
 .product__info-container .icon-with-text {
-  margin: 2.5rem 0;
+  margin: 2rem 0 2.5rem;
 }
 
 .product__text {

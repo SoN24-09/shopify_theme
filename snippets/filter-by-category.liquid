@@ -1,14 +1,42 @@
+<<<<<<< Updated upstream
+=======
+{% comment %} <!-- アコーディオンjs -->
+<script type="text/javascript">
+  document.addEventListener('DOMContentLoaded', function () {
+    var accordions = document.querySelectorAll('.parent-accordion');
+    accordions.forEach(function (accordion) {
+      accordion.addEventListener('click', function (event) {
+        if (event.target.tagName === 'A' && event.target.classList.contains('parent-a')) {
+          return;
+        }
+      });
+    });
+  });
+</script> {% endcomment %}
+
+>>>>>>> Stashed changes
 <div class="filter-section {% unless mobile %}small-hide{% endunless %}">
     <h3 class="filter-title">カテゴリから探す</h3>
     <ul class="category-list">
       {% for category in collections %}
         {% if category.metafields.custom.level == 1 %}
+<<<<<<< Updated upstream
           <li style="order: {{ category.metafields.custom.sort }}">
             <div class="sub-accordion {% if category.metafields.custom.children != blank %}has-children{% endif %}" data-toggle="cat{{ category.handle }}">
               {% if category.featured_image != blank %}
                 <img src="{{ category.featured_image | image_url }}" alt="{{ category.title }}">
               {% endif %}
               {{ category.title }}
+=======
+          <li class="parent-accordion" style="order: {{ category.metafields.custom.sort }}">
+            <div id="p-{{ category.id }}" class="sub-accordion {% if category.metafields.custom.children != blank %}has-children{% endif %}" data-toggle="cat{{ category.handle }}">
+              <a class="parent-a" href="{{ category.url }}">
+                {% if category.featured_image != blank %}
+                  <img src="{{ category.featured_image | image_url }}" alt="{{ category.title }}">
+                {% endif %}
+                {{ category.title }}
+              </a>
+>>>>>>> Stashed changes
             </div>
             {% if category.metafields.custom.children != blank %}
               <div id="cat{{ category.handle }}" class="sub-panel">

@@ -1,3 +1,23 @@
+<style>
+  .top-search-wrapper .more-search {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+</style>
+
+<script>
+  function expandKeyNoSearch() {
+    // a tag content to empty, toggle input
+    var aTag = document.querySelector('.more-search a');
+    aTag.innerHTML = '';
+    // a tag width to initial
+    aTag.style.width = 'initial';
+
+  }
+
+</script>
+
 <div class="top-search-wrapper" bis_skin_checked="1">
     <div class="page-width page-width-desktop" bis_skin_checked="1">
       <div class="search-container" bis_skin_checked="1">
@@ -5,9 +25,6 @@
           <input type="text" name="q" class="search-input" placeholder="商品名・キーワード・品番を入力">
           <button type="submit" class="search-button"></button>
         </form>
-        <div class="more-search" bis_skin_checked="1">
-          <a href="#">ロットNoから年代検索</a>
-        </div>
       </div>
     </div>
 </div>

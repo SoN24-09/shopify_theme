@@ -1,3 +1,5 @@
+{{ 'efo-form.css' | asset_url | stylesheet_tag }}
+
 <product-info
   id="MainProduct-{{ section.id }}"
   class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}"
@@ -15,6 +17,8 @@
   {{ 'component-slider.css' | asset_url | stylesheet_tag }}
   {{ 'component-rating.css' | asset_url | stylesheet_tag }}
   {{ 'component-deferred-media.css' | asset_url | stylesheet_tag }}
+  {{ 'wishlistbtn.css' | asset_url | stylesheet_tag }}
+
 
   {% unless product.has_only_default_variant %}
     {{ 'component-product-variant-picker.css' | asset_url | stylesheet_tag }}
@@ -24,78 +28,8 @@
   {%- if product.quantity_price_breaks_configured? -%}
     {{ 'component-volume-pricing.css' | asset_url | stylesheet_tag }}
   {%- endif -%}
-
+  
   {%- style -%}
-    .section-{{ section.id }}-padding {
-      padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
-      padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
-    }
-
-    @media screen and (min-width: 750px) {
-      .section-{{ section.id }}-padding {
-        padding-top: {{ section.settings.padding_top }}px;
-        padding-bottom: {{ section.settings.padding_bottom }}px;
-      }
-    }
-
-    .check-button {
-      display: none;
-      padding: 10px 20px;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-
-    .check-button.show {
-      display: block;
-    }
-
-  .input-container {
-    display: flex;
-    align-items: baseline; 
-    gap: 10px; 
-  }
-
-  .input-container label {
-      font-weight: bold;
-    }
-
-    .input-container input[type="text"] {
-      padding: 5px;
-      border: 1px solid #ccc;
-      font-size: 14px;
-      width: 200px;
-    }
-
-    .input-container input[type="hidden"] {
-      display: none;
-    }
-
-    .input-container button {
-      padding: 8px 15px;
-      background-color: orange;
-      color: white;
-      border: none;
-      cursor: pointer;
-      font-size: 14px;
-      transition: background-color 0.3s ease;
-    }
-
-    .input-container button:hover {
-      background-color: darkorange;
-    }
-
-    .input-container   button:focus {
-      outline: 2px solid #ffa500;
-    }
-
-    .buy-button--hidden {
-      display: none;
-    }
-
   {%- endstyle -%}
 
   <script src="{{ 'product-info.js' | asset_url }}" defer="defer"></script>
@@ -131,6 +65,69 @@
     >
   {%- endif -%}
 
+  <script>
+    function removeProductToWishlist(customer_email, product_id, wishlist_id, shop) {
+      var dataInfo = {
+        customer: customer_email,
+        product: product_id,
+        wishlist: wishlist_id,
+        shop: shop,
+      };
+      return $.ajax({
+        url: 'https://wishlist.onlinestatusindicator.com/api/wishlistremovecust',
+        type: 'POST',
+        data: dataInfo,
+        dataType: 'json',
+        cache: true,
+        success: function (data) {
+          return true;
+        },
+        error: function (xhr, resp, text) {
+          console.log(xhr, resp, text);
+          return false;
+        },
+      });
+    }
+
+    $(document).ready(function () {
+      $('.onstwishlistbtnbox button').click(function () {
+        if ($(this).attr('data-login') == 'already') {
+          var customer_email = $(this).attr('data-customer');
+          var product_id = $(this).attr('data-id');
+          var wishlist_id = $(this).next().val();
+          var shop = $(this).next().next().val();
+
+          if (removeProductToWishlist(customer_email, product_id, wishlist_id, shop)) {
+            $(this).attr('data-login', 'wishlist');
+          }
+        }
+      });
+    });
+  </script>
+
+  <script>
+    $(document).ready(function () {
+      $('input[name="product-type"]').each(function () {
+        if ($(this).val() === 'sanding' || $(this).val() === '_sustainability') {
+          $('.onstwishlistbtnbox').hide();
+        }
+      });
+
+      //  keyNoInput onchange max 10 digits, min 8 digits,  only numbers, prevent input > 10 digits, prevent type other than numbers
+      // document.getElementById('keyNoInput').addEventListener('input', function(e) {
+      //   // only numbers
+      //   this.value = this.value.replace(/[^0-9]/g, '');
+      //   // max 10 digits
+      //   if (this.value.length > 10) {
+      //     this.value = this.value.slice(0, 10);
+      //   }
+      // });
+
+      
+    });
+  </script>
+
+
   {% assign variant_images = product.images | where: 'attached_to_variant?', true | map: 'src' %}
   <div class="page-width">
     <div class="product product--{{ section.settings.media_size }} product--{{ section.settings.media_position }} product--{{ section.settings.gallery_layout }} product--mobile-{{ section.settings.mobile_thumbnails }} grid grid--1-col {% if product.media.size > 0 %}grid--2-col-tablet{% else %}product--no-media{% endif %}">
@@ -143,6 +140,8 @@
           class="product__info-container{% if section.settings.enable_sticky_info %} product__column-sticky{% endif %}"
         >
           {%- assign product_form_id = 'product-form-' | append: section.id -%}
+
+          <input type="hidden" name="product-type" value="{{ product.type }}">
 
           {%- for block in section.blocks -%}
             {%- case block.type -%}
@@ -196,13 +195,14 @@
                 {%- endif -%}
                 <div {{ block.shopify_attributes }}>
                   {%- assign product_form_installment_id = 'product-form-installment-' | append: section.id -%}
-                  {%- form 'product', product, id: product_form_installment_id, class: 'installment caption-large' -%}
+                  {%- form 'product', product, id: product_form_installment_id, class: 'add-to-cart-form installment caption-large' -%}
                     <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
                     
                     {{ form | payment_terms }}
                   
                   {%- endform -%}
                   {% if product.metafields.custom.keyno %}
+<<<<<<< Updated upstream
                     <div class="input-container">
                       <label for="nameInput">KeyNo: </label>
                       <input
@@ -215,6 +215,21 @@
                       <button type="button" id="checkButton" class="check-button">
                         Check KeyNo
                       </button>
+=======
+                    <div class="input-container keyno-container">
+                      <label for="keyNoInput">KeyNo: </label>
+                      <div>
+                        <input
+                          type="text"
+                          name="properties[KeyNo]"
+                          placeholder=""
+                          form="product-form-{{ section.id }}"
+                          id="keyNoInput"
+                          maxlength="10"
+                        >
+                        <p id="keyNoInputWarning" style="display:none" class="efo-input-message error">半角数字で入力してください。</p>
+                       </div>
+>>>>>>> Stashed changes
                     </div>
                   {% endif %}
                  
@@ -270,6 +285,11 @@
                     {%- endif -%}
                   {%- endif -%}
                 </p>
+               {% if product.metafields.custom.link_instruction_manual != blank %}
+                <div class="pdf-guide">
+                  <a href="{{ product.metafields.custom.link_instruction_manual.value }}" target="_blank">取扱説明書はこちら</a>
+                </div>
+              {% endif %}
               {%- when 'description' -%}
                 {%- if product.description != blank -%}
                   <div class="product__description rte quick-add-hidden" {{ block.shopify_attributes }}>
@@ -277,19 +297,23 @@
                   </div>
                 {%- endif -%}
               {%- when 'sku' -%}
-                <p
-                  class="product__sku{% if block.settings.text_style == 'uppercase' %} caption-with-letter-spacing{% elsif block.settings.text_style == 'subtitle' %} subtitle{% endif %}{% if product.selected_or_first_available_variant.sku.size == 0 %} visibility-hidden{% endif %}"
-                  id="Sku-{{ section.id }}"
-                  role="status"
-                  {{ block.shopify_attributes }}
-                >
-                品番:  <span class="visually-hidden">{{ 'products.product.sku' | t }}:</span>
-                  {{- product.selected_or_first_available_variant.sku -}}
-                </p>
+                 {% if product.selected_or_first_available_variant.sku != blank %}
+                  <p
+                    class="product__sku{% if block.settings.text_style == 'uppercase' %} caption-with-letter-spacing{% elsif block.settings.text_style == 'subtitle' %} subtitle{% endif %}{% if product.selected_or_first_available_variant.sku.size == 0 %} visibility-hidden{% endif %}"
+                    id="Sku-{{ section.id }}"
+                    role="status"
+                    {{ block.shopify_attributes }}
+                  >
+                  品番:  <span class="visually-hidden">{{ 'products.product.sku' | t }}:</span>
+                    {{- product.selected_or_first_available_variant.sku -}}
+                  </p>
+                 {% endif %}
               {%- when 'custom_liquid' -%}
                 {{ block.settings.custom_liquid }}  
               {% when 'production_period' %}  
+                {% if product.metafields.custom.manufacturing_period != blank %}
                 <p class="product__date">製造期間: {{ product.metafields.custom.manufacturing_period }}</p>
+                {% endif %}
                 {%- when 'custom-variant_picker' -%}
                   {%  if product.has_only_default_variant  %}  
                       <div></div>
@@ -304,13 +328,7 @@
                     %}
                   </variant-selectors>
                   {% endif %}
-                 
-              {%- when 'pdf_link' -%}
-                <div class="pdf-guide">
-                  <a href="{{ product.metafields.custom.link_instruction_manual }}" target="_blank">
-                    {{ block.settings.name }}
-                  </a>
-                </div>
+
               {%- when 'collapsible_tab' -%}
                 <div class="product__accordion accordion quick-add-hidden" {{ block.shopify_attributes }}>
                   <details id="Details-{{ block.id }}-{{ section.id }}">

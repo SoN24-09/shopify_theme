@@ -11,6 +11,7 @@
   "current": {
     "logo": "shopify://shop_images/logo_609632e3-be43-421a-8a6f-d304efb838eb.png",
     "logo_width": 120,
+    "favicon": "shopify://shop_images/favicon.png",
     "type_header_font": "noto_sans_japanese_n4",
     "heading_scale": 100,
     "type_body_font": "noto_sans_japanese_n4",
@@ -19,7 +20,7 @@
     "spacing_sections": 0,
     "spacing_grid_horizontal": 12,
     "spacing_grid_vertical": 4,
-    "animations_reveal_on_scroll": true,
+    "animations_reveal_on_scroll": false,
     "animations_hover_elements": "vertical-lift",
     "buttons_border_thickness": 1,
     "buttons_border_opacity": 100,

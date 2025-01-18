@@ -1473,6 +1473,195 @@ class Calendar extends HTMLElement {
   }
 }
 customElements.define('calendar-element', Calendar);
+<<<<<<< Updated upstream
+=======
+class RegisterForm extends HTMLElement {
+  constructor(){
+    super();
+    this.zipEle = this.querySelector('.efo-input-zip');
+    this.searchAddressBtn = this.querySelector('.efo-search-address')
+    this.address = this.querySelector('#pref')
+    this.fields = this.querySelectorAll('input:not(.efo-input-zip),select');
+    this.inputZip = this.querySelector('.efo-input-zip');
+    this.showPassBtn = this.querySelector('.js-action-pass-switch-type-btn');
+    this.button = this.querySelector('button[type="submit"]');
+    this.form = this.querySelector('form');
+    this.key = CryptoJS.enc.Utf8.parse('1234567890123456'); // 16 ký tự
+    this.iv = CryptoJS.enc.Utf8.parse('6543210987654321');  // 16 ký tự
+  }
+  connectedCallback() {
+    this.searchAddressBtn.addEventListener('click',this.searchAddress.bind(this))
+    this.inputZip.addEventListener('change',this.enterZip.bind(this))
+    this.inputZip.addEventListener('blur',this.enterZip.bind(this))
+    this.showPassBtn.addEventListener('click',this.showPassword.bind(this))
+    this.fields.forEach(field => {
+      field.addEventListener('change',this.fieldChange.bind(this))
+      field.addEventListener('blur',this.fieldChange.bind(this))
+    })
+    this.form.addEventListener('submit',this.submit.bind(this));
+    if(location.search != ""){
+      var encryptedText = location.search.replace('?','');
+      var decrypt = this.decryptAES128CBC(encryptedText, this.key, this.iv);
+      decrypt.split('&').forEach(param => {
+        var entries = param.split('=');
+        var key = entries[0];
+        var value = entries[1];
+        switch (key) {
+          case 'MINO':
+            this.querySelector('[name="mino"]').value = value;
+            break;
+          case 'CKTR':
+            this.querySelector('[name="cktr"]').value = value;
+            break;
+          case 'RANK':
+            this.querySelector('[name="rank"]').value = value;
+            break;
+          default:
+            if(key.includes('HMK')){
+              this.querySelector('#'+key).checked = value == '2'
+            }
+            break;
+        }
+      })
+    }else{
+      this.querySelector('.hmk-field').style.display = 'none'
+    }
+  }
+  submit(e){
+    e.preventDefault();
+    var formData = new FormData(this.form);
+    var data = Object.fromEntries(formData.entries());
+    document.querySelector('[name="customer[email]"]').value = data.email;
+    document.querySelector('[name="customer[password]"]').value = data.password;
+    document.querySelector('[name="customer[first_name]"]').value = data.first_name;
+    document.querySelector('[name="customer[last_name]"]').value = data.last_name;
+    document.querySelector('[name="customer[phone]"]').value = data.tel;
+    var note = ``;
+    Object.entries(data).forEach(field => {
+      if(field[0] != 'email' && field[0] != 'password' && field[0] != 'first_name' && field[0] != 'last_name' && field[0] != 'hmk' && field[0].indexOf('birth') == -1){
+        note += `${field[0]}:${field[1]}\n`
+      }
+    })
+    var hmk = [];
+    this.querySelectorAll('input[name="hmk"]').forEach(checkbox => {
+      if(checkbox.checked) {
+        hmk.push(checkbox.value)
+      }
+    })
+    note += `birthday:${data.birth_year}-${data.birth_month}-${data.birth_day}\n`;
+    note += `hmk: ${hmk.join(',')}\n`;
+    document.querySelector('[name="customer[note]"]').value = note;
+    document.querySelector('#register-form button').click()
+  }
+  showPassword(){
+    this.querySelector('#form_password').type = "text";
+  }
+  async enterZip(e){
+    if(e.target.value.length == 7 && /^[0-9]+$/.test(e.target.value)){
+      e.target.classList.remove('input-ng')
+      AjaxZip3.zip2addr(this.zipEle,'','pref','address')
+      this.inputZip.parentElement.querySelector('p').classList.remove('error');
+      this.inputZip.parentElement.querySelector('p').innerText = ''
+      await setTimeout(() => {
+        this.querySelector('#pref').dispatchEvent(new Event('change'))
+        this.querySelector('#address').dispatchEvent(new Event('change'))
+      },500)
+    }else{
+      this.inputZip.parentElement.querySelector('p').classList.add('error');
+      this.inputZip.parentElement.querySelector('p').innerText = '半角数字・ハイフンなしで入力してください。'
+      e.target.classList.add('input-ng')
+    }
+  }
+  fieldChange(e){
+    if(e.target.value == ''){
+      e.target.classList.add('input-ng')
+    }else{
+      if(e.target.name == 'tel'){
+        const phoneRegex = /^(0([1-9]{1}-?[1-9]\d{3}|[1-9]{2}-?\d{3}|[1-9]{2}\d{1}-?\d{2}|[1-9]{2}\d{2}-?\d{1})-?\d{4}|0[789]0-?\d{4}-?\d{4}|050-?\d{4}-?\d{4})$/;
+        if(phoneRegex.test(e.target.value)){
+          e.target.classList.remove('input-ng')
+          e.target.parentElement.querySelector('p').classList.remove('error');
+          e.target.parentElement.querySelector('p').innerText = ''
+        }else{
+          e.target.classList.add('input-ng')
+          e.target.parentElement.querySelector('p').classList.add('error');
+          e.target.parentElement.querySelector('p').innerText = '半角数字・ハイフンなしで入力してください。'
+        }
+      }else if(e.target.name == "email"){
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if(emailRegex.test(e.target.value)){
+          e.target.classList.remove('input-ng')
+          e.target.parentElement.querySelector('p').classList.remove('error');
+          e.target.parentElement.querySelector('p').innerText = ''
+        }else{
+          e.target.classList.add('input-ng')
+          e.target.parentElement.querySelector('p').classList.add('error');
+          e.target.parentElement.querySelector('p').innerText = '不正なメールアドレスです。（例：sample@sample.com）'
+        }
+      }else if(e.target.name == "password"){
+        const passwordRegex = /^(?=.*?[a-z])(?=.*?\d)[a-z\,\.\_\-\/\(\)\{\}\d]{8,16}$/i;
+        if(passwordRegex.test(e.target.value)){
+          e.target.classList.remove('input-ng')
+          e.target.parentElement.querySelector('p').classList.remove('error');
+          e.target.parentElement.querySelector('p').innerText = ''
+        }else{
+          e.target.classList.add('input-ng')
+          e.target.parentElement.querySelector('p').classList.add('error');
+          e.target.parentElement.querySelector('p').innerText = '8文字以上16文字以下で半角英数字をそれぞれ1文字以上含んでください。使える記号は『 , . _ - / () {} 』です。'
+        }
+      }else{
+        e.target.classList.remove('input-ng')
+      }
+    }
+    if(e.target.id == 'form_birth_year'){
+      this.querySelector('label[for="form_birth_year"]').innerText = e.target.value
+    }
+    if(e.target.id == 'form_birth_month'){
+      this.querySelector('label[for="form_birth_month"]').innerText = e.target.value
+    }
+    if(e.target.id == 'form_birth_day'){
+      this.querySelector('label[for="form_birth_day"]').innerText = e.target.value
+    }
+    var isValid = true;
+    this.querySelectorAll('.required').forEach(field => {
+      if (field.value == "" || field.value == null) {
+        isValid = false;
+      }
+    })
+    if(isValid && this.querySelectorAll('.efo-input-message.error').length == 0){
+      this.button.removeAttribute('disabled')
+      this.button.innerText = '登録する'
+    }else{
+      this.button.setAttribute('disabled',true)
+      this.button.innerText = '未入力の項目があります'
+    }
+  }
+  async searchAddress(){
+    await AjaxZip3.zip2addr(this.zipEle,'','pref','address')
+    setTimeout(() => {
+      this.querySelector('#pref').dispatchEvent(new Event('change'))
+      this.querySelector('#address').dispatchEvent(new Event('change'))
+    },500)
+  }
+  encryptAES128CBC(text, key, iv) {
+    const encrypted = CryptoJS.AES.encrypt(text, key, {
+        iv: iv,
+        mode: CryptoJS.mode.CBC,
+        padding: CryptoJS.pad.Pkcs7
+    });
+    return encrypted.toString(); // Kết quả base64
+  }
+  decryptAES128CBC(encrypted, key, iv) {
+    const bytes = CryptoJS.AES.decrypt(encrypted, key, {
+        iv: iv,
+        mode: CryptoJS.mode.CBC,
+        padding: CryptoJS.pad.Pkcs7
+    });
+    return bytes.toString(CryptoJS.enc.Utf8);
+  }
+}
+customElements.define('register-form', RegisterForm);
+>>>>>>> Stashed changes
 document.querySelectorAll('.custom-dropdown').forEach((box) => {
   var button = box.querySelector('.dropdown-button');
   var menu = box.querySelector('.dropdown-menu');
@@ -1508,9 +1697,58 @@ document.querySelectorAll('.accordion').forEach((div) => {
 
 // サブカテゴリアコーディオンの制御
 document.querySelectorAll('.sub-accordion').forEach((div) => {
+<<<<<<< Updated upstream
   div.addEventListener('click', () => {
+=======
+  div.addEventListener('click', function (event) {
+    if (event.target.tagName === 'A' && event.target.classList.contains('parent-a')) {
+      return;
+    }
+    
+>>>>>>> Stashed changes
     const subPanel = div.parentNode.querySelector('.sub-panel');
     subPanel.classList.toggle('open');
     div.classList.toggle('open');
   });
+<<<<<<< Updated upstream
 });
+=======
+});
+if(document.getElementById('searchKeyNo')){
+  var url = new URL(window.location.href)
+  var params = url.searchParams;
+  if(params.get('filter.p.m.custom.production_period') != '' && params.get('filter.p.m.custom.production_period') != null){
+    document.querySelector('.cate_leftmenu .input-keyno').value = window.localStorage.getItem('keyno')
+  }
+  const searchKeyNo = async () => {
+    var keyno = document.querySelector('.cate_leftmenu .input-keyno').value;
+    var year = 2014;
+    var url = window.location.href = '/collections/all?filter.p.m.custom.production_period='+keyno;
+    for await (const i of [0,1]) {
+      var latinh = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      for await (const c of latinh) {
+        var key = i+c;
+        if(keyno.slice(-2) == key){
+          window.localStorage.setItem('keyno',keyno)
+          url = '/collections/all?filter.p.m.custom.production_period='+year;
+          break;
+        }
+        year++;
+      }
+    }
+    window.localStorage.setItem('keyno',keyno)
+    window.location.href = url
+  }
+  document.querySelector('.cate_leftmenu .input-keyno').addEventListener('keyup', (event) => {
+    if(event.key == 'Enter' || event.keyCode === 13){
+      event.preventDefault()
+      searchKeyNo()
+    }
+  })
+  document.getElementById('searchKeyNo').addEventListener('click',searchKeyNo)
+  document.querySelector('.search-keyno-form').addEventListener('submit',(event) => {
+    event.preventDefault();
+    searchKeyNo()
+  })
+}
+>>>>>>> Stashed changes

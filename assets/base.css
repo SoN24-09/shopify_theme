@@ -1,3 +1,79 @@
+<<<<<<< Updated upstream
+=======
+/* CUSTOM */
+#product-grid {
+    gap: 0;
+}
+
+#product-grid .product-item {
+    position: relative;
+    z-index: 5;
+    width: 25%;
+    max-width: 25%;
+}
+
+@media screen and (max-width: 750px) {
+  #product-grid .product-item {
+      width: 50%;
+      max-width: 50%;
+  }
+}
+
+.facets-vertical .cate_leftmenu {
+  margin-right: 6rem;
+}
+
+@media screen and (max-width: 750px) {
+  .facets-vertical .cate_leftmenu {
+    margin-right: 0;
+  }
+}
+
+.product__info-container .keyno-container label {
+  font-weight: 400;
+}
+
+.product__info-container .keyno-container input  {
+    padding: 10px 7px !important;
+    font-size: 16px !important;
+}
+
+.keyno-container {
+  margin: 35px 0 25px;
+}
+
+.keyno-container > div {
+  position: relative;
+}
+
+#keyNoInputWarning {
+    min-width: 210px;
+    text-align: center;
+    font-size: 1.25rem;
+    color: white;
+    background-color: red;
+    position: absolute;
+    top: -100%;
+    padding: 2px 13px;
+    margin: 5px 0;
+}
+
+#keyNoInputWarning:after {
+    content: "";
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    bottom: -4px;
+    left: 8px;
+    transform: rotate3d(1, 1, 1, 73deg);
+    background-color: red;
+}
+
+.keyno-container > div {
+  position: relative;
+}
+
+>>>>>>> Stashed changes
 :root {
   --alpha-button-background: 1;
   --alpha-button-border: 1;
@@ -217,7 +293,11 @@ body:has(.section-header .drawer-menu) .announcement-bar-section .page-width {
 }
 
 .skip-to-content-link:focus {
+<<<<<<< Updated upstream
   z-index: 9999;
+=======
+  z-index: 90;
+>>>>>>> Stashed changes
   position: inherit;
   overflow: auto;
   width: auto;
@@ -1567,8 +1647,11 @@ details[open] > .share-button__fallback {
 .select__select,
 .customer .field input,
 .customer select {
+<<<<<<< Updated upstream
   -webkit-appearance: none;
   appearance: none;
+=======
+>>>>>>> Stashed changes
   background-color: rgb(var(--color-background));
   color: rgb(var(--color-foreground));
   font-family: var(--font-body-family);
@@ -2311,7 +2394,11 @@ input[type='checkbox'] {
 
 /* section-header */
 .section-header.shopify-section-group-header-group {
+<<<<<<< Updated upstream
   z-index: 3;
+=======
+  z-index: 80;
+>>>>>>> Stashed changes
 }
 
 .shopify-section-header-sticky {
