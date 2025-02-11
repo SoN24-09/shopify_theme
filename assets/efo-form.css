@@ -420,7 +420,7 @@ textarea {
   padding-bottom: .85em;
 }
 .efo-input-container .efo-input-title {
-  width: 11em;
+  width: 12em;
   padding-right: 20px;
   padding-top: 18px;
   font-size: 128.57%;
@@ -654,6 +654,7 @@ textarea {
   background: #ffddde;
 }
 .efo-input-container .required.input-ng ~ .efo-dummy-select {
+  display: none;
   color: #aaa;
   background: #ffddde;
 }
@@ -1782,4 +1783,48 @@ html.android label.radio-red {
   padding:25px 0 25px 10px;
   width:318px;
   cursor:pointer;
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+.popup {
+  max-width: 80%;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  text-align: center;
+}
+.close-btn {
+  margin-top: 10px;
+  padding: 8px 16px;
+  border: none;
+  background: red;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+}
+.btn-cancel {
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.btn-cancel:hover {
+  background-color: #333;
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+.btn-cancel:active {
+  background-color: #222;
+  transform: translateY(1px);
 }

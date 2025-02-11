@@ -34,6 +34,13 @@
           "type": "price",
           "settings": {}
         },
+        "shopify_apps_blocks_app_block_67cce3d8_a1e5_43f3_8d2d_0c320d8c46e7_3nwfVn": {
+          "type": "shopify://apps//blocks/app-block/67cce3d8-a1e5-43f3-8d2d-0c320d8c46e7",
+          "settings": {
+            "onetime_purchase_label": "１回決済",
+            "subscription_label": "定期決済"
+          }
+        },
         "sku_JHbkpY": {
           "type": "sku",
           "settings": {
@@ -127,6 +134,7 @@
         "label_9p6K7r",
         "title",
         "price",
+        "shopify_apps_blocks_app_block_67cce3d8_a1e5_43f3_8d2d_0c320d8c46e7_3nwfVn",
         "sku_JHbkpY",
         "production_period_WYRDK3",
         "custom_liquid_T9qVXj",
@@ -144,7 +152,8 @@
         "h1 {font-size: 2.2rem;}",
         ".product-label span {font-size: 1.2rem;}",
         ".price-item {color: #f47838;}",
-        ".product__sku,.product__date,.product__inventory {font-size: 1.3rem;}"
+        ".product__sku,.product__date,.product__inventory {font-size: 1.3rem;}",
+        ".product {margin-bottom: 50px;}"
       ],
       "settings": {
         "enable_sticky_info": true,
@@ -165,7 +174,7 @@
     "product_detail_text_zEkwLe": {
       "type": "product-detail-text",
       "custom_css": [
-        ".item-detail-text {padding-top: 60px; font-size: 1.4rem;}"
+        ".item-detail-text {padding-top: 60px; font-size: 1.4rem; margin-top: 60px;}"
       ],
       "settings": {}
     },

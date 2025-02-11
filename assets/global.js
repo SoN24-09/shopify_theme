@@ -1286,7 +1286,7 @@ class Calendar extends HTMLElement {
     this.calMonthName = [
       "1月",
       "2月",
-      "行進",
+      "3月",
       "4月",
       "5月",
       "6月",
@@ -1473,8 +1473,94 @@ class Calendar extends HTMLElement {
   }
 }
 customElements.define('calendar-element', Calendar);
-<<<<<<< Updated upstream
-=======
+
+class ContactForm extends HTMLElement {
+  constructor(){
+    super();
+    this.zipEle = this.querySelector('.efo-input-zip');
+    this.searchAddressBtn = this.querySelector('.efo-search-address')
+    this.address = this.querySelector('#pref')
+    this.fields = this.querySelectorAll('input:not(.efo-input-zip),select');
+    this.inputZip = this.querySelector('.efo-input-zip');
+  }
+  connectedCallback() {
+    this.searchAddressBtn.addEventListener('click',this.searchAddress.bind(this))
+    this.inputZip.addEventListener('change',this.enterZip.bind(this))
+    this.inputZip.addEventListener('blur',this.enterZip.bind(this))
+    this.fields.forEach(field => {
+      field.addEventListener('change',this.fieldChange.bind(this))
+      field.addEventListener('blur',this.fieldChange.bind(this))
+    })
+  }
+  async enterZip(e){
+    if(/^\d{7}$/.test(e.target.value)){
+      var first = e.target.value.slice(0,3);
+      e.target.value = e.target.value.replace(first,first+'-')
+    }
+    if(e.target.value.length == 8 && /^\d{3}-\d{4}$/.test(e.target.value)){
+      e.target.classList.remove('input-ng')
+      AjaxZip3.zip2addr(this.zipEle,'','pref','address', '', '', false)
+      this.inputZip.parentElement.querySelector('p').classList.remove('error');
+      this.inputZip.parentElement.querySelector('p').innerText = ''
+      await setTimeout(() => {
+        this.querySelector('#pref').dispatchEvent(new Event('change'))
+        this.querySelector('#address').dispatchEvent(new Event('change'))
+      },500)
+    }else{
+      this.inputZip.parentElement.querySelector('p').classList.add('error');
+      this.inputZip.parentElement.querySelector('p').innerText = '半角数字・ハイフンなしで入力してください。'
+      e.target.classList.add('input-ng')
+    }
+  }
+  async searchAddress(){
+    await AjaxZip3.zip2addr(this.zipEle.value.replace('-',''),'','pref','address', '', '', false)
+    setTimeout(() => {
+      this.querySelector('#pref').dispatchEvent(new Event('change'))
+      this.querySelector('#address').dispatchEvent(new Event('change'))
+    },500)
+  }
+  fieldChange(e){
+    if(e.target.value == ''){
+      e.target.classList.add('input-ng')
+    }else{
+      if(e.target.name == 'tel'){
+        // const phoneRegex = /^0\d{9}$|^0\d{2}-\d{3}-\d{4}$/;
+        const phoneRegex = /^0\d{1,3}-\d{2,4}-\d{3,4}$/;
+
+        if(e.target.value.length == 10){
+          e.target.value = `${e.target.value.slice(0,3)}-${e.target.value.slice(3,6)}-${e.target.value.slice(6,10)}`
+        }
+        if(phoneRegex.test(e.target.value)){
+          e.target.classList.remove('input-ng')
+          e.target.parentElement.querySelector('p').classList.remove('error');
+          e.target.parentElement.querySelector('p').innerText = ''
+        }else{
+          e.target.classList.add('input-ng')
+          e.target.parentElement.querySelector('p').classList.add('error');
+          e.target.parentElement.querySelector('p').innerText = '半角数字・ハイフンなしで入力してください。'
+        }
+      }else if(e.target.name == "email"){
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if(emailRegex.test(e.target.value)){
+          e.target.classList.remove('input-ng')
+          e.target.parentElement.querySelector('p').classList.remove('error');
+          e.target.parentElement.querySelector('p').innerText = ''
+        }else{
+          e.target.classList.add('input-ng')
+          e.target.parentElement.querySelector('p').classList.add('error');
+          e.target.parentElement.querySelector('p').innerText = '不正なメールアドレスです。（例：sample@sample.com）'
+        }
+      }else{
+        e.target.classList.remove('input-ng')
+      }
+
+      
+      
+    }
+  }
+}
+customElements.define('contact-form', ContactForm);
+
 class RegisterForm extends HTMLElement {
   constructor(){
     super();
@@ -1486,8 +1572,10 @@ class RegisterForm extends HTMLElement {
     this.showPassBtn = this.querySelector('.js-action-pass-switch-type-btn');
     this.button = this.querySelector('button[type="submit"]');
     this.form = this.querySelector('form');
-    this.key = CryptoJS.enc.Utf8.parse('1234567890123456'); // 16 ký tự
-    this.iv = CryptoJS.enc.Utf8.parse('6543210987654321');  // 16 ký tự
+    this.key = CryptoJS.enc.Utf8.parse('VxYe84B7zSj4PHsr'); // 16 ký tự
+    this.iv = CryptoJS.enc.Utf8.parse('eLyUW4vttpvQdZsf');  // 16 ký tự
+    this.readTermsOfService = false;
+    this.readPrivacyPolicy = false;
   }
   connectedCallback() {
     this.searchAddressBtn.addEventListener('click',this.searchAddress.bind(this))
@@ -1504,7 +1592,7 @@ class RegisterForm extends HTMLElement {
       var decrypt = this.decryptAES128CBC(encryptedText, this.key, this.iv);
       decrypt.split('&').forEach(param => {
         var entries = param.split('=');
-        var key = entries[0];
+        var key = entries[0].trim();
         var value = entries[1];
         switch (key) {
           case 'MINO':
@@ -1518,13 +1606,49 @@ class RegisterForm extends HTMLElement {
             break;
           default:
             if(key.includes('HMK')){
-              this.querySelector('#'+key).checked = value == '2'
+              this.querySelector('#'+key).checked = value == '1'
             }
             break;
         }
       })
-    }else{
-      this.querySelector('.hmk-field').style.display = 'none'
+    }
+    this.querySelector('#scroll-terms-of-service').addEventListener('scroll',this.scrollTermsOfService.bind(this));
+    this.querySelector('#scroll-privacy-policy').addEventListener('scroll',this.scrollPrivacyPolicy.bind(this));
+  
+    const formUseStartDate = document.getElementById('form_use_start_date');
+    const inputTriggerForm = document.getElementById('inputTriggerForm');
+    $('.js-datepicker').datepicker({
+      dateFormat: "yy/mm/dd",
+      onSelect: function(dateText) {
+          if (formUseStartDate) {
+            if (this.value === '') {
+                inputTriggerForm.value = (Math.random() + 1).toString(36).substring(7);
+                formUseStartDate.classList.add('required');
+                formUseStartDate.classList.add('input-ng');
+            } else {
+                inputTriggerForm.value = (Math.random() + 1).toString(36).substring(7);
+                formUseStartDate.classList.remove('required');
+                formUseStartDate.classList.remove('input-ng');
+                this.parentElement.querySelector('p').classList.remove('error')
+            }
+         }
+      }
+    });
+  }
+  scrollTermsOfService(e){
+    if(e.target.scrollHeight - e.target.scrollTop - e.target.clientHeight <= 1){
+      this.readTermsOfService = true;
+    }
+    if(this.readTermsOfService && this.readPrivacyPolicy){
+      this.querySelector('#form_privacy_agreement').removeAttribute('disabled')
+    }
+  }
+  scrollPrivacyPolicy(e){
+    if(e.target.scrollHeight - e.target.scrollTop - e.target.clientHeight <= 1){
+      this.readPrivacyPolicy = true;
+    }
+    if(this.readTermsOfService && this.readPrivacyPolicy){
+      this.querySelector('#form_privacy_agreement').removeAttribute('disabled')
     }
   }
   submit(e){
@@ -1535,10 +1659,10 @@ class RegisterForm extends HTMLElement {
     document.querySelector('[name="customer[password]"]').value = data.password;
     document.querySelector('[name="customer[first_name]"]').value = data.first_name;
     document.querySelector('[name="customer[last_name]"]').value = data.last_name;
-    document.querySelector('[name="customer[phone]"]').value = data.tel;
+    document.querySelector('[name="customer[phone]"]').value = data.tel1 + data.tel2 + data.tel3;
     var note = ``;
     Object.entries(data).forEach(field => {
-      if(field[0] != 'email' && field[0] != 'password' && field[0] != 'first_name' && field[0] != 'last_name' && field[0] != 'hmk' && field[0].indexOf('birth') == -1){
+      if(field[1] != '' && field[0] != 'tel1' && field[0] != 'tel2' && field[0] != 'tel3' && field[0] != 'email' && field[0] != 'password' && field[0] != 'first_name' && field[0] != 'last_name' && field[0] != 'hmk' && field[0].indexOf('birth') == -1){
         note += `${field[0]}:${field[1]}\n`
       }
     })
@@ -1557,9 +1681,224 @@ class RegisterForm extends HTMLElement {
     this.querySelector('#form_password').type = "text";
   }
   async enterZip(e){
-    if(e.target.value.length == 7 && /^[0-9]+$/.test(e.target.value)){
+    if(/^\d{7}$/.test(e.target.value)){
+      var first = e.target.value.slice(0,3);
+      e.target.value = e.target.value.replace(first,first+'-')
+    }
+    if(e.target.value.length == 8 && /^\d{3}-\d{4}$/.test(e.target.value)){
       e.target.classList.remove('input-ng')
-      AjaxZip3.zip2addr(this.zipEle,'','pref','address')
+      AjaxZip3.zip2addr(this.zipEle,'','pref','address', '', '', false)
+      this.inputZip.parentElement.querySelector('p').classList.remove('error');
+      this.inputZip.parentElement.querySelector('p').innerText = ''
+      await setTimeout(() => {
+        this.querySelector('#pref').dispatchEvent(new Event('change'))
+        this.querySelector('#address').dispatchEvent(new Event('change'))
+      },500)
+    }else{
+      this.inputZip.parentElement.querySelector('p').classList.add('error');
+      this.inputZip.parentElement.querySelector('p').innerText = '半角数字・ハイフンなしで入力してください。'
+      e.target.classList.add('input-ng')
+    }
+  }
+  fieldChange(e){
+    if(e.target.value == ''){
+      if(!e.target.classList.contains('input-ng')){
+        e.target.classList.add('input-ng');
+      }
+      if(e.target.name == "furigana_first_name" || e.target.name == "furigana_last_name"){
+          e.target.parentElement.querySelector('p').classList.remove('error');
+          e.target.parentElement.querySelector('p').innerText = ''    
+      }
+    }else{
+      if(e.target.name == 'tel1' || e.target.name == 'tel2' || e.target.name == 'tel3'){
+        if(e.target.name == 'tel1'){
+          var phoneRegex = /^0\d{1,3}$/;
+        }else if(e.target.name == 'tel2'){
+          var phoneRegex = /^\d{2,4}$/;
+        }else{
+          var phoneRegex = /^\d{3,4}$/;
+        }
+        if(phoneRegex.test(e.target.value)){
+          e.target.classList.remove('input-ng')
+          e.target.parentElement.querySelector('p').classList.remove('error');
+          e.target.parentElement.querySelector('p').innerText = ''
+        }else{
+          e.target.classList.add('input-ng')
+          e.target.parentElement.querySelector('p').classList.add('error');
+          e.target.parentElement.querySelector('p').innerText = '入力内容にお間違いがないか確認してください。'
+        }
+      }else if(e.target.name == "email"){
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if(emailRegex.test(e.target.value)){
+          e.target.classList.remove('input-ng')
+          e.target.parentElement.querySelector('p').classList.remove('error');
+          e.target.parentElement.querySelector('p').innerText = ''
+        }else{
+          e.target.classList.add('input-ng')
+          e.target.parentElement.querySelector('p').classList.add('error');
+          e.target.parentElement.querySelector('p').innerText = '不正なメールアドレスです。（例：sample@sample.com）'
+        }
+      }else if(e.target.name == "password"){
+        const passwordRegex = /^(?=.*?[a-z])(?=.*?\d)[a-z\,\.\_\-\/\(\)\{\}\d]{8,16}$/i;
+        if(passwordRegex.test(e.target.value)){
+          e.target.classList.remove('input-ng')
+          e.target.parentElement.querySelector('p').classList.remove('error');
+          e.target.parentElement.querySelector('p').innerText = ''
+        }else{
+          e.target.classList.add('input-ng')
+          e.target.parentElement.querySelector('p').classList.add('error');
+          e.target.parentElement.querySelector('p').innerText = '8文字以上16文字以下で半角英数字をそれぞれ1文字以上含んでください。使える記号は『 , . _ - / () {} 』です。'
+        }
+      }else if(e.target.name == "furigana_first_name" || e.target.name == "furigana_last_name"){
+         const furiganaRegex = /^[\u30A0-\u30FF]+$/;
+          if(furiganaRegex.test(e.target.value)){
+            e.target.classList.remove('input-ng')
+            e.target.parentElement.querySelector('p').classList.remove('error');
+            e.target.parentElement.querySelector('p').innerText = ''
+          }else{
+            e.target.classList.add('input-ng')
+            e.target.parentElement.querySelector('p').classList.add('error');
+            e.target.parentElement.querySelector('p').innerText = '全角カタカナで入力してください'
+          }
+      }else if(e.target.name == 'job'){
+        const iconRequired = document.createElement('i');
+        iconRequired.classList.add('icon-required');
+        if (e.target.value === '法人') {
+          this.querySelector('#form_company').classList.add('required');
+          if(this.querySelector('#form_company').value == '' && !this.querySelector('#form_company').classList.contains('input-ng')){
+            this.querySelector('#form_company').classList.add('input-ng');
+          }
+          if(this.querySelector('#companyName .efo-input-title .icon-required') == null){
+            this.querySelector('#companyName .efo-input-title').appendChild(iconRequired);
+          }
+        } else {
+          this.querySelector('#form_company').classList.remove('required', 'input-ng');
+          this.querySelector('#companyName .efo-input-title i')?.remove()
+        }
+      }else if(e.target.name == "use_start_date_select"){
+        const dateRegex = /^(19|20)\d{2}\/(0[1-9]|1[0-2])\/(0[1-9]|[12]\d|3[01])$/;
+        if(dateRegex.test(e.target.value)){
+          e.target.classList.remove('input-ng')
+          e.target.parentElement.querySelector('p').classList.remove('error');
+          e.target.parentElement.querySelector('p').innerText = ''
+        }else{
+          e.target.classList.add('input-ng')
+          e.target.parentElement.querySelector('p').classList.add('error');
+          e.target.parentElement.querySelector('p').innerText = 'YYYY/MM/DD形式（例：2013/01/08）で入力してください。'
+        }
+      }else{
+        e.target.classList.remove('input-ng')
+      }
+    }
+    if(e.target.id == 'form_birth_year'){
+      this.querySelector('label[for="form_birth_year"]').innerText = e.target.value
+    }
+    if(e.target.id == 'form_birth_month'){
+      this.querySelector('label[for="form_birth_month"]').innerText = e.target.value
+    }
+    if(e.target.id == 'form_birth_day'){
+      this.querySelector('label[for="form_birth_day"]').innerText = e.target.value
+    }
+    var isValid = true;
+    this.querySelectorAll('.required').forEach(field => {
+      if (field.value == "" || field.value == null) {
+        isValid = false;
+      }
+    })
+    if(isValid && this.querySelectorAll('.efo-input-message.error').length == 0 && this.querySelector('#form_privacy_agreement').checked){
+      this.button.removeAttribute('disabled')
+      this.button.innerText = '登録する'
+    }else{
+      this.button.setAttribute('disabled',true)
+      this.button.innerText = '未入力の項目があります'
+    }
+  }
+  async searchAddress(){
+    await AjaxZip3.zip2addr(this.zipEle.value.replace('-',''),'','pref','address', '', '', false)
+    setTimeout(() => {
+      this.querySelector('#pref').dispatchEvent(new Event('change'))
+      this.querySelector('#address').dispatchEvent(new Event('change'))
+    },500)
+  }
+  encryptAES128CBC(text, key, iv) {
+    const encrypted = CryptoJS.AES.encrypt(text, key, {
+        iv: iv,
+        mode: CryptoJS.mode.CBC,
+        padding: CryptoJS.pad.Pkcs7
+    });
+    return encrypted.toString(); // Kết quả base64
+  }
+  decryptAES128CBC(encrypted, key, iv) {
+    const bytes = CryptoJS.AES.decrypt(encrypted, key, {
+        iv: iv,
+        mode: CryptoJS.mode.CBC,
+        padding: CryptoJS.pad.Pkcs7
+    });
+    return bytes.toString(CryptoJS.enc.Utf8);
+  }
+}
+customElements.define('register-form', RegisterForm);
+class EditInfomationForm extends HTMLElement {
+  constructor(){
+    super();
+    this.zipEle = this.querySelector('.efo-input-zip');
+    this.searchAddressBtn = this.querySelector('.efo-search-address')
+    this.address = this.querySelector('#pref')
+    this.fields = this.querySelectorAll('input:not(.efo-input-zip),select');
+    this.inputZip = this.querySelector('.efo-input-zip');
+    this.showPassBtn = this.querySelector('.js-action-pass-switch-type-btn');
+    this.button = this.querySelector('button[type="submit"]');
+    this.form = this.querySelector('form');
+    this.form.addEventListener('submit',this.submit.bind(this));
+  }
+  connectedCallback() {
+    this.searchAddressBtn.addEventListener('click',this.searchAddress.bind(this))
+    this.inputZip.addEventListener('change',this.enterZip.bind(this))
+    this.inputZip.addEventListener('blur',this.enterZip.bind(this))
+    this.fields.forEach(field => {
+      field.addEventListener('change',this.fieldChange.bind(this))
+      field.addEventListener('blur',this.fieldChange.bind(this))
+    })
+    AjaxZip3.zip2addr(this.zipEle,'','pref','address', '', '', false);
+    var isValid = true;
+    this.querySelectorAll('.required').forEach(field => {
+      if (field.value == "" || field.value == null) {
+        isValid = false;
+      }
+    })
+    if(isValid && this.querySelectorAll('.efo-input-message.error').length == 0){
+      this.button.removeAttribute('disabled')
+      this.button.innerText = '変更する'
+    }else{
+      this.button.setAttribute('disabled',true)
+      this.button.innerText = '未入力の項目があります'
+    }
+    // document.getElementById('form_firstkana').value = wanakana.toKatakana(document.getElementById('form_firstname').value)
+    // document.getElementById('form_lastkana').value = wanakana.toKatakana(document.getElementById('form_lastname').value)
+  }
+  submit(e){
+    e.preventDefault();
+    var formData = new FormData(this.form);
+    var data = Object.fromEntries(formData.entries());
+    var note = ``;
+    Object.entries(data).forEach(field => {
+      if(field[1] != '' && field[0] != 'password' && field[0] != 'first_name' && field[0] != 'last_name' && field[0] != 'hmk' && field[0].indexOf('birth') == -1){
+        note += `${field[0]}:${field[1]}\n`
+      }
+    })
+    document.querySelector('#infomation-form [name="contact[first_name]"]').value = document.getElementById('form_firstname').value;
+    document.querySelector('#infomation-form [name="contact[last_name]"]').value = document.getElementById('form_lastname').value;
+    document.querySelector('[name="contact[note]"]').value = note;
+    document.querySelector('#infomation-form').submit()
+  }
+  async enterZip(e){
+    if(/^\d{7}$/.test(e.target.value)){
+      var first = e.target.value.slice(0,3);
+      e.target.value = e.target.value.replace(first,first+'-')
+    }
+    if(e.target.value.length == 8 && /^\d{3}-\d{4}$/.test(e.target.value)){
+      e.target.classList.remove('input-ng')
+      AjaxZip3.zip2addr(this.zipEle,'','pref','address', '', '', false)
       this.inputZip.parentElement.querySelector('p').classList.remove('error');
       this.inputZip.parentElement.querySelector('p').innerText = ''
       await setTimeout(() => {
@@ -1577,7 +1916,12 @@ class RegisterForm extends HTMLElement {
       e.target.classList.add('input-ng')
     }else{
       if(e.target.name == 'tel'){
-        const phoneRegex = /^(0([1-9]{1}-?[1-9]\d{3}|[1-9]{2}-?\d{3}|[1-9]{2}\d{1}-?\d{2}|[1-9]{2}\d{2}-?\d{1})-?\d{4}|0[789]0-?\d{4}-?\d{4}|050-?\d{4}-?\d{4})$/;
+        // const phoneRegex = /^0\d{9}$|^0\d{2}-\d{3}-\d{4}$/;
+        const phoneRegex = /^0\d{1,3}-\d{2,4}-\d{3,4}$/;
+
+        if(e.target.value.length == 10){
+          e.target.value = `${e.target.value.slice(0,3)}-${e.target.value.slice(3,6)}-${e.target.value.slice(6,10)}`
+        }
         if(phoneRegex.test(e.target.value)){
           e.target.classList.remove('input-ng')
           e.target.parentElement.querySelector('p').classList.remove('error');
@@ -1630,14 +1974,14 @@ class RegisterForm extends HTMLElement {
     })
     if(isValid && this.querySelectorAll('.efo-input-message.error').length == 0){
       this.button.removeAttribute('disabled')
-      this.button.innerText = '登録する'
+      this.button.innerText = '変更する'
     }else{
       this.button.setAttribute('disabled',true)
       this.button.innerText = '未入力の項目があります'
     }
   }
   async searchAddress(){
-    await AjaxZip3.zip2addr(this.zipEle,'','pref','address')
+    await AjaxZip3.zip2addr(this.zipEle.value.replace('-',''),'','pref','address', '', '', false)
     setTimeout(() => {
       this.querySelector('#pref').dispatchEvent(new Event('change'))
       this.querySelector('#address').dispatchEvent(new Event('change'))
@@ -1660,8 +2004,7 @@ class RegisterForm extends HTMLElement {
     return bytes.toString(CryptoJS.enc.Utf8);
   }
 }
-customElements.define('register-form', RegisterForm);
->>>>>>> Stashed changes
+customElements.define('infomation-form', EditInfomationForm);
 document.querySelectorAll('.custom-dropdown').forEach((box) => {
   var button = box.querySelector('.dropdown-button');
   var menu = box.querySelector('.dropdown-menu');
@@ -1697,22 +2040,15 @@ document.querySelectorAll('.accordion').forEach((div) => {
 
 // サブカテゴリアコーディオンの制御
 document.querySelectorAll('.sub-accordion').forEach((div) => {
-<<<<<<< Updated upstream
-  div.addEventListener('click', () => {
-=======
   div.addEventListener('click', function (event) {
     if (event.target.tagName === 'A' && event.target.classList.contains('parent-a')) {
       return;
     }
     
->>>>>>> Stashed changes
     const subPanel = div.parentNode.querySelector('.sub-panel');
     subPanel.classList.toggle('open');
     div.classList.toggle('open');
   });
-<<<<<<< Updated upstream
-});
-=======
 });
 if(document.getElementById('searchKeyNo')){
   var url = new URL(window.location.href)
@@ -1751,4 +2087,47 @@ if(document.getElementById('searchKeyNo')){
     searchKeyNo()
   })
 }
->>>>>>> Stashed changes
+
+async function fetchSwatch(cursor = null){
+  var query = `{ metaobjects(type: "product_color_mapping", first: 50) { pageInfo { hasNextPage endCursor } nodes { handle fields { key value }}}}`;
+  if(cursor != null){
+    query = `{ metaobjects(after: "${cursor}",type: "product_color_mapping", first: 50) { pageInfo { hasNextPage endCursor } nodes { handle fields { key value }}}}`;
+  }
+  return await fetch('https://woodone-shuei-prd.myshopify.com/api/2025-01/graphql.json',{
+    headers: {
+        'Content-Type': 'application/json',
+        'X-Shopify-Storefront-Access-Token': '00e0c0894ba6406c5678ef4a26795fd4'
+    },
+    method: 'POST',
+    body: JSON.stringify({
+        query
+    })
+  }).then(res => res.json()).then(res => res.data)
+}
+document.addEventListener('DOMContentLoaded',async () => {
+  var hasNext = false;
+  var cursor = null;
+  var swatches = [];
+  do{
+    if(cursor != null){
+      var result = await fetchSwatch(cursor);
+    }else{
+      var result = await fetchSwatch();
+    }
+    hasNext = result.metaobjects.pageInfo.hasNextPage;
+    cursor = result.metaobjects.pageInfo.endCursor;
+    swatches = [...swatches, ...result.metaobjects.nodes];
+  }while(hasNext)
+    document.querySelectorAll('.product-item.grid__item').forEach(pro => {
+      pro.querySelectorAll('.dropdown-item.color').forEach(option => {
+        var value = option.querySelector('span').innerText;
+        var swatch = swatches.find(s => s.fields[1].value == value);
+        if(swatch){
+          if(option.querySelector('.variant-selector__color') == null){
+            option.innerHTML = `<div class="color-swatch__item" style="background-color: ${swatch.fields[0].value}">●</div></span>${value}`
+          }
+        }
+      })
+    })
+  
+})

@@ -1,3 +1,107 @@
+.shopify-section .h0 {
+  text-align: center;
+}
+
+.contact .efo-form-container {
+  padding-top: 0px;
+}
+
+.contact .efo-form {
+  padding-bottom: 30px;
+}
+
+.contact .efo-input-container textarea {
+  width: 75% !important;
+}
+
+.contact .efo-input-wrap-textarea {
+  display: flex;
+}
+
+.contact .efo-memo {
+  margin-top: 10px;
+  margin-bottom: 4px;
+  font-size: 1.25rem;
+}
+
+.contact_policy {
+    padding: 40px 0 0;
+}
+
+#agreement {
+  margin: 0px 3px 3px;
+}
+
+.privacy-block__content {
+  padding-left: 20px;
+}
+
+.mCustomScrollbar  {
+    margin: 20px 0px 30px;
+    height: 350px;
+    font-size: 1.3rem;
+    border: 1px solid #ececec;
+    padding: 12px;
+    overflow: auto;
+    position: relative;
+}
+
+.mCSB_container h1 {
+	clear:both;
+	font-size:153.8%;
+	font-weight:bold;
+	margin:15px 0 25px;
+	line-height:1.1;
+}
+.mCSB_container .texttl{
+	background:#E3DAC7;
+	margin:0 0 20px;
+	padding:11px;
+	position:relative;
+	min-height:17px;
+}
+.mCSB_container .texttl h1{
+	border-left:4px solid #2A2823;
+	padding:0 0 0 8px;
+	font-size:138.5%;
+	font-weight:bold;
+}
+.mCSB_container .subtl01{
+	padding:0 0 10px;
+	position:relative;
+	border-bottom:1px solid #CCC;
+	margin:0 0 15px;
+}
+.mCSB_container .subtl01 h1{
+	border-left:4px solid #2A2823;
+	font-weight:bold;
+	font-size:107.7%;
+	padding:0 0 0 8px;
+}
+.mCSB_container .subtl01 .link{
+	position:absolute;
+	top:0;
+	right:0;
+	line-height:1.1;
+}
+.mCSB_container .subtl01 .link a{
+	/*background:url(../images/ic_arrow01.gif) no-repeat left;*/
+	padding:0 0 0 16px;
+	font-size:92.3%;
+	color:inherit;
+}
+
+.check-agreement {
+    display: block;
+}
+.check-agreement {
+    margin-top: 20px;
+    text-align: center;
+    border: 1px solid #B2A791;
+    padding: 20px;
+    background-color: whitesmoke;
+}
+
 .contact img {
   max-width: 100%;
 }
@@ -21,12 +125,17 @@
 }
 
 .contact__button {
-  margin-top: 3rem;
+  display: flex;
+  justify-content: center;
+}
+
+.contact__button button {
+  width: 90%;
+  max-width: 200px;
 }
 
 @media screen and (min-width: 750px) {
   .contact__button {
-    margin-top: 4rem;
   }
 }
 

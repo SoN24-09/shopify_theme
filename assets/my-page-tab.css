@@ -1,0 +1,198 @@
+.mypage .onstwishlistpagebox-container>div>div {
+  padding: 0;
+  background-color: initial;
+  border: none;
+}
+
+.mypage .onstwishlistpagebox-find-wishlist-items-list .onstwishlistpagebox-find-wishlist-items-list-items {
+  gap: 0;
+  margin-left: 1px;
+}
+
+.mypage .onstwishlistpagebox-find-wishlist-items-list .onstwishlistpagebox-find-wishlist-items-list-items .onstwishlistpagebox-find-wishlist-item {
+  width: 20%;
+  max-width: 20%;
+  padding: 12px 12px 27px;
+  margin-left: -1px;
+  margin-bottom: -1px;
+}
+
+@media screen and (max-width: 768px) {
+  .mypage .onstwishlistpagebox-find-wishlist-items-list .onstwishlistpagebox-find-wishlist-items-list-items .onstwishlistpagebox-find-wishlist-item {
+     width: 50%;
+     max-width: 50%;
+     padding: 12px 12px 10px;
+  }
+
+  .mypage .tab {
+    padding: 10px 10px;
+  }
+}
+
+
+#tab3 .onstwishlistpagebox-find-wishlist-item-actions {
+    padding-top: 0;
+    position: absolute;
+    bottom: -12px;
+  }
+  
+#tab3 .onstwishlistpagebox-remove {
+    font-size: 0;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23444' d='M96 472a23.82 23.82 0 0 0 23.579 24h272.842A23.82 23.82 0 0 0 416 472V152H96Zm32-288h256v280H128Z'/%3E%3Cpath fill='%23444' d='M168 216h32v200h-32zm72 0h32v200h-32zm72 0h32v200h-32zm16-128V40c0-13.458-9.488-24-21.6-24H205.6C193.488 16 184 26.542 184 40v48H64v32h384V88ZM216 48h80v40h-80Z'/%3E%3C/svg%3E");
+    /* background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='%23000' d='M2.854 2.146a.5.5 0 1 0-.708.708l1.271 1.27a4 4 0 0 0-.156.15c-1.688 1.705-1.68 4.476.016 6.189l6.277 6.34c.26.263.682.263.942 0l2.787-2.813l3.863 3.864a.5.5 0 0 0 .708-.708zm9.722 11.137l-2.55 2.575l-6.039-6.099c-1.313-1.326-1.314-3.47-.015-4.782q.074-.075.153-.145zm3.452-3.485l-2.045 2.064l.707.707l2.05-2.07a4.41 4.41 0 0 0-.016-6.187a4.306 4.306 0 0 0-6.135-.015l-.596.603l-.605-.61l-.1-.099a4.32 4.32 0 0 0-4.035-1.06l.874.874a3.32 3.32 0 0 1 2.55.988l.961.97a.5.5 0 0 0 .711 0L11.3 5a3.306 3.306 0 0 1 4.713.016a3.41 3.41 0 0 1 .016 4.78z'/%3E%3C/svg%3E"); */
+    background-size: 22px;
+    background-position: center;
+    border: none;
+    padding: 0;
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
+  }
+
+.onstwishlistpagebox-find-wishlist-item-content {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+
+.onstwishlistpagebox-find-wishlist-item-image {
+    border: none !important;
+}
+
+.onstwishlistpagebox-find-wishlist-item-title {
+  text-align: left;
+}
+
+.onstwishlistpagebox-find-wishlist-item-title a {
+    font-weight: 400;
+    text-align: left;
+    font-size: 1.35rem !important;
+    line-height: 1.6 !important;
+}
+
+.onstwishlistpagebox-find-wishlist-item-inner {
+  padding-bottom: 20px;
+  height: 100%;
+}
+
+@media screen and (max-width: 768px) {
+  .onstwishlistpagebox-find-wishlist-item-inner {
+    padding-bottom: 38px;
+  }
+
+  #tab3 .onstwishlistpagebox-find-wishlist-item-actions {
+      padding-top: 0;
+      bottom: 9px;
+  }
+}
+
+.onstwishlistpagebox-find-wishlist-item {
+  border: 1px solid #efefef;
+}
+
+.tab-wishlist-content .onstwishlistpagebox {
+    padding: 0;
+      
+  }
+  
+  .tab-wishlist-content
+    .onstwishlistpagebox
+    .onstwishlistpagebox-find-wishlist-items-box {
+    background-color: #ffffff00;
+    border: 0px;
+  }
+  
+  .tab-wishlist-content
+    .onstwishlistpagebox
+    .onstwishlistpagebox-find-wishlist-items-box
+    .onstwishlistpagebox-find-wishlist-item-image {
+    border: 0px;
+    background-color: #ffffff00;
+  }
+  
+  .address {
+    border-bottom: 1px solid #5e5e5e;
+    padding-top: 15px;
+  }
+  
+  .address-content {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .adress-action {
+    align-self: center;
+  }
+  
+  .mypage .btn-edit-address {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border: 0;
+    padding: 0 3rem;
+    cursor: pointer;
+    font: inherit;
+    font-size: 1.5rem;
+    text-decoration: none;
+    color: rgb(var(--color-button-text));
+    transition: box-shadow var(--duration-short) ease;
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: rgba(var(--color-button), var(--alpha-button-background));
+  }
+  
+  .mypage .hide {
+    display: none;
+  }
+  
+  .tab-content .tab-content-data {
+    width: 100%;
+    max-width: 80rem;
+    margin: auto;
+  }
+  
+  .tab-content .tab-content-data h2 {
+    font-size: 1.8rem;
+  }
+  .edit-address-title {
+    font-size: 2rem;
+  }
+
+
+
+/* Loading overlay covers the entire page */
+#loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.8); /* Transparent white background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999; /* Ensure it stays on top */
+  visibility: hidden; /* Hidden by default */
+}
+
+/* Spinner animation */
+#loading-overlay .spinner {
+  display: block;
+  width: 50px;
+  height: 50px;
+  border: 5px solid #ccc; /* Outer border */
+  border-top: 5px solid #333; /* Blue border for the animation */
+  border-radius: 50%;
+  animation: spin 1s linear infinite; /* Infinite spin */
+}
+
+/* Spin animation */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+

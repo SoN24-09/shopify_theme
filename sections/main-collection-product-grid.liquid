@@ -22,6 +22,42 @@
   <script src="{{ 'quick-order-list.js' | asset_url }}" defer="defer"></script>
 {%- endif -%}
 
+<style>
+  .filters-list {
+    display: flex;
+    flex-wrap: wrap;
+    list-style-type: none;
+    margin: 0;
+    padding: 10px 7px;
+    background-color: #f5f5f5;
+    border-top: 1px solid #d9d9d9;
+    gap: 10px;
+  }
+  .filters-list li {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #e6f7ff;
+    border: 1px solid #b3d8ff;
+    border-radius: 20px;
+    padding: 7px 15px;
+    margin-right: 10px;
+    font-size: 18px;
+    color: #000;
+  }
+  .filter-label {
+    font-weight: bold;
+    margin-right: 5px;
+    color:#111;
+  }
+  .filter-values ​​{
+    color: #111;
+  }
+  .filters-list li:hover {
+    background-color: #d4e9ff;
+    cursor: pointer;
+  }
+</style>
 {%- style -%}
   .section-{{ section.id }}-padding {
     padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
@@ -138,6 +174,16 @@
     {%- endif -%}
 
     {% render 'breadcrumbs' %}
+
+    <div class="collection-description">
+      <div>
+        {{ collection.description }}
+      </div>
+      <div class="collection-children">
+        {% render 'grid-collection-children', collection: collection %}
+      </div>
+    </div>
+
     <div class="{% if section.settings.filter_type == 'vertical' %} facets-vertical page-width{% endif %}">
       {{ 'component-facets.css' | asset_url | stylesheet_tag }}
       <script src="{{ 'facets.js' | asset_url }}" defer="defer"></script>
@@ -166,6 +212,32 @@
           data-cascade
         {% endif %}
       >
+        {% assign has_active_filters = false %}
+        {% for filter in collection.filters %}
+          {% if filter.param_name != "filter.pmcustom.production_period" %}
+            {% assign active_values = filter.values | where: "active", true %}
+            {% if active_values.size > 0 %}
+              {% assign has_active_filters = true %}
+              {% break %}
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+    
+        {% if has_active_filters %}
+          <ul class="filters-list">
+            {% for filter in collection.filters %}
+              {%- assign active_values = filter.values | where: "active", true -%}
+              {% if active_values.size > 0 %}
+                <li {% if filter.param_name == "filter.pmcustom.production_period" %}style="display: none;"{% endif %}>
+                  <span class="filter-label">{{ filter.label }}:</span>
+                  <span class="filter-values">
+                    {{ active_values | map: "value" | join: ", " }}
+                  </span>
+                </li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        {% endif %}
         {%- if collection.products.size == 0 -%}
           <div class="collection collection--empty page-width" id="product-grid" data-id="{{ section.id }}">
             <div class="loading-overlay gradient"></div>

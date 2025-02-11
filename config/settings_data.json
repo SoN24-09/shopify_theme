@@ -69,7 +69,7 @@
     "blog_card_style": "standard",
     "blog_card_image_padding": 0,
     "blog_card_text_alignment": "left",
-    "blog_card_color_scheme": "scheme-2",
+    "blog_card_color_scheme": "scheme-1",
     "blog_card_border_thickness": 0,
     "blog_card_border_opacity": 10,
     "blog_card_corner_radius": 0,
@@ -141,9 +141,20 @@
         "settings": {
           "color_scheme": "scheme-1"
         }
+      },
+      "maintenance": {
+        "type": "maintenance",
+        "settings": {}
       }
     },
     "content_for_index": [],
+    "blocks": {
+      "13259354545351828247": {
+        "type": "shopify://apps//blocks/app-embed/67cce3d8-a1e5-43f3-8d2d-0c320d8c46e7",
+        "disabled": false,
+        "settings": {}
+      }
+    },
     "color_schemes": {
       "scheme-1": {
         "settings": {

@@ -1,0 +1,126 @@
+{{ 'maintenance.css' | asset_url | stylesheet_tag }}
+<div class="page-width">
+  <div class="maintenance__top" bis_skin_checked="1">
+    <div bis_skin_checked="1">
+      <img src="https://www.woodone-onlineservice.com/assets/img/static/maintenance/img-maintenance-top.png" alt="出張メンテナンス">
+    </div>
+    <p>
+      対象商品につきまして、以下より記載いたします施工対象地域限定で、「出張メンテナンス」を承っております。ぜひご活用ください。
+      <br>
+      なお、「出張メンテナンス」については商品代金とは別途、「出張費」が発生いたします。
+      また、「出張費」と併せて、別途「作業費」が発生する商品がございます。 あらかじめご了承ください。 <br>
+      施工対象地域および価格、メンテナンス作業対象商品および価格については以下をご確認ください。
+    </p>
+    <div class="maintenance__contact" bis_skin_checked="1">
+      <span>
+        ※対象エリア以外は、ご住所・電話番号・依頼内容を記載して、
+        <a href="https://support.woodone.co.jp/formsalesf/parts/contact/index.php" target="_blank">こちら</a>
+        よりお問い合わせください。 <br>
+        ※出張メンテナンスの出張費・作業費は、会員割引対象外です。 <br>
+        ※手摺取付、扉交換、床の貼り替えその他ウッドワン商品の施工につきましては、
+        <a href="https://support.woodone.co.jp/formsalesf/parts/contact/index.php" target="_blank">こちら</a>
+        よりお問い合わせください。
+      </span>
+    </div>
+    <!--
+      <div style="margin-top: 20px;"><a href="/assets/pdf/maintenance.pdf" target="_blank" class="over" onclick="ga('send','event','banner','click','sub', 1);"><img src="/assets/img/common/maintenance_pc_bnr.png" alt="メンテナンスキャンペーン" class="pc-only"><img src="/assets/img/common/maintenance_sp_bnr.png" alt="メンテナンスキャンペーン" class="sp-only"></a></div>
+    -->
+  </div>
+  <div class="maintenance__area" bis_skin_checked="1">
+    <h2>
+      出張費 <span>※注 出張費：こちらのサイトでお問合せやご購入されるお客様のみ表示される出張費が適用されます。</span>
+    </h2>
+    <div class="maintenance__area__content" bis_skin_checked="1">
+      <h2 class="search-zip-title" id="search-zip">郵便番号検索</h2>
+      <div class="search-zip-wrap" bis_skin_checked="1">
+        <form>
+          <div class="search-zip" bis_skin_checked="1">
+            <p>お住まいの郵便番号をハイフンなしで入力してください。出張費が検索できます。</p>
+            <div class="input-wrap" bis_skin_checked="1">
+              <div class="input" bis_skin_checked="1">
+                <input
+                  id="form_zip-code"
+                  class="number"
+                  placeholder="郵便番号"
+                  name="zip-code"
+                  value="0040021"
+                  type="text"
+                >
+              </div>
+              <div class="submit-button" bis_skin_checked="1">
+                <button type="button" id="searchZipCode" class="">検索</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="maintenance-result">
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  const sheetId = '1Fw-vqsfYMILbqna-DJp1v4qPqD5ChxtUNj6paV0dWc4'; // Thay YOUR_SHEET_ID bằng ID Google Sheet
+  const apiKey = 'AIzaSyD5zBSKcJXWg1FJ1Jh0oUbV_WMCqxBkUqA'; // Thay YOUR_API_KEY bằng API Key của bạn
+  const range = 'Sheet1!A1:C10'; // Phạm vi bạn muốn lấy
+
+  document.getElementById('searchZipCode').addEventListener('click',async () => {
+    var zipCode = toHalfWidthNumbers(document.getElementById('form_zip-code').value.replaceAll('-',''));
+      var result = await searchData(zipCode);
+      var html = '';
+      if(result.length > 0){
+        result.forEach((item) => {
+          html += `<div class="search-list" bis_skin_checked="1">
+            <dl>
+              <dt>${item[0]}</dt>
+              <dd>${item[1]}</dd>
+            </dl>
+            <div class="price" bis_skin_checked="1">
+              <div bis_skin_checked="1">
+                出張費 <strong> <span>${item[2]}</span>円（税込） </strong>
+              </div>
+            </div>
+          </div>
+          <p class="search-text">上記は会員割引前の金額です。</p>
+        <br>`
+        })
+      }else{
+        html = `<div class="search-not" bis_skin_checked="1">
+                      <a href="https://support.woodone.co.jp/formsalesf/parts/contact/index.php" target="_blank">
+                        申し訳ございません。<br>対象エリアではないため、<span>こちらのお問い合わせフォーム</span>よりお問い合わせください。
+                      </a>
+                    </div>`
+      }
+      document.querySelector('.maintenance-result').innerHTML = html;
+  })
+
+  // URL của API
+  const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/Sheet1?key=${apiKey}`;
+
+  const onlyUnique = (value, index, array) => {
+    return array.findIndex(ele => ele[0] == value[0] && ele[1] == value[1] && ele[2] == value[2]) === index;
+  }
+  // Fetch dữ liệu từ Google Sheets API
+  const searchData = async (zipCode) => {
+    var data = await fetch(url)
+      .then((response) => response.json())
+      .then((data) => {
+        const values = data.values;
+        return values.filter(row => row[0] == zipCode || row[0].includes(zipCode)).filter(onlyUnique);
+      })
+      .catch((error) => console.log(error));
+    return data;
+  }
+  const toHalfWidthNumbers = (str) => {
+    // 全角数字を半角数字に変換
+    return str.replace(/[０-９]/g, function(s) {
+      return String.fromCharCode(s.charCodeAt(0) - 0xFEE0);
+    });
+  }
+</script>
+{% schema %}
+{
+  "name": "Section name",
+  "settings": []
+}
+{% endschema %}

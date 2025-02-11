@@ -1,9 +1,15 @@
 {{ 'customer.css' | asset_url | stylesheet_tag }}
 {{ 'efo-form.css' | asset_url | stylesheet_tag }}
+{{ 'section-register-form.css' | asset_url | stylesheet_tag }}
+
 <script src="https://unpkg.com/wanakana"></script>
 <script src="https://ajaxzip3.github.io/ajaxzip3.js" charset="UTF-8"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
-
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://code.jquery.com/ui/1.14.1/jquery-ui.js"></script>
+<script src="{{ 'prototypeKana.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'autoKana.js' | asset_url }}" defer="defer"></script>
 
 
 {%- style -%}
@@ -14,11 +20,240 @@
 
   @media screen and (min-width: 750px) {
     .section-{{ section.id }}-padding {
-      padding-top: {{ section.settings.padding_top }}px;ạ
+      padding-top: {{ section.settings.padding_top }}px;
       padding-bottom: {{ section.settings.padding_bottom }}px;
     }
   }
 {%- endstyle -%}
+
+<style>
+
+</style>
+
+<script>
+  // open modal about guide by value HDF9006 or HDF9008 , UDF9001
+  const openModalAbout = (value) => {
+    document.body.style.overflow = 'hidden';
+
+    const modal = document.getElementById('modalAboutRegister');
+    // modal.style.display = 'flex';
+    showFadeIn(modal);
+
+    const modalContent = document.getElementsByClassName('modal-guide-content')[0];
+    for (let i = 0; i < modalContent.children.length; i++) {
+      modalContent.children[i].style.display = 'none';
+    }
+
+    const modalMail = document.getElementsByClassName('modal-guide-' + value);
+    for (let i = 0; i < modalMail.length; i++) {
+      modalMail[i].style.display = 'block';
+    }
+  };
+
+  // close modal about guide by value HDF9006 or HDF9008 , UDF9001
+  const closeModalGuide = () => {
+    document.body.style.overflow = "auto";
+
+    const modal = document.getElementById('modalAboutRegister');
+    // modal.style.display = 'none';
+    hideFadeOut(modal);
+    // const modalContent = document.getElementsByClassName('modal-guide-content')[0];
+    // for (let i = 0; i < modalContent.children.length; i++) {
+    //   modalContent.children[i].style.display = 'none';
+    // }
+  };
+
+  function hideFadeOut(element) {
+    if (element) {
+
+    element.style.opacity = 0;
+    element.style.transition = "opacity 0.3s ease-in-out";
+    setTimeout(() => {
+      element.style.display = "none";
+    }, 300); // Matches the transition duration
+  }
+  }
+
+  function showFadeIn(element) {
+    if (element) {
+
+      element.style.display = 'flex';
+      element.style.opacity = 0;
+      element.style.transition = 'opacity 0.3s ease-in-out';
+      setTimeout(() => {
+        element.style.opacity = 1;
+      }, 10);
+    }
+  }
+
+  function openPopup() {
+    document.getElementById('popupOverlay').style.display = 'flex';
+}
+
+function closePopup() {
+    document.getElementById('popupOverlay').style.display = 'none';
+}
+
+  // close modal when click outside
+  window.onclick = function (event) {
+    if (event.target.classList.contains('modal-guide')) {
+      closeModalGuide();
+    }
+  };
+
+
+  document.addEventListener('DOMContentLoaded', function () {
+      const notificationServiceUse = document.getElementById('notificationServiceUse');
+      const formNotificationServiceFlg1 = document.getElementById('form_notification_service_flg1');
+      const formNotificationServiceFlg2 = document.getElementById('form_notification_service_flg2');
+      const formCartridgeProductCode = document.getElementById('form_cartridge_product_code');
+      const formFaucetProductCode = document.getElementById('form_faucet_product_code');
+      const formUseStartDate = document.getElementById('form_use_start_date');
+
+      formNotificationServiceFlg1.addEventListener('change', function () {
+        if (formNotificationServiceFlg1.checked) {
+          notificationServiceUse.style.display = 'block';
+          if(formCartridgeProductCode.value == ''){
+            formCartridgeProductCode.classList.add('required', 'input-ng');
+          }
+          // if(formUseStartDate.value == ''){
+          //   formUseStartDate.classList.add('required', 'input-ng');
+          // }
+        } else {
+          notificationServiceUse.style.display = 'none';
+          formCartridgeProductCode.classList.remove('required', 'input-ng');
+          // formFaucetProductCode.classList.remove('required', 'input-ng');
+          // formUseStartDate.classList.add('required', 'input-ng');
+        }
+      });
+
+      formUseStartDate.addEventListener('change', function() {
+            if (formUseStartDate.value === '') {
+                formUseStartDate.classList.add('required');
+                formUseStartDate.classList.add('input-ng');
+            } else {
+                formUseStartDate.classList.remove('required');
+                formUseStartDate.classList.remove('input-ng');
+            }
+      });
+
+
+      formNotificationServiceFlg2.addEventListener('change', function () {
+        if (formNotificationServiceFlg2.checked) {
+          notificationServiceUse.style.display = 'none';
+          formCartridgeProductCode.classList.remove('required', 'input-ng');
+          // formFaucetProductCode.classList.remove('required', 'input-ng');
+        } else {
+          notificationServiceUse.style.display = 'block';
+          // formCartridgeProductCode.classList.add('required', 'input-ng');
+          // formFaucetProductCode.classList.add('required', 'input-ng');
+        }
+      });
+
+      // check form_cartridge_product_code change, show or hide form_cartridge_product_code
+      formCartridgeProductCode.addEventListener('change', function () {
+          // hide all .select-item-list item
+          const selectItemLists = document.querySelectorAll('.select-item-list');
+          selectItemLists.forEach((selectItemList) => {
+            selectItemList.style.display = 'none';
+          });
+
+          // get value of form_cartridge_product_code
+          const value = formCartridgeProductCode.value;
+          const item = document.getElementById(value);
+          if (item) {
+            item.style.display = 'block';
+          }
+      });
+
+      // if form_customer_type change to 法人, #companyName add .required to input
+      // const formCustomerType = document.getElementById('form_customer_type');
+      // const companyName = document.getElementById('companyName');
+      // const input = companyName.querySelector('input');
+      // const title = companyName.querySelector('.efo-input-title');
+      // const iconRequired = document.createElement('i');
+      // iconRequired.classList.add('icon-required');
+      // formCustomerType.addEventListener('change', function () {
+      //   if (formCustomerType.value === '法人') {
+      //     input.classList.add('required', 'input-ng');
+      //     title.appendChild(iconRequired);
+      //   } else {
+      //     input.classList.remove('required', 'input-ng');
+      //     title.removeChild(iconRequired);
+      //   }
+      // });
+
+
+    const notificationServiceFlg = document.querySelectorAll('input[name="notification_service_flg"]');
+    const cartridgeProductCode = document.getElementById('form_cartridge_product_code');
+    const useStartDate = document.getElementById('form_use_start_date');
+    notificationServiceFlg.forEach((element) => {
+        element.addEventListener('change', function() {
+            if (element.value === '1') {
+              if (!cartridgeProductCode.value) {
+                cartridgeProductCode.classList.add('required');
+                cartridgeProductCode.classList.add('input-ng');
+              }
+              if (useStartDate.value === '') {
+                useStartDate.classList.add('required');
+                useStartDate.classList.add('input-ng');
+              }
+            } else {
+                cartridgeProductCode.classList.remove('required');
+                cartridgeProductCode.classList.remove('input-ng');
+                useStartDate.classList.remove('required');
+                useStartDate.classList.remove('input-ng');
+            }
+        });
+    });
+
+
+    // onchange tel1, tel2, tel3, concat value to hidden input tel
+    const tel1 = document.getElementById('form_tel1');
+    const tel2 = document.getElementById('form_tel2');
+    const tel3 = document.getElementById('form_tel3');
+    const phone1011Warning = document.getElementById('phone1011Warning');
+    const phoneCheckBelow = document.getElementById('phoneCheckBelow');
+    const tel = document.querySelector('input[name="tel"]');
+    const telItems = document.querySelectorAll('.tel-item');
+    // onchange
+    telItems.forEach(item => {
+       
+        item.addEventListener('input', () => {
+            var telTotal = tel1.value.length + tel2.value.length + tel3.value.length;
+            tel.value = `${tel1.value}-${tel2.value}-${tel3.value}`;
+
+           
+        });
+
+       item.addEventListener('change', () => {
+        var telTotal = tel1.value.length + tel2.value.length + tel3.value.length;
+        if (tel1.value !== '' && tel2.value !== '' && tel3.value !== '') {
+          
+          
+          if (telTotal == 10 || telTotal == 11) {
+             phone1011Warning.style.display = 'none';
+             phoneCheckBelow.removeAttribute("style");
+          } else {
+            phone1011Warning.style.display = 'block';
+            phoneCheckBelow.style.display = 'none';
+            //  if (item.value.length < 3) {
+            //   item.classList.add('required, input-ng');
+            // } else {
+            //   item.classList.remove('required, input-ng');
+            // }
+            
+          }
+        }
+      });
+    });
+
+
+      var auto_kana_1 = new AutoKana('form_firstname', 'form_firstkana', { katakana: true, toggle: false });
+      var auto_kana_2 = new AutoKana('form_lastname', 'form_lastkana', { katakana: true, toggle: false });
+  });
+
+</script>
 
 <div class="customer register section-{{ section.id }}-padding">
   <h1>
@@ -27,252 +262,390 @@
   <p>{{ 'customer.register.description' | t | newline_to_br }}</p>
   <register-form>
     <form>
-        <div class="efo-form input" >
-          <div class="efo-form-container" >
-            <div class="efo-input-container" >
-              <!-- 個人・法人 -->
-              <div class="efo-input-row" >
-                <div class="efo-input-title" >
-                  <label>個人・法人</label>
-                  <i class="icon-required"></i>
-                </div>
-                <div class="efo-input-content" >
-                  <div class="efo-input-wrap" >
-                    <select id="form_customer_type" class="required input-ng" name="job">
-                      <option value="">選択してください</option>
-                      <option value="個人">個人</option>
-                      <option value="法人">法人</option>
-                    </select>
-                    <label for="form_customer_type" class="efo-dummy-select">選択してください</label>
-                    <p class="efo-input-message"></p>
-                    <i class="efo-input-required-check"></i>
-                  </div>
-                </div>
-              </div>
-              <!-- End .efo-input-row -->
-              <!-- 法人名 -->
-              <div class="efo-input-row" >
-                <div class="efo-input-title" >
-                  <label>法人名</label>
-                </div>
-                <div class="efo-input-content" >
-                  <div class="efo-input-wrap" >
-                    <input placeholder="例：株式会社〇〇〇〇〇〇" maxlength="50" class="efo-input-sm input-ng" data-convert="zenkaku" name="company" value="" type="text" id="form_company">
-                    <p class="efo-input-message"></p>
-                    <i class="efo-input-required-check"></i>
-                  </div>
-                </div>
-              </div>
-              <!-- End .efo-input-row -->
-              <!-- お名前 -->
-              <div class="efo-input-row" >
-                <div class="efo-input-title" >
-                  <label>姓・名</label>
-                  <i class="icon-required"></i>
-                </div>
-                <div class="efo-input-content" style="display: flex;">
-                  <div class="efo-input-wrap" >
-                    <input placeholder="例：山田" 
-                      maxlength="20" 
-                      class="efo-input-sm required input-ng"
-                      data-convert="zenkaku" 
-                      name="first_name"
-                      onkeyup="document.getElementById('form_firstkana').value = wanakana.toKatakana(document.getElementById('form_firstname').value)"
-                      type="text" 
-                      id="form_firstname">
-                    <p class="efo-input-message"></p>
-                    <i class="efo-input-required-check"></i>
-                  </div>
-                  <div class="efo-input-wrap" >
-                    <input placeholder="例：太郎" 
-                      maxlength="20" 
-                      class="efo-input-sm required input-ng"
-                      data-convert="zenkaku" 
-                      name="last_name"
-                      onkeyup="document.getElementById('form_lastkana').value = wanakana.toKatakana(document.getElementById('form_lastname').value)"
-                      type="text" 
-                      id="form_lastname">
-                    <p class="efo-input-message"></p>
-                    <i class="efo-input-required-check"></i>
-                  </div>
-                </div>
-              </div>
-              <!-- End .efo-input-row -->
-              <!-- お名前（フリガナ） -->
-              <div class="efo-input-row" >
-                <div class="efo-input-title" >
-                  <label>姓・名（フリガナ）</label>
-                </div>
-                <div class="efo-input-content" style="display: flex">
-                  <div class="efo-input-wrap" >
-                    <input placeholder="例：ヤマダ" maxlength="20" class="efo-input-sm input-ng" data-efo="全角カタカナで入力してください" data-validate="kana" data-convert="zenkaku" name="furigana_first_name" value="" type="text" id="form_firstkana">
-                    <p class="efo-input-message"></p>
-                    <i class="efo-input-required-check"></i>
-                  </div>
-                  <div class="efo-input-wrap" >
-                    <input placeholder="例：タロウ" maxlength="20" class="efo-input-sm input-ng" data-efo="全角カタカナで入力してください" data-validate="kana" data-convert="zenkaku" name="furigana_last_name" value="" type="text" id="form_lastkana">
-                    <p class="efo-input-message"></p>
-                    <i class="efo-input-required-check"></i>
-                  </div>
-                </div>
-              </div>
-              <!-- End .efo-input-row -->
-              <!-- 郵便番号 -->
-              <div class="efo-input-row" >
-                <div class="efo-input-title" >
-                  <label>郵便番号</label>
-                  <i class="icon-required"></i>
-                </div>
-                <div class="efo-input-content" >
-                  <div class="efo-input-wrap" >
-                    <input placeholder="例：1234567" maxlength="7" class="efo-input-zip required input-ng" id="zip" data-efo="半角数字・ハイフンなしで入力してください" data-validate="zip" name="zip" value="" type="text">
-                    <p class="efo-input-message"></p>
-                    <!--モーダルで表示させる要素-->
-                    <div style="display: none;" >
-                      <div id="inline-content" class="formItem" >
-                        <div class="inner" >
-                          <h3>住所の選択</h3>
-                          <p class="ttl">郵便番号に該当する住所</p>
-                          <ul class="clearfix"></ul>
-                        </div>
-                      </div>
-                    </div>
-                    <button type="button" class="efo-search-address" data-zip="zip" data-pref="pref" data-address="address">
-                      <span>郵便番号から住所を検索</span>
-                    </button>
-                    <i class="efo-input-required-check"></i>
-                  </div>
-                </div>
-              </div>
-              <!-- End .efo-input-row -->
-              <!-- 都道府県 -->
-              <div class="efo-input-row" >
-                <div class="efo-input-title" >都道府県 <i class="icon-required"></i>
-                </div>
-                <div class="efo-input-content" >
-                  <div class="efo-input-wrap" >
-                    <select id="pref" class="required input-ng" name="pref">
-                      <option value="" selected="selected">選択してください</option>
-                      <option value="北海道">北海道</option>
-                      <option value="青森県">青森県</option>
-                      <option value="岩手県">岩手県</option>
-                      <option value="宮城県">宮城県</option>
-                      <option value="秋田県">秋田県</option>
-                      <option value="山形県">山形県</option>
-                      <option value="福島県">福島県</option>
-                      <option value="茨城県">茨城県</option>
-                      <option value="栃木県">栃木県</option>
-                      <option value="群馬県">群馬県</option>
-                      <option value="埼玉県">埼玉県</option>
-                      <option value="千葉県">千葉県</option>
-                      <option value="東京都">東京都</option>
-                      <option value="神奈川県">神奈川県</option>
-                      <option value="新潟県">新潟県</option>
-                      <option value="富山県">富山県</option>
-                      <option value="石川県">石川県</option>
-                      <option value="福井県">福井県</option>
-                      <option value="1山梨県">山梨県</option>
-                      <option value="長野県">長野県</option>
-                      <option value="岐阜県">岐阜県</option>
-                      <option value="静岡県">静岡県</option>
-                      <option value="愛知県">愛知県</option>
-                      <option value="三重県">三重県</option>
-                      <option value="滋賀県">滋賀県</option>
-                      <option value="京都府">京都府</option>
-                      <option value="大阪府">大阪府</option>
-                      <option value="兵庫県">兵庫県</option>
-                      <option value="奈良県">奈良県</option>
-                      <option value="和歌山県">和歌山県</option>
-                      <option value="鳥取県">鳥取県</option>
-                      <option value="岡山県">岡山県</option>
-                      <option value="広島県">広島県</option>
-                      <option value="山口県">山口県</option>
-                      <option value="徳島県">徳島県</option>
-                      <option value="香川県">香川県</option>
-                      <option value="愛媛県">愛媛県</option>
-                      <option value="高知県">高知県</option>
-                      <option value="福岡県">福岡県</option>
-                      <option value="佐賀県">佐賀県</option>
-                      <option value="長崎県">長崎県</option>
-                      <option value="熊本県">熊本県</option>
-                      <option value="大分県">大分県</option>
-                      <option value="宮崎県">宮崎県</option>
-                      <option value="鹿児島県">鹿児島県</option>
-                      <option value="沖縄県">沖縄県</option>
-                    </select>
-                    <p class="efo-input-message"></p>
-                    <i class="efo-input-required-check"></i>
-                  </div>
-                </div>
-              </div>
-              <!-- End .efo-input-row -->
-              <!-- 市区町村 -->
-              <div class="efo-input-row" >
-                <div class="efo-input-title" >
-                  <label>市区町村</label>
-                  <i class="icon-required"></i>
-                </div>
-                <div class="efo-input-content" >
-                  <div class="efo-input-wrap" >
-                    <input placeholder="例：○○市○○町" maxlength="100" class="efo-input-md required input-ng" id="address" data-efo="例：○○市○○町" name="address" value="" type="text">
-                    <p class="efo-input-message"></p>
-                    <i class="efo-input-required-check"></i>
-                  </div>
-                </div>
-              </div>
-              <!-- End .efo-input-row -->
-              <!-- 番地 -->
-              <div class="efo-input-row" >
-                <div class="efo-input-title" >
-                  <label>番地</label>
-                  <i class="icon-required"></i>
-                </div>
-                <div class="efo-input-content" >
-                  <div class="efo-input-wrap" >
-                    <input placeholder="例：12-34" maxlength="100" class="efo-input-md required input-ng" id="address2" data-efo="例：12-34" name="address1" value="" type="text">
-                    <p class="efo-input-message"></p>
-                    <i class="efo-input-required-check"></i>
-                  </div>
-                </div>
-              </div>
-              <!-- End .efo-input-row -->
-              <!-- 建物名 -->
-              <div class="efo-input-row" >
-                <div class="efo-input-title" >
-                  <label>建物名</label>
-                </div>
-                <div class="efo-input-content" >
-                  <div class="efo-input-wrap" >
-                    <input placeholder="例：○○ビル 101号室" maxlength="100" class="efo-input-md input-ng" id="address3" data-efo="例：○○ビル 101号室" name="address2" value="" type="text">
-                    <p class="efo-input-message"></p>
-                    <i class="efo-input-required-check"></i>
-                  </div>
-                </div>
-              </div>
-              <!-- End .efo-input-row -->
-              <!-- 電話番号（記号なし） -->
-            <div class="efo-input-row" >
-              <div class="efo-input-title" >
-                <label>電話番号</label>
+      <input type="hidden" id="inputTriggerForm" class="hidden" value="" />
+      
+      <div class="efo-form input">
+        <div class="efo-form-container">
+          <div class="efo-input-container">
+            <!-- 個人・法人 -->
+            <div class="efo-input-row">
+              <div class="efo-input-title">
+                <label>個人・法人</label>
                 <i class="icon-required"></i>
               </div>
-              <div class="efo-input-content" >
-                <div class="efo-input-wrap" >
-                  <input placeholder="例：09012345678" maxlength="14" class="efo-input-sm required input-ng" data-efo="半角数字・ハイフンなしで入力してください" data-validate="tel" name="tel" value="" type="text" id="form_tel">
+              <div class="efo-input-content">
+                <div class="efo-input-wrap">
+                  <select id="form_customer_type" class="required" name="job">
+                    <option value="個人">個人</option>
+                    <option value="法人">法人</option>
+                  </select>
+                  <label for="form_customer_type" class="efo-dummy-select">選択してください</label>
                   <p class="efo-input-message"></p>
                   <i class="efo-input-required-check"></i>
                 </div>
               </div>
             </div>
             <!-- End .efo-input-row -->
+            <!-- 法人名 -->
+            <div class="efo-input-row" id="companyName">
+              <div class="efo-input-title">
+                <label>法人名</label>
+              </div>
+              <div class="efo-input-content">
+                <div class="efo-input-wrap">
+                  <input
+                    placeholder="例：株式会社〇〇〇〇〇〇"
+                    maxlength="50"
+                    class="efo-input-sm input-ng"
+                    data-convert="zenkaku"
+                    name="company"
+                    value=""
+                    type="text"
+                    id="form_company"
+                  >
+                  <p class="efo-input-message"></p>
+                  <i class="efo-input-required-check"></i>
+                </div>
+              </div>
+            </div>
+            <!-- End .efo-input-row -->
+            <!-- お名前 -->
+            <div class="efo-input-row">
+              <div class="efo-input-title">
+                <label>姓・名</label>
+                <i class="icon-required"></i>
+              </div>
+              <div class="efo-input-content" style="display: flex;">
+                <div class="efo-input-wrap">
+                  <input
+                    placeholder="例：山田"
+                    maxlength="20"
+                    class="efo-input-sm required input-ng"
+                    data-convert="zenkaku"
+                    name="first_name"
+                    type="text"
+                    id="form_firstname"
+                  >
+                  <p class="efo-input-message"></p>
+                  <i class="efo-input-required-check"></i>
+                </div>
+                <div class="efo-input-wrap">
+                  <input
+                    placeholder="例：太郎"
+                    maxlength="20"
+                    class="efo-input-sm required input-ng"
+                    data-convert="zenkaku"
+                    name="last_name"
+                    type="text"
+                    id="form_lastname"
+                  >
+                  <p class="efo-input-message"></p>
+                  <i class="efo-input-required-check"></i>
+                </div>
+              </div>
+            </div>
+            <!-- End .efo-input-row -->
+            <!-- お名前（フリガナ） -->
+            <div class="efo-input-row">
+              <div class="efo-input-title">
+                <label>姓・名（フリガナ）</label>
+              </div>
+              <div class="efo-input-content" style="display: flex">
+                <div class="efo-input-wrap">
+                  <input
+                    placeholder="例：ヤマダ"
+                    maxlength="20"
+                    class="efo-input-sm input-ng furigana_name"
+                    data-efo="全角カタカナで入力してください"
+                    data-validate="kana"
+                    data-convert="zenkaku"
+                    name="furigana_first_name"
+                    value=""
+                    type="text"
+                    id="form_firstkana"
+                  >
+                  <p class="efo-input-message"></p>
+                  <i class="efo-input-required-check"></i>
+                </div>
+                <div class="efo-input-wrap">
+                  <input
+                    placeholder="例：タロウ"
+                    maxlength="20"
+                    class="efo-input-sm input-ng furigana_name"
+                    data-efo="全角カタカナで入力してください"
+                    data-validate="kana"
+                    data-convert="zenkaku"
+                    name="furigana_last_name"
+                    value=""
+                    type="text"
+                    id="form_lastkana"
+                  >
+                  <p class="efo-input-message"></p>
+                  <i class="efo-input-required-check"></i>
+                </div>
+              </div>
+            </div>
+            <!-- End .efo-input-row -->
+            <!-- 郵便番号 -->
+            <div class="efo-input-row">
+              <div class="efo-input-title">
+                <label>郵便番号</label>
+                <i class="icon-required"></i>
+              </div>
+              <div class="efo-input-content">
+                <div class="efo-input-wrap efo-input-wrap-below">
+                  <input
+                    placeholder="例: 1234567"
+                    maxlength="8"
+                    class="efo-input-zip required input-ng"
+                    id="zip"
+                    data-efo="半角数字・ハイフンなしで入力してください"
+                    data-validate="zip"
+                    name="zip"
+                    value=""
+                    type="text"
+                  >
+                  <p class="efo-input-message"></p>
+                  <!-- モーダルで表示させる要素 -->
+                  <div style="display: none;">
+                    <div id="inline-content" class="formItem">
+                      <div class="inner">
+                        <h3>住所の選択</h3>
+                        <p class="ttl">郵便番号に該当する住所</p>
+                        <ul class="clearfix"></ul>
+                      </div>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    class="efo-search-address"
+                    data-zip="zip"
+                    data-pref="pref"
+                    data-address="address"
+                  >
+                    <span>郵便番号から住所を検索</span>
+                  </button>
+                  <i class="efo-input-required-check"></i>
+                </div>
+              </div>
+            </div>
+            <!-- End .efo-input-row -->
+            <!-- 都道府県 -->
+            <div class="efo-input-row">
+              <div class="efo-input-title">都道府県 <i class="icon-required"></i></div>
+              <div class="efo-input-content">
+                <div class="efo-input-wrap">
+                  <select id="pref" class="required input-ng" name="pref">
+                    <option value="" selected="selected">選択してください</option>
+                    <option value="北海道">北海道</option>
+                    <option value="青森県">青森県</option>
+                    <option value="岩手県">岩手県</option>
+                    <option value="宮城県">宮城県</option>
+                    <option value="秋田県">秋田県</option>
+                    <option value="山形県">山形県</option>
+                    <option value="福島県">福島県</option>
+                    <option value="茨城県">茨城県</option>
+                    <option value="栃木県">栃木県</option>
+                    <option value="群馬県">群馬県</option>
+                    <option value="埼玉県">埼玉県</option>
+                    <option value="千葉県">千葉県</option>
+                    <option value="東京都">東京都</option>
+                    <option value="神奈川県">神奈川県</option>
+                    <option value="新潟県">新潟県</option>
+                    <option value="富山県">富山県</option>
+                    <option value="石川県">石川県</option>
+                    <option value="福井県">福井県</option>
+                    <option value="1山梨県">山梨県</option>
+                    <option value="長野県">長野県</option>
+                    <option value="岐阜県">岐阜県</option>
+                    <option value="静岡県">静岡県</option>
+                    <option value="愛知県">愛知県</option>
+                    <option value="三重県">三重県</option>
+                    <option value="滋賀県">滋賀県</option>
+                    <option value="京都府">京都府</option>
+                    <option value="大阪府">大阪府</option>
+                    <option value="兵庫県">兵庫県</option>
+                    <option value="奈良県">奈良県</option>
+                    <option value="和歌山県">和歌山県</option>
+                    <option value="鳥取県">鳥取県</option>
+                    <option value="岡山県">岡山県</option>
+                    <option value="広島県">広島県</option>
+                    <option value="山口県">山口県</option>
+                    <option value="徳島県">徳島県</option>
+                    <option value="香川県">香川県</option>
+                    <option value="愛媛県">愛媛県</option>
+                    <option value="高知県">高知県</option>
+                    <option value="福岡県">福岡県</option>
+                    <option value="佐賀県">佐賀県</option>
+                    <option value="長崎県">長崎県</option>
+                    <option value="熊本県">熊本県</option>
+                    <option value="大分県">大分県</option>
+                    <option value="宮崎県">宮崎県</option>
+                    <option value="鹿児島県">鹿児島県</option>
+                    <option value="沖縄県">沖縄県</option>
+                  </select>
+                  <p class="efo-input-message"></p>
+                  <i class="efo-input-required-check"></i>
+                </div>
+              </div>
+            </div>
+            <!-- End .efo-input-row -->
+            <!-- 市区町村 -->
+            <div class="efo-input-row">
+              <div class="efo-input-title">
+                <label>市区町村</label>
+                <i class="icon-required"></i>
+              </div>
+              <div class="efo-input-content">
+                <div class="efo-input-wrap">
+                  <input
+                    placeholder="例：○○市○○町"
+                    maxlength="100"
+                    class="efo-input-md required input-ng"
+                    id="address"
+                    data-efo="例：○○市○○町"
+                    name="address"
+                    value=""
+                    type="text"
+                  >
+                  <p class="efo-input-message"></p>
+                  <i class="efo-input-required-check"></i>
+                </div>
+              </div>
+            </div>
+            <!-- End .efo-input-row -->
+            <!-- 番地 -->
+            <div class="efo-input-row">
+              <div class="efo-input-title">
+                <label>番地</label>
+                <i class="icon-required"></i>
+              </div>
+              <div class="efo-input-content">
+                <div class="efo-input-wrap">
+                  <input
+                    placeholder="例：12-34"
+                    maxlength="100"
+                    class="efo-input-md required input-ng"
+                    id="address2"
+                    data-efo="例：12-34"
+                    name="address1"
+                    value=""
+                    type="text"
+                  >
+                  <p class="efo-input-message"></p>
+                  <i class="efo-input-required-check"></i>
+                </div>
+              </div>
+            </div>
+            <!-- End .efo-input-row -->
+            <!-- 建物名 -->
+            <div class="efo-input-row">
+              <div class="efo-input-title">
+                <label>建物名</label>
+              </div>
+              <div class="efo-input-content">
+                <div class="efo-input-wrap">
+                  <input
+                    placeholder="例：○○ビル 101号室"
+                    maxlength="100"
+                    class="efo-input-md input-ng"
+                    id="address3"
+                    data-efo="例：○○ビル 101号室"
+                    name="address2"
+                    value=""
+                    type="text"
+                  >
+                  <p class="efo-input-message"></p>
+                  <i class="efo-input-required-check"></i>
+                </div>
+              </div>
+            </div>
+            <!-- End .efo-input-row -->
+            <!-- 電話番号（記号なし） -->
+            <div class="efo-input-row">
+              <div class="efo-input-title">
+                <label>電話番号</label>
+                <i class="icon-required"></i>
+              </div>
+              <input
+                    class="hidden"
+                    name="tel"
+                    value=""
+                    type="hidden"
+              >
+              <div class="efo-input-content" style="display: flex;gap: 10px;align-items: center;">
+                <div class="efo-input-wrap">
+                  <input
+                    placeholder="例）0123"
+                    maxlength="4"
+                    class="efo-input-sm required input-ng tel-item"
+                    data-efo="半角数字・ハイフンなしで入力してください"
+                    data-validate="tel"
+                    name="tel1"
+                    value=""
+                    type="text"
+                    id="form_tel1"
+                    style="width: 110px; min-width: unset;"
+                  >
+                  <p class="efo-input-message"></p>
+                  <!-- <i class="efo-input-required-check"></i> -->
+                </div>
+                <div>-</div>
+                <div class="efo-input-wrap">
+                  <input
+                    placeholder="45"
+                    maxlength="4"
+                    class="efo-input-sm required input-ng tel-item"
+                    data-efo="半角数字・ハイフンなしで入力してください"
+                    data-validate="tel"
+                    name="tel2"
+                    value=""
+                    type="text"
+                    id="form_tel2"
+                    style="width: 80px; min-width: unset;"
+                  >
+                  <p class="efo-input-message"></p>
+                  <!-- <i class="efo-input-required-check"></i> -->
+                </div>
+                <div>-</div>
+                <div class="efo-input-wrap">
+                  <input
+                    placeholder="6789"
+                    maxlength="4"
+                    class="efo-input-sm required input-ng tel-item"
+                    data-efo="半角数字・ハイフンなしで入力してください"
+                    data-validate="tel"
+                    name="tel3"
+                    value=""
+                    type="text"
+                    id="form_tel3"
+                    style="width: 110px; min-width: unset;"
+                  >
+                  <p class="efo-input-message"></p>
+                  <i class="efo-input-required-check efo-input-required-check-below" id="phoneCheckBelow"></i>
+                </div>
+              </div>
+              <p id="phone1011Warning" style="display: none; color: red; padding-top: 0;">電話番号は10桁または11桁で入力してください。</p>
+            </div>
+            <!-- End .efo-input-row -->
             <!-- FAX（記号なし） -->
-            <div class="efo-input-row" >
-              <div class="efo-input-title" >
+            <div class="efo-input-row">
+              <div class="efo-input-title">
                 <label>FAX</label>
               </div>
-              <div class="efo-input-content" >
-                <div class="efo-input-wrap" >
-                  <input placeholder="例：0345678989" maxlength="14" class="efo-input-sm input-ng" data-efo="半角数字・ハイフンなしで入力してください" data-validate="tel" name="fax" value="" type="text" id="form_fax">
+              <div class="efo-input-content">
+                <div class="efo-input-wrap">
+                  <input
+                    placeholder="例：0345678989"
+                    maxlength="14"
+                    class="efo-input-sm input-ng"
+                    data-efo="半角数字・ハイフンなしで入力してください"
+                    data-validate="tel"
+                    name="fax"
+                    value=""
+                    type="text"
+                    id="form_fax"
+                  >
                   <p class="efo-input-message"></p>
                   <i class="efo-input-required-check"></i>
                 </div>
@@ -280,14 +653,24 @@
             </div>
             <!-- End .efo-input-row -->
             <!-- メールアドレス -->
-            <div class="efo-input-row" >
-              <div class="efo-input-title" >
+            <div class="efo-input-row">
+              <div class="efo-input-title">
                 <label>メールアドレス</label>
                 <i class="icon-required"></i>
               </div>
-              <div class="efo-input-content" >
-                <div class="efo-input-wrap" >
-                  <input placeholder="例：sample.@gmail.com" maxlength="50" class="efo-input-md required input-ng" data-efo="半角英数字で入力してください" data-validate="email" name="email" value="" type="text" id="form_email">
+              <div class="efo-input-content">
+                <div class="efo-input-wrap">
+                  <input
+                    placeholder="例：sample.@gmail.com"
+                    maxlength="50"
+                    class="efo-input-md required input-ng"
+                    data-efo="半角英数字で入力してください"
+                    data-validate="email"
+                    name="email"
+                    value=""
+                    type="text"
+                    id="form_email"
+                  >
                   <p class="efo-input-message"></p>
                   <i class="efo-input-required-check"></i>
                 </div>
@@ -295,42 +678,43 @@
             </div>
             <!-- End .efo-input-row -->
             <!-- メールマガジン -->
-            {% comment %} <div class="efo-input-row" style="display:none;" >
-              <div class="efo-input-title" >
-                <label for="efo-form01-input-radio1">メールマガジン</label>
-                <i class="icon-required"></i>
-              </div>
-              <div class="efo-input-content" >
-                <div class="efo-input-wrap" >
-                  <div class="efo-input-radio required" >
-                    <div class="bg-gray" >
-                      <ul class="panel-layout">
-                        <li>
-                          <label class="radio-red">
-                            <input id="form_mail_magazine_flg1" name="mail_magazine_flg" value="1" checked="checked" type="radio">希望する </label> &nbsp;&nbsp;
-                        </li>
-                        <li>
-                          <label class="radio-red">
-                            <input id="form_mail_magazine_flg2" name="mail_magazine_flg" value="2" type="radio">希望しない </label> &nbsp;&nbsp;
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                  <p class="efo-input-message"></p>
-                  <i class="efo-input-required-check"></i>
+            {% comment %}
+              <div class="efo-input-row" style="display:none;" >
+                <div class="efo-input-title" >
+                  <label for="efo-form01-input-radio1">メールマガジン</label>
+                  <i class="icon-required"></i>
                 </div>
-                <div class="cs-font-color-01 cs-mgt-5" >お得なクーポンや情報を配信しております。</div>
+                <div class="efo-input-content" >
+                  <div class="efo-input-wrap" >
+                    <div class="efo-input-radio required" >
+                      <div class="bg-gray" >
+                        <ul class="panel-layout">
+                          <li>
+                            <label class="radio-red">
+                              <input id="form_mail_magazine_flg1" name="mail_magazine_flg" value="1" checked="checked" type="radio">希望する </label> &nbsp;&nbsp;
+                          </li>
+                          <li>
+                            <label class="radio-red">
+                              <input id="form_mail_magazine_flg2" name="mail_magazine_flg" value="2" type="radio">希望しない </label> &nbsp;&nbsp;
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                    <p class="efo-input-message"></p>
+                    <i class="efo-input-required-check"></i>
+                  </div>
+                  <div class="cs-font-color-01 cs-mgt-5" >お得なクーポンや情報を配信しております。</div>
+                </div>
               </div>
-            </div> {% endcomment %}
+            {% endcomment %}
             <!-- End .efo-input-row -->
             <!-- 生年月日 -->
-            <div class="efo-input-row efo-birthday-range" >
-              <div class="efo-input-title" >
+            {% comment %} <div class="efo-input-row efo-birthday-range">
+              <div class="efo-input-title">
                 <label>生年月日</label>
               </div>
-              <div class="efo-input-content" >
-                <div class="efo-input-wrap" >
-                  <!-- 年 -->
+              <div class="efo-input-content">
+                <div class="efo-input-wrap">
                   <select name="birth_year" id="form_birth_year" class="input-ng">
                     <option value="" selected="selected">----</option>
                     <option value="1920">1920</option>
@@ -423,8 +807,8 @@
                     <option value="2007">2007</option>
                   </select>
                   <label for="form_birth_year" class="efo-dummy-select">----</label>
-                  <p class="efo-input-message"></p> &nbsp;年&nbsp;&nbsp;
-                  <!-- 月 -->
+                  <p class="efo-input-message"></p>
+                  &nbsp;年&nbsp;&nbsp;
                   <select name="birth_month" id="form_birth_month" class="input-ng">
                     <option value="" selected="selected">--</option>
                     <option value="1">1</option>
@@ -441,8 +825,8 @@
                     <option value="12">12</option>
                   </select>
                   <label for="form_birth_month" class="efo-dummy-select">--</label>
-                  <p class="efo-input-message"></p> &nbsp;月&nbsp;&nbsp;
-                  <!-- 日 -->
+                  <p class="efo-input-message"></p>
+                  &nbsp;月&nbsp;&nbsp;
                   <select name="birth_day" id="form_birth_day" class="input-ng">
                     <option value="" selected="selected">--</option>
                     <option value="1">1</option>
@@ -478,30 +862,33 @@
                     <option value="31">31</option>
                   </select>
                   <label for="form_birth_day" class="efo-dummy-select">--</label>
-                  <p class="efo-input-message"></p> &nbsp;日 <i class="efo-input-required-check"></i>
+                  <p class="efo-input-message"></p>
+                  &nbsp;日 <i class="efo-input-required-check"></i>
                   <i class="efo-input-required-check"></i>
                   <i class="efo-input-required-check"></i>
                 </div>
               </div>
-            </div>
+            </div> {% endcomment %}
             <!-- End .efo-input-row -->
             <!-- 性別 -->
-            <div class="efo-input-row" >
-              <div class="efo-input-title" >
+            {% comment %} <div class="efo-input-row">
+              <div class="efo-input-title">
                 <label>性別</label>
               </div>
-              <div class="efo-input-content" >
-                <div class="efo-input-wrap" >
-                  <div class="efo-input-radio input-ng" >
-                    <div class="bg-gray" >
+              <div class="efo-input-content">
+                <div class="efo-input-wrap">
+                  <div class="efo-input-radio input-ng">
+                    <div class="bg-gray">
                       <ul class="panel-layout">
                         <li>
                           <label class="radio-red">
-                            <input id="form_sex1" name="gender" value="男性" type="radio">男性 </label>&nbsp;&nbsp;
+                            <input id="form_sex1" name="gender" value="男性" type="radio">男性 </label
+                          >&nbsp;&nbsp;
                         </li>
                         <li>
                           <label class="radio-red">
-                            <input id="form_sex2" name="gender" value="女性" type="radio">女性 </label>&nbsp;&nbsp;
+                            <input id="form_sex2" name="gender" value="女性" type="radio">女性 </label
+                          >&nbsp;&nbsp;
                         </li>
                       </ul>
                     </div>
@@ -510,24 +897,24 @@
                   <i class="efo-input-required-check"></i>
                 </div>
               </div>
-            </div>
+            </div> {% endcomment %}
             <!-- End .efo-input-row -->
             <!-- パスワード -->
-            <div class="efo-input-row" >
-              <div class="efo-input-title" >
+            <div class="efo-input-row">
+              <div class="efo-input-title">
                 <label for="password">パスワード</label>
                 <i class="icon-required"></i>
               </div>
-              <div class="efo-input-content js-action-pass-switch-type" >
-                <div class="efo-input-wrap" >
-                  <input 
-                    maxlength="20" 
-                    class="js-action-pass-switch-type-target efo-input-sm required input-ng" 
-                    data-efo="8文字以上16文字以下で半角英数字をそれぞれ1文字以上含んでください。使える記号は『 , . _ - / () {} 』です。" 
-                    data-validate="password" 
-                    type="password" 
+              <div class="efo-input-content js-action-pass-switch-type">
+                <div class="efo-input-wrap">
+                  <input
+                    maxlength="20"
+                    class="js-action-pass-switch-type-target efo-input-sm required input-ng"
+                    data-efo="8文字以上16文字以下で半角英数字をそれぞれ1文字以上含んでください。使える記号は『 , . _ - / () {} 』です。"
+                    data-validate="password"
+                    type="password"
                     name="password"
-                    value="" 
+                    value=""
                     id="form_password"
                   >
                   <p class="efo-input-message"></p>
@@ -537,17 +924,18 @@
                 <p class="view-password">
                   <a href="javascript:void(0);" class="js-action-pass-switch-type-btn">パスワードを表示する</a>
                 </p>
+                <p class="txt-color-red">※8文字以上16文字以下で半角英数字をそれぞれ1文字以上含んでください。使える記号は『 , . _ - / () {} 』です。</p>
               </div>
             </div>
             <!-- End .efo-input-row -->
-            <!-- 築年数 -->
-            <div class="efo-input-row" >
-              <div class="efo-input-title" >
-                <label for="form_construction_year">築年数</label>
+            <!-- 居住を開始した年 -->
+            <div class="efo-input-row">
+              <div class="efo-input-title">
+                <label for="form_construction_year">居住を開始した年</label>
                 <i class="icon-required"></i>
               </div>
-              <div class="efo-input-content" >
-                <div class="efo-input-wrap" >
+              <div class="efo-input-content">
+                <div class="efo-input-wrap">
                   <select class="required input-ng" name="age" id="form_construction_year">
                     <option value="">選択してください</option>
                     <option value="1">不明</option>
@@ -591,63 +979,76 @@
             </div>
             <!-- End .efo-input-row -->
             <!-- 施⼯業者名 -->
-            <div class="efo-input-row" >
-              <div class="efo-input-title" >
+            {% comment %} <div class="efo-input-row">
+              <div class="efo-input-title">
                 <label for="form_construction_name">施⼯業者名</label>
               </div>
-              <div class="efo-input-content" >
-                <div class="efo-input-wrap" >
-                  <input placeholder="例：□□□□ホーム" maxlength="50" class="efo-input-sm input-ng" name="builders" value="" type="text" id="form_construction_name">
+              <div class="efo-input-content">
+                <div class="efo-input-wrap">
+                  <input
+                    placeholder="例：□□□□ホーム"
+                    maxlength="50"
+                    class="efo-input-sm input-ng"
+                    name="builders"
+                    value=""
+                    type="text"
+                    id="form_construction_name"
+                  >
                   <p class="efo-input-message"></p>
                   <i class="efo-input-required-check"></i>
                 </div>
-                <!-- End .efo-input-wrap -->
               </div>
-              <!-- End .efo-input-content -->
-            </div>
+            </div> {% endcomment %}
             <!-- End .efo-input-row -->
             <!-- 紹介コード -->
-            <div class="efo-input-row" >
-              <div class="efo-input-title" >
+            {% comment %} <div class="efo-input-row">
+              <div class="efo-input-title">
                 <label for="form_introduction_code">紹介コード</label>
               </div>
-              <div class="efo-input-content" >
-                <div class="efo-input-wrap" >
-                  <input placeholder="例：07535" maxlength="8" class="efo-input-sm input-ng" data-validate="number" name="referral_code" value="" type="text" id="form_introduction_code">
+              <div class="efo-input-content">
+                <div class="efo-input-wrap">
+                  <input
+                    placeholder="例：07535"
+                    maxlength="8"
+                    class="efo-input-sm input-ng"
+                    data-validate="number"
+                    name="referral_code"
+                    value=""
+                    type="text"
+                    id="form_introduction_code"
+                  >
                   <p class="efo-input-message"></p>
                   <i class="efo-input-required-check"></i>
                 </div>
-                <!-- End .efo-input-wrap -->
               </div>
-              <!-- End .efo-input-content -->
-            </div>
-            <input type="hidden" value="" name="mino" />
-            <input type="hidden" value="" name="cktr" />
-            <input type="hidden" value="" name="rank" />
+            </div> {% endcomment %}
+            <input type="hidden" value="" name="mino">
+            <input type="hidden" value="" name="cktr">
+            <input type="hidden" value="" name="rank">
             <div class="efo-input-row hmk-field">
-              <div class="efo-input-title" >
+              <div class="efo-input-title">
                 <label for="form_introduction_code">品目</label>
               </div>
-              <div class="efo-input-content" >
-                <div class="efo-input-wrap" style="display: flex;flex-wrap: wrap;gap: 8px;" >
+              <div class="efo-input-content">
+                <div class="efo-input-wrap" style="display: flex;flex-wrap: wrap;gap: 14px;">
                   <div>
-                    <input type="checkbox" id="HMK1" name="hmk" value="ドア・クローゼット"/>
+                    <input type="checkbox" id="HMK1" name="hmk" value="ドア・クローゼット">
                     <label for="HMK1">ドア・クローゼット</label>
                   </div>
                   <div>
-                    <input type="checkbox" id="HMK2" name="hmk" value="床・段階"/>
+                    <input type="checkbox" id="HMK2" name="hmk" value="床・段階">
                     <label for="HMK2">床・段階</label>
                   </div>
                   <div>
-                    <input type="checkbox" id="HMK3" name="hmk" value="収納"/>
+                    <input type="checkbox" id="HMK3" name="hmk" value="収納">
                     <label for="HMK3">収納</label>
                   </div>
                   <div>
-                    <input type="checkbox" id="HMK4" name="hmk" value="キッチン・洗面"/>
+                    <input type="checkbox" id="HMK4" name="hmk" value="キッチン・洗面">
                     <label for="HMK4">キッチン・洗面</label>
                   </div>
                   <div>
-                    <input type="checkbox" id="HMK5" name="hmk" value="その他"/>
+                    <input type="checkbox" id="HMK5" name="hmk" value="その他">
                     <label for="HMK5">その他</label>
                   </div>
                 </div>
@@ -655,15 +1056,838 @@
               </div>
               <!-- End .efo-input-content -->
             </div>
+            <!-- End .efo-input-row -->
+          </div>
+        </div>
+        <!-- End .efo-form-container -->
+
+
+         <div class="register_notification clearfix">
+        <div class="efo-form input efo-form--service">
+          <h2 class="cs-gy-bg-title">弊社キッチンご購入者用、浄水器カートリッジ交換時期お知らせサービス</h2>
+          <div class="efo-input-container">
+            <p class="efo-form--service__lead">
+              カートリッジ品番<a href="javascript:openModalAbout('HDF9006');" class="info-text">HDF9006</a>、<a
+                href="javascript:openModalAbout('HDF9008');"
+                class="info-text"
+                >HDF9008</a
+              >、<a href="javascript:openModalAbout('UDF9001');" class="info-text">UDF9001</a
+              >、UDF9006-TCのみのサービスとなります。
+            </p>
+
+            <div id="modalAboutRegister" class="modal-guide">
+              <div class="modal-guide-content about-modal">
+                <span class="close" onclick="closeModalGuide()">&times;</span>
+                <div class="modal-guide-HDF9006 modal-guide-item">
+                  <h3 class="cs-gy-bg-title">HDF9006（アンダーシンク）</h3>
+                  <p class="modal-guide-item__txt">
+                    ご登録された、ご使用開始日から10ヶ月後にお知らせメールが届きます。<br>
+                    取付時、1年間使用可能カートリッジ付属。交換カートリッジも1年用×1本です。
+                  </p>
+                  <div class="about-mail-img">
+                    <img src="/cdn/shop/files/img-about-mail-01.png" alt="">
+                  </div>
+                </div>
+                <div class="modal-guide-HDF9008 modal-guide-UDF9001 modal-guide-item">
+                  <h3 class="cs-gy-bg-title">HDF9008・UDF9001（スパウトイン）</h3>
+                  <p class="modal-guide-item__txt">
+                    ご登録された、ご使用開始日から3ヶ月後にお知らせメールが届きます。ご購入後は、4ヶ月ごとにお知らせメールを配信させていただきます。<span class="txt-color-red"
+                      >取付時、4ヶ月使用可能カートリッジ1本付属。</span
+                    >交換カートリッジは４ヶ月用×3本セットです。
+                  </p>
+                  <div class="about-mail-img">
+                    <img src="/cdn/shop/files/img-about-mail-02.png" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <script type="text/javascript">
+              var product = {
+                HDF9006: {
+                  product_id: 258,
+                  code: 'HDF9006',
+                  name: '\u30a2\u30f3\u30c0\u30fc\u30b7\u30f3\u30af\u30bf\u30a4\u30d7',
+                  use_period: '12',
+                  purchase_notification_date_1: '10',
+                  purchase_notification_date_2: '1',
+                  purchase_notification_date_3: '14',
+                  replacement_notification_date_1: '',
+                  replacement_notification_date_2: '',
+                  faucets: {
+                    A101BKW: 'HDFC002-JH',
+                    A602BKW: 'HDFC003-JH',
+                    AL680BKW: 'HDFC004-AH',
+                    F914BKW: 'HDFC006-JH',
+                    AL700BKW: 'HDFC007-AH',
+                    A101WO: 'HDFC010-JH',
+                    AL700WO: 'HDFC011-AH',
+                    F914C1WO: 'HDFC012-JH',
+                    F904C1WO: 'HDFC013-JH',
+                    F904KC1WO: 'HDFC013-JW',
+                    'F904C1WO ': 'UDFC003-JH-C',
+                    'F904KC1WO ': 'UDFC003-JW-C',
+                    F914ECOWO: 'UDFC002-JH-C',
+                    F914KECOWO: 'UDFC002-JW-C',
+                    A103ZCWO: 'UDFC004-JH-C',
+                    A113HUWO: 'UDFC007-JH-C',
+                  },
+                },
+                HDF9008: {
+                  product_id: 259,
+                  code: 'HDF9008',
+                  name: '\u30b9\u30d1\u30a6\u30c8\u30a4\u30f3\u6c34\u6813\u4e00\u4f53\u578b',
+                  use_period: '4',
+                  purchase_notification_date_1: '3',
+                  purchase_notification_date_2: '14',
+                  purchase_notification_date_3: '7',
+                  replacement_notification_date_1: '',
+                  replacement_notification_date_2: '',
+                  faucets: {
+                    F402BKW: 'HDFC001-SH',
+                    F402BKWK: 'HDFC001-SW',
+                    F425BKW: 'HDFC008-SH',
+                    F425BKWK: 'HDFC008-SW',
+                    F426WO: 'HDFC009-SH',
+                  },
+                },
+                'HDF9008-1': {
+                  product_id: 259,
+                  code: 'HDF9008-1',
+                  name: '\u30b9\u30d1\u30a6\u30c8\u30a4\u30f3\u6c34\u6813\u4e00\u4f53\u578b \u521d\u56de',
+                  use_period: '4',
+                  purchase_notification_date_1: '3',
+                  purchase_notification_date_2: '14',
+                  purchase_notification_date_3: '7',
+                  replacement_notification_date_1: '',
+                  replacement_notification_date_2: '',
+                  faucets: {
+                    F402BKW: 'HDFC001-SH',
+                    F402BKWK: 'HDFC001-SW',
+                    F425BKW: 'HDFC008-SH',
+                    F425BKWK: 'HDFC008-SW',
+                    F426WO: 'HDFC009-SH',
+                  },
+                },
+                'HDF9008-2': {
+                  product_id: 259,
+                  code: 'HDF9008-2',
+                  name: '\u30b9\u30d1\u30a6\u30c8\u30a4\u30f3\u6c34\u6813\u4e00\u4f53\u578b \u4ea4\u63db',
+                  use_period: '12',
+                  purchase_notification_date_1: '11',
+                  purchase_notification_date_2: '14',
+                  purchase_notification_date_3: '7',
+                  replacement_notification_date_1: '4',
+                  replacement_notification_date_2: '8',
+                  faucets: {
+                    F402BKW: 'HDFC001-SH',
+                    F402BKWK: 'HDFC001-SW',
+                    F425BKW: 'HDFC008-SH',
+                    F425BKWK: 'HDFC008-SW',
+                    F426WO: 'HDFC009-SH',
+                  },
+                },
+                UDF9001: {
+                  product_id: 406,
+                  code: 'UDF9001',
+                  name: '\u30b9\u30d1\u30a6\u30c8\u30a4\u30f311\u7269\u8cea\u9664\u53bb\u30bf\u30a4\u30d7',
+                  use_period: '4',
+                  purchase_notification_date_1: '3',
+                  purchase_notification_date_2: '14',
+                  purchase_notification_date_3: '7',
+                  replacement_notification_date_1: '',
+                  replacement_notification_date_2: '',
+                  faucets: {
+                    F402BKW: 'HDFC001-SH',
+                    F402BKWK: 'HDFC001-SW',
+                    F425BKW: 'HDFC008-SH',
+                    F425BKWK: 'HDFC008-SW',
+                    F426WO: 'HDFC009-SH',
+                    F428WO: 'UDFC001-SH-C',
+                    F428KWO: 'UDFC001-SW-C',
+                  },
+                },
+                'UDF9001-1': {
+                  product_id: 406,
+                  code: 'UDF9001-1',
+                  name: '\u30b9\u30d1\u30a6\u30c8\u30a4\u30f311\u7269\u8cea\u9664\u53bb\u30bf\u30a4\u30d7 \u521d\u56de',
+                  use_period: '4',
+                  purchase_notification_date_1: '3',
+                  purchase_notification_date_2: '14',
+                  purchase_notification_date_3: '7',
+                  replacement_notification_date_1: '',
+                  replacement_notification_date_2: '',
+                  faucets: {
+                    F402BKW: 'HDFC001-SH',
+                    F402BKWK: 'HDFC001-SW',
+                    F425BKW: 'HDFC008-SH',
+                    F425BKWK: 'HDFC008-SW',
+                    F426WO: 'HDFC009-SH',
+                    F428WO: 'UDFC001-SH-C',
+                    F428KWO: 'UDFC001-SW-C',
+                  },
+                },
+                'UDF9001-2': {
+                  product_id: 406,
+                  code: 'UDF9001-2',
+                  name: '\u30b9\u30d1\u30a6\u30c8\u30a4\u30f311\u7269\u8cea\u9664\u53bb\u30bf\u30a4\u30d7 \u4ea4\u63db',
+                  use_period: '12',
+                  purchase_notification_date_1: '11',
+                  purchase_notification_date_2: '14',
+                  purchase_notification_date_3: '7',
+                  replacement_notification_date_1: '4',
+                  replacement_notification_date_2: '8',
+                  faucets: {
+                    F402BKW: 'HDFC001-SH',
+                    F402BKWK: 'HDFC001-SW',
+                    F425BKW: 'HDFC008-SH',
+                    F425BKWK: 'HDFC008-SW',
+                    F426WO: 'HDFC009-SH',
+                    F428WO: 'UDFC001-SH-C',
+                    F428KWO: 'UDFC001-SW-C',
+                  },
+                },
+              };
+            </script>
+            <!-- サービスを利用する -->
+            <div class="efo-input-row">
+              <div class="efo-input-title">
+                <label for="efo-form01-input-radio1">お知らせサービス利用</label>
+                <i class="icon-required"></i>
+              </div>
+              <div class="efo-input-content">
+                <div class="efo-input-wrap">
+                  <div class="efo-input-radio" style="display: flex;gap: 10px;">
+                    <div class="bg-gray">
+                      <ul class="panel-layout">
+                        <li>
+                          <label class="radio-red"
+                            ><input
+                              id="form_notification_service_flg1"
+                              name="notification_service_flg"
+                              value="1"
+                              type="radio"
+
+                            >希望する</label
+                          >
+                        </li>
+                        <li>
+                          <label class="radio-red"
+                            ><input
+                              id="form_notification_service_flg2"
+                              name="notification_service_flg"
+                              value="2"
+                              type="radio"
+                            >希望しない</label
+                          >
+                        </li>
+                      </ul>
+                    </div>
+                    <div onclick="openPopup()" style="cursor: pointer"> ？カートリッジお知らせメールの配信について</div>
+                  </div>
+                  {% comment %} <p class="efo-input-message"></p> {% endcomment %}
+                  {% comment %} <i class="efo-input-required-check"></i> {% endcomment %}
+                </div>
+              </div>
+            </div>
+            <!-- End .efo-input-row -->
+
+            <div id="notificationServiceUse">
+              <!-- ご使用中のカートリッジ -->
+              <div class="efo-input-row">
+                <div class="efo-input-title">ご使用中のカートリッジ<i class="icon-required"></i></div>
+                <div class="efo-input-content">
+                  <div class="efo-input-wrap">
+                    <select
+                      class="efo-input-sm js-action-cartridge-code required input-ng"
+                      name="cartridge_product_code"
+                      id="form_cartridge_product_code"
+                    >
+                      <option value="" selected="selected">選択してください</option>
+                      <option value="HDF9006">HDF9006 アンダーシンクタイプ</option>
+                      <option value="HDF9008-1">HDF9008 スパウトイン水栓一体型</option>
+                      <option value="UDF9001-1">UDF9001 スパウトイン11物質除去タイプ</option></select
+                    ><label for="form_cartridge_product_code" class="efo-dummy-select">選択してください</label>
+                    {% comment %} <p class="efo-input-message"></p> {% endcomment %}
+                    {% comment %} <i class="efo-input-required-check"></i> {% endcomment %}
+                  </div>
+                  <ul class="cartridge-list">
+                    <li>
+                      <span class="cartridge-list__img">
+                        <img src="/cdn/shop/files/img-cartridge-01.png" alt="">
+                      </span>
+                      <p class="cartridge-list__cap">
+                        HDF9006<br>
+                        カートリッジ<span>（アンダーシンクタイプ）</span>
+                      </p>
+                    </li>
+                    <li>
+                      <span class="cartridge-list__img">
+                        <img src="/cdn/shop/files/img-cartridge-02.png" alt="">
+                      </span>
+                      <p class="cartridge-list__cap">
+                        HDF9008<br>
+                        カートリッジ<span>（スパウトイン水栓一体型）</span>
+                      </p>
+                    </li>
+                    <li>
+                      <span class="cartridge-list__img">
+                        <img src="/cdn/shop/files/img-cartridge-03.png" alt="">
+                      </span>
+                      <p class="cartridge-list__cap">
+                        UDF9001<br>
+                        カートリッジ<span>（スパウトイン11物質除去タイプ）</span>
+                      </p>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <!-- End efo-input-row -->
+
+              <!-- ご使用開始時期 -->
+              <div class="efo-input-row">
+                <div class="efo-input-title">
+                  <label for="efo-form01-day">使用開始日</label>
+                  <i class="icon-required"></i>
+                </div>
+                <div class="efo-input-content">
+                  <div class="efo-input-wrap">
+                    <div>
+                     <input
+                        class="hidden"
+                        name="use_start_date"
+                        value=""
+                        type="hidden"
+                       id="form_use_start_date_input"
+                      >
+                      <input
+                        class="js-datepicker efo-input-xs datepicker required input-ng"
+                        data-date-format="yyyy/mm/dd"
+                        data-validate="number-symbol"
+                        placeholder="例:2013/01/08"
+                        name="use_start_date_select"
+                        value=""
+                        type="text"
+                        id="form_use_start_date"
+                      >
+                      <p class="efo-input-message"></p>
+                       <i class="efo-input-required-check"></i>
+                    </div>
+                    <p class="txt-color-red" style="margin-top: 5px;"><b>※使用開始日は購入後必ず更新をお願いいたします。</b></p>
+                   
+                  </div>
+                </div>
+              </div>
               <!-- End .efo-input-row -->
+
+              <!-- <div class="efo-input-row">
+                <div class="efo-input-title">ご使用中の水栓</div>
+                <div class="efo-input-content">
+                        <div class="efo-input-wrap">
+                          <select class="efo-input-sm js-action-faucet-code" name="faucet_product_code" id="form_faucet_product_code"><option value="">選択してください</option><option value="F402BKW">HDFC001-SH</option><option value="F402BKWK">HDFC001-SW</option><option value="F425BKW">HDFC008-SH</option><option value="F425BKWK">HDFC008-SW</option><option value="F426WO">HDFC009-SH</option></select><label for="form_faucet_product_code" class="efo-dummy-select">選択してください</label>
+                        </div>
+                        <ul class="select-item-list" id="HDF9006" style="display: none;">
+                          <li>
+                            <div class="select-item-list__img">
+                              <img src="/cdn/shop/files/img-tap-01-01.png" alt="">
+                            </div>
+                            <p class="select-item-list__cap">HDFC002-JH<span>（型番A101BKW）</span></p>
+                          </li>
+                          <li>
+                            <div class="select-item-list__img">
+                              <img src="/cdn/shop/files/img-tap-01-02.png" alt="">
+                            </div>
+                            <p class="select-item-list__cap">HDFC003-JH<span>（型番A602BKW）</span></p>
+                          </li>
+                          <li>
+                            <div class="select-item-list__img">
+                              <img src="/cdn/shop/files/img-tap-01-03.png" alt="">
+                            </div>
+                            <p class="select-item-list__cap">HDFC004-AH<span>（型番AL680BKW）</span></p>
+                          </li>
+                          <li>
+                            <div class="select-item-list__img">
+                              <img src="/cdn/shop/files/img-tap-01-04.png" alt="">
+                            </div>
+                            <p class="select-item-list__cap">HDFC006-JH<span>（型番F914BKW）</span></p>
+                          </li>
+                          <li>
+                            <div class="select-item-list__img">
+                              <img src="/cdn/shop/files/img-tap-01-05.png" alt="">
+                            </div>
+                            <p class="select-item-list__cap">HDFC007-AH<span>（型番AL700BKW）</span></p>
+                          </li>
+                          <li>
+                            <div class="select-item-list__img">
+                              <img src="/cdn/shop/files/img-tap-01-06.png" alt="">
+                            </div>
+                            <p class="select-item-list__cap">HDFC010-JH<span>（型番A101WO）</span></p>
+                          </li>
+                          <li>
+                            <div class="select-item-list__img">
+                              <img src="/cdn/shop/files/img-tap-01-07.png" alt="">
+                            </div>
+                            <p class="select-item-list__cap">HDFC011-AH<span>（型番AL700WO）</span></p>
+                          </li>
+                          <li>
+                            <div class="select-item-list__img">
+                              <img src="/cdn/shop/files/img-tap-01-08.png" alt="">
+                            </div>
+                            <p class="select-item-list__cap">HDFC012-JH<span>（型番F914C1WO）</span></p>
+                          </li>
+                          <li>
+                            <div class="select-item-list__img">
+                              <img src="/cdn/shop/files/img-tap-01-09.png" alt="">
+                            </div>
+                            <p class="select-item-list__cap">HDFC013-JH /<br>UDFC003-JH-C<span>（型番F904C1WO）</span></p>
+                            <p class="select-item-list__cap">HDFC013-JW /<br>UDFC003-JW-C<span>（型番F904KC1WO）</span></p>
+                          </li>
+                          <li>
+                            <div class="select-item-list__img">
+                              <img src="/cdn/shop/files/img-tap-01-10.jpg" alt="">
+                            </div>
+                            <p class="select-item-list__cap">UDFC002-JH-C<span>（型番F914ECOWO）</span></p>
+                            <p class="select-item-list__cap">UDFC002-JW-C<span>（型番F914KECOWO）</span></p>
+                          </li>
+                          <li>
+                            <div class="select-item-list__img">
+                              <img src="/cdn/shop/files/img-tap-01-11.jpg" alt="">
+                            </div>
+                            <p class="select-item-list__cap">UDFC004-JH-C<span>（型番A103ZCWO）</span></p>
+                          </li>
+                          <li>
+                            <div class="select-item-list__img">
+                              <img src="/cdn/shop/files/img-tap-01-12.jpg" alt="">
+                            </div>
+                            <p class="select-item-list__cap">UDFC007-JH-C<span>（型番A113HUWO）</span></p>
+                          </li>
+                        </ul>
+                        <ul class="select-item-list" id="HDF9008-1" style="display: none;">
+                          <li>
+                            <div class="select-item-list__img">
+                              <img src="/cdn/shop/files/img-tap-02-01.png" alt="">
+                            </div>
+                            <p class="select-item-list__cap">HDFC001-SH<span>（型番F402BKW）</span></p>
+                            <p class="select-item-list__cap">HDFC001-SW<span>（型番F402BKWK）</span></p>
+                          </li>
+                          <li>
+                            <div class="select-item-list__img">
+                              <img src="/cdn/shop/files/img-tap-02-02.png" alt="">
+                            </div>
+                            <p class="select-item-list__cap">HDFC008-SH<span>（型番F425BKW）</span></p>
+                            <p class="select-item-list__cap">HDFC008-SW<span>（型番F425BKWK）</span></p>
+                          </li>
+                          <li>
+                            <div class="select-item-list__img">
+                              <img src="/cdn/shop/files/img-tap-02-03.png" alt="">
+                            </div>
+                            <p class="select-item-list__cap">HDFC009-SH<span>（型番F426WO）</span></p>
+                          </li>
+                        </ul>
+                        <ul class="select-item-list" id="UDF9001-1" style="display: none;">
+                          <li>
+                            <div class="select-item-list__img">
+                              <img src="/cdn/shop/files/img-tap-02-01.png" alt="">
+                            </div>
+                            <p class="select-item-list__cap">HDFC001-SH<span>（型番F402BKW）</span></p>
+                            <p class="select-item-list__cap">HDFC001-SW<span>（型番F402BKWK）</span></p>
+                          </li>
+                          <li>
+                            <div class="select-item-list__img">
+                              <img src="/cdn/shop/files/img-tap-02-02.png" alt="">
+                            </div>
+                            <p class="select-item-list__cap">HDFC008-SH<span>（型番F425BKW）</span></p>
+                            <p class="select-item-list__cap">HDFC008-SW<span>（型番F425BKWK）</span></p>
+                          </li>
+                          <li>
+                            <div class="select-item-list__img">
+                              <img src="/cdn/shop/files/img-tap-02-03.png" alt="">
+                            </div>
+                            <p class="select-item-list__cap">HDFC009-SH<span>（型番F426WO）</span></p>
+                          </li>
+                          <li>
+                            <div class="select-item-list__img">
+                              <img src="/cdn/shop/files/img-tap-02-04.png" alt="">
+                            </div>
+                            <p class="select-item-list__cap">UDFC001-SH-C<span>（型番F428WO）</span></p>
+                            <p class="select-item-list__cap">UDFC001-SW-C<span>（型番F428KWO）</span></p>
+                          </li>
+                        </ul>
+                      </div>
+              </div> -->
             </div>
           </div>
-          <!-- End .efo-form-container -->
         </div>
-        <button id="btnSubmitForm" type="submit" class="btn-01 cs-w-265 over" data-enabled="アカウントを作成する" data-disabled="未入力の項目があります" disabled="" name="submit-btn">未入力の項目があります</button>
-      </form>
+        <div class="popup-overlay" id="popupOverlay">
+          <div class="popup">
+            <div class="about-mail-block" bis_skin_checked="1">
+              <div class="about-mail-box" bis_skin_checked="1">
+                <h3 class="cs-gy-bg-title">HDF9006（アンダーシンク）・UDF9006-TC</h3>
+                <p class="about-mail-box__txt" data-mh="matchTxt02" style="height: 60px;">ご登録された、ご使用開始日から10ヶ月後にお知らせメールが届きます。 <br>取付時、1年間使用可能カートリッジ付属。交換カートリッジも1年用×1本です。 </p>
+                <div class="about-mail-img" bis_skin_checked="1">
+                  <img src="{{ 'img-about-mail-01.png' | asset_url  }}" alt="">
+                </div>
+              </div>
+              <div class="about-mail-box" bis_skin_checked="1">
+                <h3 class="cs-gy-bg-title">HDF9008・UDF9001（スパウトイン）</h3>
+                <p class="about-mail-box__txt" data-mh="matchTxt02" style="height: 60px;">ご登録された、ご使用開始日から3ヶ月後にお知らせメールが届きます。ご購入後は、4ヶ月ごとにお知らせメールを配信させていただきます。 <span class="txt-color-red">取付時、4ヶ月使用可能カートリッジ1本付属。</span>交換カートリッジは４ヶ月用×3本セットです。 </p>
+                <div class="about-mail-img" bis_skin_checked="1">
+                  <img src="{{ 'img-about-mail-02.png' | asset_url  }}" alt="">
+                </div>
+              </div>
+              <p class="about-mail-block-not txt-color-red" style="margin-top: 10px;letter-spacing: 0;">
+                購入お知らせメールの配信前に購入された場合など、購入されるタイミングによっては、必要のない購入お知らせメールが配信される場合がありますのでご了承ください。
+              </p>
+            </div>
+              <button class="close-btn" type="button" onclick="closePopup()">閉じる</button>
+          </div>
+        </div>
+        
+      </div>
+      </div>
+
+     
+
+      <div class="register_policy clearfix ">
+        <h2 class="cs-gy-bg-title">
+          <span class="cs-font-color-01 cs-fontweight-bold">【重要】</span>
+          会員登録をされる前に、下記ご利用規約をよくお読みください。
+        </h2>
+        <div class="cs-inner-box-long">
+          <p>規約には、本サービスを使用するにあたってのあなたの権利と義務が規定されております。</p>
+        </div>
+        <div
+          class="cs-inner-box-long cs-pdg-box-0 cs-max-height-170 js-scroll-box mCustomScrollbar _mCS_1"
+          id="scroll-terms-of-service"
+        >
+          <div
+            id="mCSB_1"
+            class="mCustomScrollBox mCS-dark-3 mCSB_vertical mCSB_inside"
+            style="max-height: 168.889px;"
+            tabindex="0"
+          >
+            <div
+              id="mCSB_1_container"
+              class="mCSB_container"
+              style="position: relative; top: 0px; left: 0px;"
+              dir="ltr"
+            >
+              <dl>
+                <dt class="cs-left-line-title">利用規約</dt>
+                <dd class="cs-pdg-box-20">
+                  ウッドワン パーツショップとは、商品又はサービスの提供情報掲載、<br>
+                  オンラインによる商品又はサービスの提供機能を持ったシステムで、<br>
+                  当社が本規約に基づいてインターネット上で運営するサイトをいいます。<br>
+                  <br>
+                  「利用者」とは、ウッドワン パーツショップにアクセスする者をいいます。<br>
+                  <br>
+                  「本サービス」とは、当社が本規約に基づきウッドワン パーツショップを利用する者に対し、<br>
+                  提供するサービスをいい、サービスの内容、種類については、当社の独自の判断により随時変更、増減が行なわれるものとし、<br>
+                  その通知は随時、ウッドワン
+                  パーツショップ上での表示、又は電子メールその他の通信手段を通じて行なわれるものとします。<br>
+                  <br>
+                  第2条（規約の範囲及び変更）<br>
+                  1 本規約は、本サービスの利用に関し、当社及び利用者に適用するものとし、利用者はウッドワン
+                  パーツショップを利用するにあたり、本規約を誠実に遵守するものとします。<br>
+                  <br>
+                  2 当社が別途ウッドワン パーツショップ上における掲示またはその他の方法により規定する個別規定及び当社が<br>
+                  随時利用者に対し通知する追加規定は、本規約の一部を構成します。<br>
+                  本規約と個別規定及び追加規定が異なる場合には、個別規定及び追加規定が優先するものとします。<br>
+                  <br>
+                  3 当社は利用者の承諾なく、当社の独自の判断により、本規約を変更する事があります。<br>
+                  この場合、ウッドワン
+                  パーツショップが提供するサービスの利用条件は変更後の利用規約に基づくものとします。<br>
+                  当該変更は、予め当社に通知したアドレス宛の電子メール、ウッドワン パーツショップ上の<br>
+                  一般掲示又はその他当社が適当と認めるその他の方法により通知した時点より効力を発するものとします。<br>
+                  <br>
+                  4 規約の変更に伴い、利用者に不利益、損害が発生した場合、当社はその責任を一切負わないものとします。<br>
+                  <br>
+                  第3条（利用者の地位及び制限事項）<br>
+                  1 利用者の地位<br>
+                  ウッドワン
+                  パーツショップにおいて利用者は、提供される本サービスのいずれかを享受する時点において（ここにいう享受には、情報の閲覧も含みます）、本規約に合意
+                  したものとみなされ、同時にウッドワン パーツショップにおける利用者としての地位を得るものとします。<br>
+                  <br>
+                  2 利用者に対する制限事項<br>
+                  利用者は、以下に掲げる行為は行ってはならないものとします。<br>
+                  <br>
+                  (1) ウッドワン パーツショップが指定した方法以外の方法によって、ウッドワン
+                  パーツショップを利用する行為。<br>
+                  (2) 他者になりすまして本サービスを利用する行為。<br>
+                  (3) ウッドワン
+                  パーツショップが認める以外の方法で、本サービスに関連するデータのリンクを、他のデータ等へ指定する行為。<br>
+                  (4) ウッドワン
+                  パーツショップを利用するコンピュータに保存されているデータへ不正アクセスする、又はこれを破壊もしくは破壊するおそれのある行為。<br>
+                  (5) 本サービスの運営を妨害する行為。<br>
+                  (6) 本サービスを使用した営業活動並びに営利を目的とした利用及びその準備を目的とした利用。<br>
+                  但し、当社が別途承認した場合には、この限りではありません。<br>
+                  (7) 他の利用者の個人情報を収集したり、蓄積すること、又はこれらの行為をしようとする事。<br>
+                  (8) 公序良俗に反する行為及びその他国内外の法令に反する行為。<br>
+                  <br>
+                  第4条（本サービスの中断、停止）<br>
+                  1
+                  当社は以下の何れかの事由に該当する場合、当社の独自の判断により、利用者に事前に通知することなく本サービスの一部もしくは全部を一時中断、又は停止することがあります。<br>
+                  <br>
+                  (1) 本サービスのための装置、システムの保守点検、更新を定期的にまたは緊急に行う場合。<br>
+                  (2) 火災、停電、天災などの不可抗力により、本サービスの提供が困難な場合。<br>
+                  (3) 第一種電気通信事業者の任務が提供されない場合。<br>
+                  (4)
+                  その他、運用上あるいは技術上当社が本サービスの一時中断、もしくは停止が必要であるか、又は不測の事態により、当社が本サービスの提供が困難と判断した場合。<br>
+                  <br>
+                  2
+                  当社は、本サービスの提供の一時中断、停止等の発生により、利用者または第三者が被ったいかなる不利益、損害について、理由を問わず一切の責任を負わないものとします。<br>
+                  <br>
+                  第5条（リンクの扱いについて）<br>
+                  ウッドワン パーツショップが提供する各種サービスの中から他のサイトへリンクをしたり、<br>
+                  第三者が 他のサイトへのリンクを提供している場合、当社はウッドワン
+                  パーツショップ以外のサイトについては、何ら責任は負いません。<br>
+                  この場合、当該サイトに包括され、また当該サイト上で利用が可能となっているコンテンツ、広告、商品、サービスなどについても同様に一切責任を負いません。<br>
+                  当社は、それらのコンテンツ、広告、商品、サービスなどに起因または関連して生じた一切の損害についても賠償する責任は負いません。<br>
+                  <br>
+                  第6条（著作権)<br>
+                  1 利用者は、権利者の承諾を得ないで、いかなる方法においてもウッドワン
+                  パーツショップを通じて提供されるいかなる情報も、<br>
+                  著作権法で定める利用者個人の私的使用の範囲を超える複製、販売、出版、その他の用途に使用することはできないものとします。<br>
+                  <br>
+                  2 利用者は、権利者の承諾を得ないで、いかなる方法においても、第三者をして、ウッドワン
+                  パーツショップを通じて提供されるいかなる情報も使用させたり、公開させたりすることはできないものとします。<br>
+                  <br>
+                  3
+                  本条の規約に違反して問題が発生した場合、利用者は、自己の責任と費用において係る問題を解決するとともに、当社に何らの迷惑又は損害を与えないものとします。<br>
+                  <br>
+                  第7条(賠償責任)<br>
+                  1 本サービスの提供、遅滞、変更、中断、中止、停止、もしくは廃止、提供される情報等の流出もしくは焼失等、<br>
+                  又はその他本サービスに関連して発生した利用者又は第三者の損害について、当社は一切の責任を負わないものとします。<br>
+                  但し、本サービスを通じて登録した個人情報については別途定める「個人情報の取扱について」に準じます。<br>
+                  <br>
+                  2
+                  利用者が本サービス利用によって第三者に対して損害を与えた場合、利用者は自己の責任と費用をもって解決し、当社に損害を与えることのないものとします。<br>
+                  利用者が本規約に反した行為、又は不正もしくは違法な行為によって当社に損害を与えた場合、当社は当該利用者に対して相応の損害賠償の請求ができるものとします。<br>
+                  <br>
+                  第8条（プライバシー・ポリシー）<br>
+                  利用者による本サービスの利用に関連して当社が知り得る利用者の情報の管理および取扱いについては、<br>
+                  当社が別途定めるプライバシー・ポリシーによるものとします。<br>
+                  <br>
+                  第9条（準拠法）<br>
+                  本規約の成立、効力、履行及び解釈に関しては日本国法が適用されるものとします。<br>
+                  <br>
+                  第10条（合意管轄）<br>
+                  本規約に関して紛争が生じた場合、当社本店所在地を管轄する地方裁判所を第一審の専属的合意管轄裁判所とします。
+                </dd>
+              </dl>
+            </div>
+            <div
+              id="mCSB_1_scrollbar_vertical"
+              class="mCSB_scrollTools mCSB_1_scrollbar mCS-dark-3 mCSB_scrollTools_vertical"
+              style="display: block;"
+            >
+              <a href="#" class="mCSB_buttonUp" style="display: block;"></a>
+              <div class="mCSB_draggerContainer">
+                <div
+                  id="mCSB_1_dragger_vertical"
+                  class="mCSB_dragger"
+                  style="position: absolute; min-height: 30px; display: block; height: 13px; max-height: 119px; top: 0px;"
+                >
+                  <div class="mCSB_dragger_bar" style="line-height: 30px;"></div>
+                </div>
+                <div class="mCSB_draggerRail"></div>
+              </div>
+              <a href="#" class="mCSB_buttonDown" style="display: block;"></a>
+            </div>
+          </div>
+        </div>
+        <div
+          class="cs-inner-box-long cs-pdg-box-0 cs-max-height-170 js-scroll-box mCustomScrollbar _mCS_2"
+          id="scroll-privacy-policy"
+        >
+          <div
+            id="mCSB_2"
+            class="mCustomScrollBox mCS-dark-3 mCSB_vertical mCSB_inside"
+            style="max-height: 168.889px;"
+            tabindex="0"
+          >
+            <div
+              id="mCSB_2_container"
+              class="mCSB_container"
+              style="position: relative; top: 0px; left: 0px;"
+              dir="ltr"
+            >
+              <dl>
+                <dt class="cs-left-line-title">個人情報保護方針</dt>
+                <dd class="cs-pdg-box-20">
+                  <p><strong>&nbsp;❚ 個人情報保護方針</strong></p>
+                  <p>
+                    株式会社ウッドワン(以下「当社」といいます。)は、高度情報通信社会の進展に伴い個人情報の利用が著しく拡大していることの重要性を認識し、お客様の個人情報を適正に利用させていただくと共に、お客様の個人情報を適切に保護することが、当社に課せられた社会的責務であると考えております。<br>
+                    そこで、お客様の個人情報のお取り扱いに関し基本となる方針を次のとおり定め、お客様の個人情報の保護に努めて参ります。
+                  </p>
+                  <p>&nbsp;</p>
+                  <p><strong>1. 個人情報・個人データの定義</strong></p>
+                  <p>
+                    (1)&nbsp;個人情報とは、生存する個人に関する情報であって、当該情報に含まれる氏名、生年月日その他の記述等により特定の個人を識別することができるもの（他の情報と容易に照合することができ、これにより特定の個人を識別することができることとなるものを含む）及び個人識別符号が含まれるものをいいます。
+                  </p>
+                  <p>
+                    (2)
+                    個人データとは、個人情報を含む情報の集合物であって特定の個人情報を容易に検索することができるように体系的に構成した個人情報データベース等を構成する個人情報をいいます。
+                  </p>
+                  <p>&nbsp;</p>
+                  <p><strong>2. 個人情報の取得、利用目的</strong></p>
+                  <p>
+                    (1) 当社は、利用目的を通知又は公表することなく、お客様の個人情報を収集・利用することはありません。<br>
+                    また、その利用目的の達成に必要な合理的範囲を超えて、お客様の個人情報を利用することはありません。
+                  </p>
+                  <p>
+                    (2) 当社がお客様の個人情報を取り扱う際の利用目的は以下のとおりとします。<br>
+                    ①
+                    お客様からご依頼いただいた当社製品、カタログ、パンフレット、製品サンプル、お見積書、ご提案書、図面、ショールームのご利用その他当社が扱うサービスの販売やご提供<br>
+                    ② 当社製品のアフターサービス、メンテナンス等のご提供・実施<br>
+                    ③ 当社の関連会社・提携会社がご提供する製品・サービスのご案内<br>
+                    ④ 各種イベント・キャンペーン・セミナーのご案内、各種情報のご提供<br>
+                    ⑤ 当社がご提供する製品・サービスやお客様に関するアンケートの実施<br>
+                    ⑥ 緊急時に行うお客様への連絡<br>
+                    ⑦ お客様からのお問合せ・ご依頼等への対応<br>
+                    ⑧ 当社施設への入退管理<br>
+                    ⑨ お取引先との商談、お打ち合わせ、契約の履行、受託業務の履行<br>
+                    ⑩ 上記①から⑨の利用目的の達成に必要となる、お客様の個人情報や個人データの第三者への提供
+                  </p>
+                  <p>&nbsp;</p>
+                  <p>
+                    <strong>3. 共同利用</strong><br>
+                    当社は、お客様の個人情報の利用目的の達成のため、次の範囲内でお客様の個人データを共同利用いたします。<br>
+                    (1) 共同して利用される個人データの項目<br>
+                    お客様から特に申入れがある場合を除いて、お客様の全ての個人データ<br>
+                    (2) 共同して利用する者の範囲<br>
+                    <a href="https://www.woodone.co.jp/company/group/"
+                      >株式会社ウッドジョイならびに株式会社ウッドワンの国内子会社および関係会社</a
+                    ><br>
+                    (3) 当該個人データの管理について責任を有する者の氏名又は名称等<br>
+                    <a href="https://www.woodone.co.jp/company/profile/">株式会社ウッドワン</a>
+                  </p>
+                  <p>&nbsp;</p>
+                  <p>
+                    <strong>4. 第三者提供<br></strong
+                    >当社は、お客様からの同意を得ることなく、第三者にお客様の個人情報を提供することはありません。<br>
+                    但し、次の何れか一つに該当する場合は除きます。<br>
+                    (1) 法令に基づく場合<br>
+                    (2)
+                    人の生命、身体又は財産の保護のために必要がある場合であって、お客様の同意を得ることが困難である場合<br>
+                    (3)
+                    公衆衛生の向上又は児童の健全な育成の推進のために特に必要がある場合であって、お客様の同意を得ることが困難である場合<br>
+                    (4)
+                    国の機関若しくは地方公共団体又はその委託を受けた者が法令の定める事務を遂行することに対して協力する必要がある場合であって、お客様の同意を得ることにより当該事務の遂行に支障を及ぼす恐れがある場合<br>
+                    (5)
+                    あらかじめ機密保持契約等を締結している委託先等の企業に対して、お客様に示した利用目的の達成に必要な合理的範囲内で個人情報を預託する場合<br>
+                    (6) 統計的なデータ等、お客様個人を識別できない状態で資料として提供・公開する場合<br>
+                    (7) 上記3.の共同利用の場合<br>
+                    <br>
+                  </p>
+                  <p>
+                    <strong>5. お客様の個人情報の管理</strong><br>
+                    当社は、個人情報の不正アクセス、紛失、破壊、改ざん、及び漏洩等を防止するために、個人情報の取扱いに関する内部規程を整備し、周知徹底するほか、外部からの不正アクセスからの防御に関するシステムの構築及び情報の暗号化、個人データへのアクセス制限、個人情報の処理に関する従業者への教育研修の実施、個人情報保護管理者の設置等、必要かつ適切な安全対策措置を講じます。<br>
+                    また、当社は、個人情報を取り扱う委託先及び従業者に対して適切な監督を実施し、外国において個人情報を取り扱う場合には、当該外国の個人情報の保護に関する制度等を把握した上で、必要かつ適切な安全対策措置を講じます。<br>
+                    当社が実施している安全対策措置の詳細については、「11. お問い合わせ窓口」にご連絡ください。
+                  </p>
+                  <p>&nbsp;</p>
+                  <p>
+                    <strong>6. 個人情報の開示等の請求<br></strong
+                    >当社は、法令遵守又は利用目的の達成に必要な範囲・期間において、個人情報を保管・利用しますが、お客様又は代理人は、当社所定の手続きに従い、お客様が識別される個人情報若しくは第三者提供に関する記録の開示・内容の訂正、追加若しくは削除・利用の停止若しくは消去、第三者提供の停止又は利用目的の通知を求めることができます。具体的な請求方法については「11.
+                    お問い合わせ窓口」にご連絡ください。<br>
+                    <br>
+                    なお、なりすまし等による不正な請求を防止するため、当社では、請求時に本人確認書類の提出を求める等、合理的な方法で本人確認を行います。当社は、当社が定める本人確認に必要な項目が全て満たされる場合、当該請求をお客様本人からの請求であるとみなし請求に対応しますが、万一お客様の個人情報や本人確認書類を入手した当該お客様本人以外の第三者からの請求であった場合でも、当該請求への対応によりお客様に生じた損害について当社は当社の故意重過失又は消費者契約法違反がない限り責任を負いません。ご自身の個人情報の管理には十分留意いただきますよう、よろしくお願い申し上げます。
+                  </p>
+                  <p>&nbsp;</p>
+                  <p>
+                    <strong>7. 関係法令等の遵守<br></strong
+                    >当社は、個人情報に関係する日本国の法令及び個人情報保護委員会の定めるガイドライン等を遵守いたします。
+                  </p>
+                  <p>&nbsp;</p>
+                  <p>
+                    <strong>8. 本ポリシーの変更及び告知<br></strong
+                    >本ポリシーの内容は、必要に応じて当社が変更することがあります。お客様へは、その都度ご連絡することはできませんので、本ポリシーの最新の内容は、当社のウェブサイトに掲載している最新版をご参照ください。
+                  </p>
+                  <p>&nbsp;</p>
+                  <p>
+                    <strong>9. クッキー（Cookie）</strong><br>
+                    当社は、お客様によりよいサービスを提供するため、cookieを使用することがありますが、これにより個人を特定できる情報の収集を行えるものではなく、お客様のプライバシーを侵害することはございません。また、cookieの受け入れを希望されない場合は、ブラウザの設定で変更することができます。<br>
+                    <br>
+                  </p>
+                  <p>
+                    <strong>10. セキュリティ</strong><br>
+                    当社のウェブサイトは、インターネット上で情報を自動的に暗号化して通信を行うセキュリティ機能（SSL/TLS）をフォーム送信に採用しております。TLSv1.2以降をサポートしているブラウザを使用されない場合、セキュリティ機能が正しく動作しない場合がありますので、最新のGoogle
+                    Chrome、Safari、Firefox、Microsoft Edgeをご利用ください。<br>
+                    <br>
+                  </p>
+                  <p>
+                    <strong>11. お問い合わせ窓口<br></strong>株式会社ウッドワン<br>
+                    〒738-8502広島県廿日市市木材港1-1<br>
+                    電話 050-9000-3331(代)<br>
+                    <a href="mailto:mailto:parts-info@woodone.co.jp">parts-info@woodone.co.jp</a>
+                  </p>
+                  <p>
+                    (営業時間8:30〜17:15 *土、日、祝・祭日等の当社休業日を除く)<br>
+                    改定日 令和6年4月1日
+                  </p>
+                </dd>
+              </dl>
+            </div>
+            <div
+              id="mCSB_2_scrollbar_vertical"
+              class="mCSB_scrollTools mCSB_2_scrollbar mCS-dark-3 mCSB_scrollTools_vertical"
+              style="display: block;"
+            >
+              <a href="#" class="mCSB_buttonUp" style="display: block;"></a>
+              <div class="mCSB_draggerContainer">
+                <div
+                  id="mCSB_2_dragger_vertical"
+                  class="mCSB_dragger"
+                  style="position: absolute; min-height: 30px; display: block; height: 14px; max-height: 119px; top: 0px;"
+                >
+                  <div class="mCSB_dragger_bar" style="line-height: 30px;"></div>
+                </div>
+                <div class="mCSB_draggerRail"></div>
+              </div>
+              <a href="#" class="mCSB_buttonDown" style="display: block;"></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="cs-inner-box-long">
+          <div class="efo-input-container">
+            <div class="efo-input-wrap">
+              <div class="efo-input-checkbox">
+                <div class="efo-input-content" style="display: flex;">
+                  <label>
+                    <input name="privacy_agreement" class="required input-ng" value="1" type="checkbox" id="form_privacy_agreement" disabled
+                    >個人情報保護方針に同意する
+                  </label>
+                  <!-- <p class="efo-input-message">最低1つの選択が必要です</p>
+                  <i class="efo-input-required-check"></i> -->
+                </div>
+                <p>
+                  上記の【個人情報保護方針】を<b>最後までスクロール</b>してお読みいただき、
+                  <br>
+                  同意される場合は「個人情報保護方針に同意する」にチェックを入れ、「同意して内容確認画面へ」にお進みください。
+                </p>
+              </div>
+             
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button
+        id="btnSubmitForm"
+        type="submit"
+        class="btn-01 cs-w-265 over"
+        data-enabled="アカウントを作成する"
+        data-disabled="未入力の項目があります"
+        disabled=""
+        name="submit-btn"
+      >
+        未入力の項目があります
+      </button>
+    </form>
   </register-form>
-  {%- form 'create_customer', novalidate: 'novalidate',id: 'register-form' -%}
+  {%- form 'create_customer', novalidate: 'novalidate', id: 'register-form',return_to: '/account?s=r' -%}
     {%- if form.errors -%}
       <h2 class="form__message" tabindex="-1" autofocus>
         <span class="svg-wrapper">
@@ -676,11 +1900,13 @@
           <li>
             {%- if field == 'form' -%}
               {{ form.errors.messages[field] }}
+              <script>$('register-form').prepend('{{ form.errors.messages[field] }}')</script>
             {%- else -%}
               <a href="#RegisterForm-{{ field }}">
                 {{ form.errors.translated_fields[field] | capitalize }}
                 {{ form.errors.messages[field] }}
               </a>
+              <script>$('register-form').prepend('{{ form.errors.messages[field] }}')</script>
             {%- endif -%}
           </li>
         {%- endfor -%}

@@ -1,3 +1,7 @@
+<script src="https://unpkg.com/wanakana"></script>
+<script src="https://ajaxzip3.github.io/ajaxzip3.js" charset="UTF-8"></script>
+
+{{ 'efo-form.css' | asset_url | stylesheet_tag }}
 {{ 'section-contact-form.css' | asset_url | stylesheet_tag }}
 
 {%- style -%}
@@ -14,124 +18,825 @@
   }
 {%- endstyle -%}
 
+<script>
+  // onready disable checkbox check-agreement, when scrolled end of #terms then enable checkbox check-agreement
+  $(document).ready(function () {
+    var scroll = document.getElementById('terms');
+    var content = document.getElementById('mCSB_1');
+
+    scroll.onscroll = function(){
+        var total = scroll.scrollTop + scroll.clientHeight;
+
+        if(total > content.clientHeight - 100) {
+           document.getElementById("agreement").removeAttribute("disabled");
+        }
+    }
+
+    var isValid = false;
+    $('#ContactForm').on('change', function () {
+      isValid = true;
+      this.querySelectorAll('.required').forEach(field => {
+        if (field.value == "" || field.value == null) {
+          isValid = false;
+        }
+      })
+
+      if(isValid && document.getElementById("agreement").checked){
+        document.getElementById("btnSubmitContact").removeAttribute("disabled");
+      }else{
+        document.getElementById("btnSubmitContact").setAttribute("disabled", "disabled");
+      }
+    });
+
+    $('#agreement').change(function () {
+      if (this.checked && isValid) {
+        document.getElementById("btnSubmitContact").removeAttribute("disabled");
+      } else {
+        document.getElementById("btnSubmitContact").setAttribute("disabled", "disabled");
+      }
+    });
+
+    $('#form_body').on('input', function () {
+      if ($(this).val().length > 0) {
+        $(this).siblings('.efo-input-required-check').css('display', 'block');
+        $(this).css('background-color', 'white');
+      } else {
+        $(this).siblings('.efo-input-required-check').css('display', 'none');
+        $(this).css('background-color', '#ffddde');
+      }
+    });
+
+    $('#nocompany').change(function () {
+      if (this.checked) {
+        $('#form_company').removeClass('required');
+        $('#form_company').css('background-color', 'white');
+        $('#form_company').val('');
+      } else {
+        if ($('#form_company').val() === '') {
+          $('#form_company').addClass('required');
+          $('#form_company').css('background-color', '#ffddde');
+        } else {
+          $('#form_company').removeClass('required');
+          $('#form_company').css('background-color', 'white');
+        }
+      }
+    });
+
+    $('#form_company').blur(function () {
+      if ($(this).val() !== '') {
+        $('#nocompany').prop('checked', false);
+        $('#form_company').removeClass('required');
+        $('#form_company').css('background-color', 'white');
+      } else {
+        $('#form_company').addClass('required');
+        $('#form_company').css('background-color', '#ffddde');
+      }
+    });
+  });
+</script>
+
 <div class="color-{{ section.settings.color_scheme }} gradient">
   <div class="contact page-width page-width--narrow section-{{ section.id }}-padding">
-    {%- if section.settings.heading != blank -%}
-      <h2 class="title title-wrapper--no-top-margin inline-richtext {{ section.settings.heading_size }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
-        {{ section.settings.heading }}
-      </h2>
-    {%- else -%}
-      <h2 class="visually-hidden">{{ 'templates.contact.form.title' | t }}</h2>
-    {%- endif -%}
-    {%- liquid
-      assign contact_form_class = 'isolate'
-      if settings.animations_reveal_on_scroll
-        assign contact_form_class = 'isolate scroll-trigger animate--slide-in'
-      endif
-    -%}
-    {%- form 'contact', id: 'ContactForm', class: contact_form_class -%}
-      {%- if form.posted_successfully? -%}
-        <h2 class="form-status form-status-list form__message" tabindex="-1" autofocus>
-          {{- 'icon-success.svg' | inline_asset_content -}}
-          {{ 'templates.contact.form.post_success' | t }}
+    <contact-form>
+      {%- if section.settings.heading != blank -%}
+        <h2 class="title title-wrapper--no-top-margin inline-richtext {{ section.settings.heading_size }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+          {{ section.settings.heading }}
         </h2>
-      {%- elsif form.errors -%}
-        <div class="form__message">
-          <h2 class="form-status caption-large text-body" role="alert" tabindex="-1" autofocus>
-            {{- 'icon-error.svg' | inline_asset_content -}}
-            {{ 'templates.contact.form.error_heading' | t }}
-          </h2>
-        </div>
-        <ul class="form-status-list caption-large" role="list">
-          <li>
-            <a href="#ContactForm-email" class="link">
-              {{ form.errors.translated_fields.email | capitalize }}
-              {{ form.errors.messages.email }}
-            </a>
-          </li>
-        </ul>
+      {%- else -%}
+        <h2 class="visually-hidden">{{ 'templates.contact.form.title' | t }}</h2>
       {%- endif -%}
-      <div class="contact__fields">
-        <div class="field">
-          <input
-            class="field__input"
-            autocomplete="name"
-            type="text"
-            id="ContactForm-name"
-            name="contact[{{ 'templates.contact.form.name' | t }}]"
-            value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}"
-            placeholder="{{ 'templates.contact.form.name' | t }}"
-          >
-          <label class="field__label" for="ContactForm-name">{{ 'templates.contact.form.name' | t }}</label>
+      {%- liquid
+        assign contact_form_class = 'isolate'
+        if settings.animations_reveal_on_scroll
+          assign contact_form_class = 'isolate scroll-trigger animate--slide-in'
+        endif
+      -%}
+      {%- form 'contact', id: 'ContactForm', class: contact_form_class -%}
+        {%- if form.posted_successfully? -%}
+          <h2 class="form-status form-status-list form__message" tabindex="-1" autofocus>
+            {{- 'icon-success.svg' | inline_asset_content -}}
+            {{ 'templates.contact.form.post_success' | t }}
+          </h2>
+        {%- elsif form.errors -%}
+          <div class="form__message">
+            <h2 class="form-status caption-large text-body" role="alert" tabindex="-1" autofocus>
+              {{- 'icon-error.svg' | inline_asset_content -}}
+              {{ 'templates.contact.form.error_heading' | t }}
+            </h2>
+          </div>
+          <ul class="form-status-list caption-large" role="list">
+            <li>
+              <a href="#ContactForm-email" class="link">
+                {{ form.errors.translated_fields.email | capitalize }}
+                {{ form.errors.messages.email }}
+              </a>
+            </li>
+          </ul>
+        {%- endif -%}
+
+        <div class="efo-form input">
+          <div class="efo-form-container">
+            <div class="efo-input-container">
+              <div class="efo-input-row">
+                <div class="efo-input-title">
+                  <label>姓・名</label>
+                  <i class="icon-required"></i>
+                </div>
+                <div class="efo-input-content" style="display: flex;">
+                  <div class="efo-input-wrap">
+                    <input
+                      placeholder="例：山田"
+                      maxlength="20"
+                      class="efo-input-sm required input-ng"
+                      data-convert="zenkaku"
+                      name="contact[姓]"
+                      type="text"
+                      id="form_firstname"
+                    >
+                    <p class="efo-input-message"></p>
+                    <i class="efo-input-required-check"></i>
+                  </div>
+                  <div class="efo-input-wrap">
+                    <input
+                      placeholder="例：太郎"
+                      maxlength="20"
+                      class="efo-input-sm required input-ng"
+                      data-convert="zenkaku"
+                      name="contact[名]"
+                      type="text"
+                      id="form_lastname"
+                    >
+                    <p class="efo-input-message"></p>
+                    <i class="efo-input-required-check"></i>
+                  </div>
+                </div>
+              </div>
+
+              <div class="efo-input-row">
+                <div class="efo-input-title">
+                  <label>姓・名（フリガナ）</label>
+                </div>
+                <div class="efo-input-content" style="display: flex">
+                  <div class="efo-input-wrap">
+                    <input
+                      placeholder="例：ヤマダ"
+                      maxlength="20"
+                      class="efo-input-sm input-ng"
+                      data-efo="全角カタカナで入力してください"
+                      data-validate="kana"
+                      data-convert="zenkaku"
+                      name="contact[姓（フリガナ）]"
+                      value=""
+                      type="text"
+                      id="form_firstkana"
+                    >
+                    <p class="efo-input-message"></p>
+                    <i class="efo-input-required-check"></i>
+                  </div>
+                  <div class="efo-input-wrap">
+                    <input
+                      placeholder="例：タロウ"
+                      maxlength="20"
+                      class="efo-input-sm input-ng"
+                      data-efo="全角カタカナで入力してください"
+                      data-validate="kana"
+                      data-convert="zenkaku"
+                      name="contact[名（フリガナ）]"
+                      value=""
+                      type="text"
+                      id="form_lastkana"
+                    >
+                    <p class="efo-input-message"></p>
+                    <i class="efo-input-required-check"></i>
+                  </div>
+                </div>
+              </div>
+
+              <div class="efo-input-row">
+                <div class="efo-input-title">
+                  <label for="form_business_type">業種</label>
+                  <i class="icon-required"></i>
+                </div>
+                <div class="efo-input-content">
+                  <div class="efo-input-wrap">
+                    <select class="required input-ng" name="contact[業種]" id="form_business_type">
+                      <option value="">選択してください</option>
+                      <option value="一般施主様">一般施主様</option>
+                      <option value="設計事務所様">設計事務所様</option>
+                      <option value="建築・施工業者様">建築・施工業者様</option>
+                      <option value="流通業者様">流通業者様</option>
+                      <option value="官公庁">官公庁様</option>
+                      <option value="大学・教育機関">大学・教育機関様</option>
+                      <option value="その他">その他</option>
+                    </select>
+                    <label for="form_business_type" class="efo-dummy-select">選択してください</label>
+                    <p class="efo-input-message"></p>
+                    <i class="efo-input-required-check"></i>
+                  </div>
+                </div>
+              </div>
+
+              <div class="efo-input-row">
+                <div class="efo-input-title">
+                  <label>会社名</label>
+                  <i class="icon-required"></i>
+                </div>
+                <div class="efo-input-content">
+                  <div class="efo-input-wrap">
+                    <input
+                      placeholder="例）○○○ホーム"
+                      maxlength="100"
+                      class="efo-input-md required input-ng"
+                      id="form_company"
+                      data-efo="例：○○市○○町"
+                      name="contact[会社名]"
+                      value=""
+                      type="text"
+                    >
+                    <p class="efo-input-message"></p>
+                    <i class="efo-input-required-check"></i>
+                    <p class="efo-memo">一般施主様は建築された施工業者様をご記入ください。ご不明の場合は、不明をチェックしてください。</p>
+                  </div>
+                  <label class="nocompany" for="nocompany"><input id="nocompany" type="checkbox" name="parm[nocompany]" value="不明">不明</label>
+                </div>
+               
+              </div>
+
+              <div class="efo-input-row">
+                <div class="efo-input-title">
+                  <label>メールアドレス</label>
+                  <i class="icon-required"></i>
+                </div>
+                <div class="efo-input-content">
+                  <div class="efo-input-wrap">
+                    <input
+                      placeholder="例）xxx@yyy.com"
+                      maxlength="100"
+                      class="efo-input-md required input-ng"
+                      data-efo="半角英数字で入力してください"
+                      data-validate="email"
+                      name="contact[email]"
+                      value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+                      type="email"
+                      id="form_email"
+                    >
+                    <p class="efo-input-message"></p>
+                    <i class="efo-input-required-check"></i>
+                    {%- if form.errors contains 'email' -%}
+                      <small class="contact__field-error" id="ContactForm-email-error">
+                        <span class="visually-hidden">{{ 'accessibility.error' | t }}</span>
+                        <span class="form__message">
+                          <span class="svg-wrapper">
+                            {{- 'icon-error.svg' | inline_asset_content -}}
+                          </span>
+                          {{- form.errors.translated_fields.email | capitalize }}
+                          {{ form.errors.messages.email -}}
+                        </span>
+                      </small>
+                    {%- endif -%}
+                  </div>
+                </div>
+              </div>
+
+              <div class="efo-input-row">
+                <div class="efo-input-title">
+                  <label>メールアドレス確認</label>
+                  <i class="icon-required"></i>
+                </div>
+                <div class="efo-input-content">
+                  <div class="efo-input-wrap">
+                    <input
+                      placeholder="例）xxx@yyy.com"
+                      maxlength="100"
+                      class="efo-input-md required input-ng"
+                      data-efo="半角英数字で入力してください"
+                      data-validate="email"
+                      name="contact[メールアドレス確認]"
+                      value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+                      type="email"
+                      id=""
+                    >
+                    <p class="efo-input-message"></p>
+                    <i class="efo-input-required-check"></i>
+                  </div>
+                </div>
+              </div>
+
+              <!-- End .efo-input-row -->
+              <!-- 郵便番号 -->
+              <div class="efo-input-row">
+                <div class="efo-input-title">
+                  <label>郵便番号</label>
+                  <i class="icon-required"></i>
+                </div>
+                <div class="efo-input-content">
+                  <div class="efo-input-wrap">
+                    <input
+                      placeholder="例: 1234567"
+                      maxlength="8"
+                      class="efo-input-zip required input-ng"
+                      id="zip"
+                      data-efo="半角数字・ハイフンなしで入力してください"
+                      data-validate="zip"
+                      name="contact[郵便番号]"
+                      value=""
+                      type="tel"
+                    >
+                    <p class="efo-input-message"></p>
+                    <!-- モーダルで表示させる要素 -->
+                    <div style="display: none;">
+                      <div id="inline-content" class="formItem">
+                        <div class="inner">
+                          <h3>住所の選択</h3>
+                          <p class="ttl">郵便番号に該当する住所</p>
+                          <ul class="clearfix"></ul>
+                        </div>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      class="efo-search-address"
+                      data-zip="zip"
+                      data-pref="pref"
+                      data-address="address"
+                    >
+                      <span>郵便番号から住所を検索</span>
+                    </button>
+                    <i class="efo-input-required-check"></i>
+                  </div>
+                </div>
+              </div>
+              <!-- End .efo-input-row -->
+              <!-- 都道府県 -->
+              <div class="efo-input-row">
+                <div class="efo-input-title">都道府県 <i class="icon-required"></i></div>
+                <div class="efo-input-content">
+                  <div class="efo-input-wrap">
+                    <select id="pref" class="required input-ng" name="contact[都道府県]">
+                      <option value="" selected="selected">選択してください</option>
+                      <option value="北海道">北海道</option>
+                      <option value="青森県">青森県</option>
+                      <option value="岩手県">岩手県</option>
+                      <option value="宮城県">宮城県</option>
+                      <option value="秋田県">秋田県</option>
+                      <option value="山形県">山形県</option>
+                      <option value="福島県">福島県</option>
+                      <option value="茨城県">茨城県</option>
+                      <option value="栃木県">栃木県</option>
+                      <option value="群馬県">群馬県</option>
+                      <option value="埼玉県">埼玉県</option>
+                      <option value="千葉県">千葉県</option>
+                      <option value="東京都">東京都</option>
+                      <option value="神奈川県">神奈川県</option>
+                      <option value="新潟県">新潟県</option>
+                      <option value="富山県">富山県</option>
+                      <option value="石川県">石川県</option>
+                      <option value="福井県">福井県</option>
+                      <option value="1山梨県">山梨県</option>
+                      <option value="長野県">長野県</option>
+                      <option value="岐阜県">岐阜県</option>
+                      <option value="静岡県">静岡県</option>
+                      <option value="愛知県">愛知県</option>
+                      <option value="三重県">三重県</option>
+                      <option value="滋賀県">滋賀県</option>
+                      <option value="京都府">京都府</option>
+                      <option value="大阪府">大阪府</option>
+                      <option value="兵庫県">兵庫県</option>
+                      <option value="奈良県">奈良県</option>
+                      <option value="和歌山県">和歌山県</option>
+                      <option value="鳥取県">鳥取県</option>
+                      <option value="岡山県">岡山県</option>
+                      <option value="広島県">広島県</option>
+                      <option value="山口県">山口県</option>
+                      <option value="徳島県">徳島県</option>
+                      <option value="香川県">香川県</option>
+                      <option value="愛媛県">愛媛県</option>
+                      <option value="高知県">高知県</option>
+                      <option value="福岡県">福岡県</option>
+                      <option value="佐賀県">佐賀県</option>
+                      <option value="長崎県">長崎県</option>
+                      <option value="熊本県">熊本県</option>
+                      <option value="大分県">大分県</option>
+                      <option value="宮崎県">宮崎県</option>
+                      <option value="鹿児島県">鹿児島県</option>
+                      <option value="沖縄県">沖縄県</option>
+                    </select>
+                    <p class="efo-input-message"></p>
+                    <i class="efo-input-required-check"></i>
+                  </div>
+                </div>
+              </div>
+              <!-- End .efo-input-row -->
+              <!-- 市区町村 -->
+              <div class="efo-input-row">
+                <div class="efo-input-title">
+                  <label>市区町村番地</label>
+                  <i class="icon-required"></i>
+                </div>
+                <div class="efo-input-content">
+                  <div class="efo-input-wrap">
+                    <input
+                      placeholder="例：○○市○○町"
+                      maxlength="100"
+                      class="efo-input-md required input-ng"
+                      id="address"
+                      data-efo="例：○○市○○町"
+                      name="contact[市区町村番地]"
+                      value=""
+                      type="text"
+                    >
+                    <p class="efo-input-message"></p>
+                    <i class="efo-input-required-check"></i>
+                  </div>
+                </div>
+              </div>
+
+              <div class="efo-input-row">
+                <div class="efo-input-title">
+                  <label>ビル・マンション名</label>
+                  <i class="icon-required"></i>
+                </div>
+                <div class="efo-input-content">
+                  <div class="efo-input-wrap">
+                    <input
+                      placeholder="例）○○○ビル 000号"
+                      maxlength="100"
+                      class="efo-input-md required input-ng"
+                      id=""
+                      data-efo="例）○○○ビル 000号"
+                      name="contact[ビル・マンション名]"
+                      value=""
+                      type="text"
+                    >
+                    <p class="efo-input-message"></p>
+                    <i class="efo-input-required-check"></i>
+                  </div>
+                </div>
+              </div>
+
+              <div class="efo-input-row">
+                <div class="efo-input-title">
+                  <label>電話番号</label>
+                  <i class="icon-required"></i>
+                </div>
+                <div class="efo-input-content">
+                  <div class="efo-input-wrap">
+                    <input placeholder="例: 0123456789" pattern="[0-9\-]*" maxlength="14" class="efo-input-sm required input-ng" data-efo="半角数字・ハイフンなしで入力してください" data-validate="tel" name="contact[{{ 'templates.contact.form.phone' | t }}]" value="{% if form.phone %}{{ form.phone }}{% elsif customer %}{{ customer.phone }}{% endif %}" type="tel" id="form_tel">
+                    <p class="efo-input-message"></p>
+                    <i class="efo-input-required-check"></i>
+                  </div>
+                </div>
+              </div>
+
+             <div class="efo-input-row">
+                <div class="efo-input-title">
+                  <label>FAX番号</label>
+                </div>
+                <div class="efo-input-content">
+                  <div class="efo-input-wrap">
+                    <input placeholder="例: 0123456789" pattern="[0-9\-]*" maxlength="14" class="efo-input-sm input-ng" data-efo="半角数字・ハイフンなしで入力してください" data-validate="tel" name="FAX番号" value="" type="tel" id="">
+                    <p class="efo-input-message"></p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="efo-input-row">
+                <div class="efo-input-title">
+                  <label for="form_construction_year">築年数</label>
+                  <i class="icon-required"></i>
+                </div>
+                <div class="efo-input-content">
+                  <div class="efo-input-wrap">
+                    <select class="required input-ng" name="contact[築年数]" id="form_construction_year">
+                      <option value="">選択してください</option>
+                      <option value="1">不明</option>
+                      <option value="1995">1995年</option>
+                      <option value="1996">1996年</option>
+                      <option value="1997">1997年</option>
+                      <option value="1998">1998年</option>
+                      <option value="1999">1999年</option>
+                      <option value="2000">2000年</option>
+                      <option value="2001">2001年</option>
+                      <option value="2002">2002年</option>
+                      <option value="2003">2003年</option>
+                      <option value="2004">2004年</option>
+                      <option value="2005">2005年</option>
+                      <option value="2006">2006年</option>
+                      <option value="2007">2007年</option>
+                      <option value="2008">2008年</option>
+                      <option value="2009">2009年</option>
+                      <option value="2010">2010年</option>
+                      <option value="2011">2011年</option>
+                      <option value="2012">2012年</option>
+                      <option value="2013">2013年</option>
+                      <option value="2014">2014年</option>
+                      <option value="2015">2015年</option>
+                      <option value="2016">2016年</option>
+                      <option value="2017">2017年</option>
+                      <option value="2018">2018年</option>
+                      <option value="2019">2019年</option>
+                      <option value="2020">2020年</option>
+                      <option value="2021">2021年</option>
+                      <option value="2022">2022年</option>
+                      <option value="2023">2023年</option>
+                      <option value="2024">2024年</option>
+                      <option value="2025">2025年</option>
+                    </select>
+                    <label for="form_construction_year" class="efo-dummy-select">選択してください</label>
+                    <p class="efo-input-message"></p>
+                    <i class="efo-input-required-check"></i>
+                  </div>
+                </div>
+              </div>
+
+              <div class="efo-input-row">
+                <div class="efo-input-title">
+                  <label for="form_use">ご用件</label>
+                  <i class="icon-required"></i>
+                </div>
+                <div class="efo-input-content">
+                  <div class="efo-input-wrap">
+                    <select class="required input-ng" name="contact[ご用件]" id="form_use">
+                      <option value="">選択してください</option>
+                      <option value="購入方法に関するお問い合わせ">購入方法に関するお問い合わせ</option>
+                      <option value="パーツに関するお問い合わせ">パーツに関するお問い合わせ</option>
+                      <option value="メンテナンスに関するお問い合わせ">メンテナンスに関するお問い合わせ</option>
+                      <option value="当パーツショップ へのご意見・ご要望">当パーツショップ へのご意見・ご要望</option>
+                      <option value="納期・お届けに関するお問い合わせ">納期・お届けに関するお問い合わせ</option>
+                      <option value="返品に関するお問い合わせ">返品に関するお問い合わせ</option>
+                      <option value="有料作業に関するお問い合わせ">有料作業に関するお問い合わせ</option>
+                      <option value="退会について">退会について</option>
+                      <option value="その他">その他</option>
+                    </select>
+                    <label for="form_use" class="efo-dummy-select">選択してください</label>
+                    <p class="efo-input-message"></p>
+                    <i class="efo-input-required-check"></i>
+                  </div>
+                </div>
+              </div>
+
+              <div class="efo-input-row">
+                <div class="efo-input-title">
+                  <label>お問い合わせ内容</label>
+                  <i class="icon-required"></i>
+                </div>
+                <div class="efo-input-content">
+                  <div class="efo-input-wrap efo-input-wrap-textarea">
+                    <textarea
+                      id="form_body"
+                      rows="5"
+                      class="efo-input-md required input-ng"
+                      name="contact[お問い合わせ内容]"
+                      placeholder=""
+                    >
+                      {{- form.body -}}
+                    </textarea>
+                    <p class="efo-input-message"></p>
+                    <i class="efo-input-required-check"></i>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="contact_policy">
+            <p>お問い合わせいただく前に、必ず下記の【個人情報保護方針】をお読みください。</p>
+
+            <div class="efo-privacy-article-inner mCustomScrollbar _mCS_1" id="terms">
+              <div
+                id="mCSB_1"
+                class="mCustomScrollBox mCS-light mCSB_vertical mCSB_outside"
+                style="max-height: none;"
+                tabindex="0"
+              >
+                <div
+                  id="mCSB_1_container"
+                  class="mCSB_container"
+                  style="position: relative; top: 0px; left: 0px;"
+                  dir="ltr"
+                >
+                  <div class="privacy-block">
+                    <h1 id="pagetl">❚ 個人情報保護方針</h1>
+                    <p>
+                      株式会社ウッドワン(以下「当社」といいます。)は、高度情報通信社会の進展に伴い個人情報の利用が著しく拡大していることの重要性を認識し、お客様の個人情報を適正に利用させていただくと共に、お客様の個人情報を適切に保護することが、当社に課せられた社会的責務であると考えております。<br>
+                      そこで、お客様の個人情報のお取り扱いに関し基本となる方針を次のとおり定め、お客様の個人情報の保護に努めて参ります。
+                    </p>
+                  </div>
+                  <br>
+                  <section class="privacy-block">
+                    <h3 class="privacy-block__title subtl01" style="font-weight: bold;">
+                      1. 個人情報・個人データの定義
+                    </h3>
+                    <div class="privacy-block__content">
+                      <ul class="noList02 mb10" style="padding-left:1px;">
+                        <li>
+                          個人情報とは、生存する個人に関する情報であって、当該情報に含まれる氏名、生年月日その他の記述等により特定の個人を識別することができるもの（他の情報と容易に照合することができ、これにより特定の個人を識別することができることとなるものを含む）及び個人識別符号が含まれるものをいいます。
+                        </li>
+                        <li>
+                          個人データとは、個人情報を含む情報の集合物であって特定の個人情報を容易に検索することができるように体系的に構成した個人情報データベース等を構成する個人情報をいいます。
+                        </li>
+                      </ul>
+                    </div>
+                  </section>
+                  <br>
+                  <section class="privacy-block">
+                    <h3 class="privacy-block__title subtl01" style="font-weight: bold;">2. 個人情報の取得、利用目的</h3>
+                    <div class="privacy-block__content">
+                      <ul class="noList02 mb10" style="padding-left:1px;">
+                        <li>
+                          当社は、利用目的を通知又は公表することなく、お客様の個人情報を収集・利用することはありません。<br>
+                          また、その利用目的の達成に必要な合理的範囲を超えて、お客様の個人情報を利用することはありません。
+                        </li>
+                        <li>当社がお客様の個人情報を取り扱う際の利用目的は以下のとおりとします。</li>
+                        <ul class="noList03 mb10">
+                          <li>
+                            お客様からご依頼いただいた当社製品、カタログ、パンフレット、製品サンプル、お見積書、ご提案書、図面、ショールームのご利用その他当社が扱うサービスの販売やご提供
+                          </li>
+                          <li>当社製品のアフターサービス、メンテナンス等のご提供・実施</li>
+                          <li>当社の関連会社・提携会社がご提供する製品・サービスのご案内</li>
+                          <li>各種イベント・キャンペーン・セミナーのご案内、各種情報のご提供</li>
+                          <li>当社がご提供する製品・サービスやお客様に関するアンケートの実施</li>
+                          <li>緊急時に行うお客様への連絡</li>
+                          <li>お客様からのお問合せ・ご依頼等への対応</li>
+                          <li>当社施設への入退管理</li>
+                          <li>お取引先との商談、お打ち合わせ、契約の履行、受託業務の履行</li>
+                          <li>上記①から⑨の利用目的の達成に必要となる、お客様の個人情報や個人データの第三者への提供</li>
+                        </ul>
+                      </ul>
+                    </div>
+                  </section>
+                  <br>
+                  <section class="privacy-block">
+                    <h3 class="privacy-block__title subtl01" style="font-weight: bold;">3. 共同利用</h3>
+                    <div class="privacy-block__content">
+                      <p>
+                        当社は、お客様の個人情報の利用目的の達成のため、次の範囲内でお客様の個人データを共同利用いたします。
+                      </p>
+                      <ul class="noList02 mb10" style="padding-left:1px;">
+                        <li>
+                          共同して利用される個人データの項目<br>
+                          お客様から特に申入れがある場合を除いて、お客様の全ての個人データ
+                        </li>
+                        <li>
+                          共同して利用する者の範囲<br>
+                          <a href="https://www.woodone.co.jp/company/group/"
+                            >株式会社ウッドワンならびに株式会社ウッドワンの国内子会社および関係会社</a
+                          >
+                        </li>
+                        <li>
+                          当該個人データの管理について責任を有する者の氏名又は名称等<br>
+                          <a href="https://www.woodone.co.jp/company/profile/">株式会社ウッドワン</a>
+                        </li>
+                      </ul>
+                    </div>
+                  </section>
+                  <br>
+                  <section class="privacy-block">
+                    <h3 class="privacy-block__title subtl01" style="font-weight: bold;">4. 第三者提供</h3>
+                    <div class="privacy-block__content">
+                      <p>
+                        当社は、お客様からの同意を得ることなく、第三者にお客様の個人情報を提供することはありません。<br>
+                        但し、次の何れか一つに該当する場合は除きます。
+                      </p>
+                      <ul class="noList02 mb10" style="padding-left:1px;">
+                        <li>法令に基づく場合</li>
+                        <li>
+                          人の生命、身体又は財産の保護のために必要がある場合であって、お客様の同意を得ることが困難である場合
+                        </li>
+                        <li>
+                          公衆衛生の向上又は児童の健全な育成の推進のために特に必要がある場合であって、お客様の同意を得ることが困難である場合
+                        </li>
+                        <li>
+                          国の機関若しくは地方公共団体又はその委託を受けた者が法令の定める事務を遂行することに対して協力する必要がある場合であって、お客様の同意を得ることにより当該事務の遂行に支障を及ぼす恐れがある場合
+                        </li>
+                        <li>
+                          あらかじめ機密保持契約等を締結している委託先等の企業に対して、お客様に示した利用目的の達成に必要な合理的範囲内で個人情報を預託する場合
+                        </li>
+                        <li>統計的なデータ等、お客様個人を識別できない状態で資料として提供・公開する場合</li>
+                        <li>上記3.の共同利用の場合</li>
+                      </ul>
+                    </div>
+                  </section>
+                  <br>
+                  <section class="privacy-block">
+                    <h3 class="privacy-block__title subtl01" style="font-weight: bold;">5. お客様の個人情報の管理</h3>
+                    <div class="privacy-block__content">
+                      <p>
+                        当社は、個人情報の不正アクセス、紛失、破壊、改ざん、及び漏洩等を防止するために、個人情報の取扱いに関する内部規程を整備し、周知徹底するほか、外部からの不正アクセスからの防御に関するシステムの構築及び情報の暗号化、個人データへのアクセス制限、個人情報の処理に関する従業者への教育研修の実施、個人情報保護管理者の設置等、必要かつ適切な安全対策措置を講じます。<br>
+                        また、当社は、個人情報を取り扱う委託先及び従業者に対して適切な監督を実施し、外国において個人情報を取り扱う場合には、当該外国の個人情報の保護に関する制度等を把握した上で、必要かつ適切な安全対策措置を講じます。<br>
+                        当社が実施している安全対策措置の詳細については、「11. お問い合わせ窓口」にご連絡ください。
+                      </p>
+                    </div>
+                  </section>
+                  <br>
+                  <section class="privacy-block">
+                    <h3 class="privacy-block__title subtl01" style="font-weight: bold;">6. 個人情報の開示等の請求</h3>
+                    <div class="privacy-block__content">
+                      <p>
+                        当社は、法令遵守又は利用目的の達成に必要な範囲・期間において、個人情報を保管・利用しますが、お客様又は代理人は、当社所定の手続きに従い、お客様が識別される個人情報若しくは第三者提供に関する記録の開示・内容の訂正、追加若しくは削除・利用の停止若しくは消去、第三者提供の停止又は利用目的の通知を求めることができます。具体的な請求方法については「11.
+                        お問い合わせ窓口」にご連絡ください｡<br>
+                        <br>
+                        なお、なりすまし等による不正な請求を防止するため、当社では、請求時に本人確認書類の提出を求める等、合理的な方法で本人確認を行います。当社は、当社が定める本人確認に必要な項目が全て満たされる場合、当該請求をお客様本人からの請求であるとみなし請求に対応しますが、万一お客様の個人情報や本人確認書類を入手した当該お客様本人以外の第三者からの請求であった場合でも、当該請求への対応によりお客様に生じた損害について当社は当社の故意重過失又は消費者契約法違反がない限り責任を負いません。ご自身の個人情報の管理には十分留意いただきますよう、よろしくお願い申し上げます。
+                      </p>
+                    </div>
+                  </section>
+                  <br>
+                  <section class="privacy-block">
+                    <h3 class="privacy-block__title subtl01" style="font-weight: bold;">7. 関係法令等の遵守</h3>
+                    <div class="privacy-block__content">
+                      <p>
+                        当社は、個人情報に関係する日本国の法令及び個人情報保護委員会の定めるガイドライン等を遵守いたします。
+                      </p>
+                      <br>
+                    </div>
+                  </section>
+                  <section class="privacy-block">
+                    <h3 class="privacy-block__title subtl01" style="font-weight: bold;">8. 本ポリシーの変更及び告知</h3>
+                    <div class="privacy-block__content">
+                      <p>
+                        本ポリシーの内容は、必要に応じて当社が変更することがあります。お客様へは、その都度ご連絡することはできませんので、本ポリシーの最新の内容は、当社のウェブサイトに掲載している最新版をご参照ください。
+                      </p>
+                      <br>
+                    </div>
+                  </section>
+                  <section class="privacy-block">
+                    <h3 class="privacy-block__title subtl01" style="font-weight: bold;">9. クッキー（Cookie）</h3>
+                    <div class="privacy-block__content">
+                      <p>
+                        当社は、お客様によりよいサービスを提供するため、cookieを使用することがありますが、これにより個人を特定できる情報の収集を行えるものではなく、お客様のプライバシーを侵害することはございません。また、cookieの受け入れを希望されない場合は、ブラウザの設定で変更することができます。<br>
+                        ※cookieとは、サーバーコンピュータからお客様のブラウザに送信され、お客様が使用しているコンピュータのハードディスクに蓄積される情報です。
+                      </p>
+                      <br>
+                    </div>
+                  </section>
+                  <section class="privacy-block">
+                    <h3 class="privacy-block__title subtl01" style="font-weight: bold;">10. セキュリティ</h3>
+                    <div class="privacy-block__content">
+                      <p>
+                        当社のウェブサイトは、インターネット上で情報を自動的に暗号化して通信を行うセキュリティ機能（SSL/TLS）をフォーム送信に採用しております。TLSv1.2以降をサポートしているブラウザを使用されない場合、セキュリティ機能が正しく動作しない場合がありますので、最新のGoogle
+                        Chrome、Safari、Firefox、Microsoft Edgeをご利用ください。
+                      </p>
+                      <br>
+                    </div>
+                  </section>
+                  <section class="privacy-block">
+                    <h3 class="privacy-block__title subtl01" style="font-weight: bold;">11. お問い合わせ窓口</h3>
+                    <div class="privacy-block__content">
+                      <p>
+                        株式会社ウッドワン<br>
+                        〒738-8502広島県廿日市市木材港1-1<br>
+                        電話 050-9000-3331(代)<br>
+                        <a href="mailto:parts-info@woodone.co.jp">parts-info@woodone.co.jp</a><br>
+                        (営業時間8:30〜17:15 *土、日、祝・祭日等の当社休業日を除く)
+                      </p>
+                    </div>
+                  </section>
+                  <div id="end"></div>
+                  <section class="privacy-block">
+                    <br>
+                    <div class="privacy-block__content" style="text-align: right; padding-right:10px;">
+                      <p>改定日 令和6年4月1日</p>
+                    </div>
+                  </section>
+                </div>
+              </div>
+              <div
+                id="mCSB_1_scrollbar_vertical"
+                class="mCSB_scrollTools mCSB_1_scrollbar mCS-light mCSB_scrollTools_vertical"
+                style="display: block;"
+              >
+                <a href="#" class="mCSB_buttonUp" style="display: block;"></a>
+                <div class="mCSB_draggerContainer">
+                  <div
+                    id="mCSB_1_dragger_vertical"
+                    class="mCSB_dragger"
+                    style="position: absolute; min-height: 30px; display: block; height: 14px; max-height: 167px; top: 0px;"
+                  >
+                    <div class="mCSB_dragger_bar" style="line-height: 30px;"></div>
+                    <div class="mCSB_draggerRail"></div>
+                  </div>
+                </div>
+                <a href="#" class="mCSB_buttonDown" style="display: block;"></a>
+              </div>
+            </div>
+          </div>
+          <p>
+            上記の【個人情報保護方針】を最後までスクロールしてお読みいただき、同意される場合は「個人情報保護方針に同意する」にチェックを入れ、「入力内容を確認する」へお進みください。
+          </p>
+          <label class="check-agreement">
+            <input type="checkbox" name="parm[agreement]" id="agreement" value="on" required="" disabled="">
+            <span class="kiyaku">個人情報保護方針</span>に同意する
+          </label>
         </div>
-        <div class="field field--with-error">
-          <input
-            autocomplete="email"
-            type="email"
-            id="ContactForm-email"
-            class="field__input"
-            name="contact[email]"
-            spellcheck="false"
-            autocapitalize="off"
-            value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
-            aria-required="true"
-            {% if form.errors contains 'email' %}
-              aria-invalid="true"
-              aria-describedby="ContactForm-email-error"
-            {% endif %}
-            placeholder="{{ 'templates.contact.form.email' | t }}"
-          >
-          <label class="field__label" for="ContactForm-email">
-            {{- 'templates.contact.form.email' | t }}
-            <span aria-hidden="true">*</span></label
-          >
-          {%- if form.errors contains 'email' -%}
-            <small class="contact__field-error" id="ContactForm-email-error">
-              <span class="visually-hidden">{{ 'accessibility.error' | t }}</span>
-              <span class="form__message">
-                <span class="svg-wrapper">
-                  {{- 'icon-error.svg' | inline_asset_content -}}
-                </span>
-                {{- form.errors.translated_fields.email | capitalize }}
-                {{ form.errors.messages.email -}}
-              </span>
-            </small>
-          {%- endif -%}
+
+        <div class="contact__button">
+          <button id="btnSubmitContact" type="submit" class="button" disabled="">
+            {{ 'templates.contact.form.send' | t }}
+          </button>
         </div>
-      </div>
-      <div class="field">
-        <input
-          type="tel"
-          id="ContactForm-phone"
-          class="field__input"
-          autocomplete="tel"
-          name="contact[{{ 'templates.contact.form.phone' | t }}]"
-          pattern="[0-9\-]*"
-          value="{% if form.phone %}{{ form.phone }}{% elsif customer %}{{ customer.phone }}{% endif %}"
-          placeholder="{{ 'templates.contact.form.phone' | t }}"
-        >
-        <label class="field__label" for="ContactForm-phone">{{ 'templates.contact.form.phone' | t }}</label>
-      </div>
-      <div class="field">
-        <textarea
-          rows="10"
-          id="ContactForm-body"
-          class="text-area field__input"
-          name="contact[{{ 'templates.contact.form.comment' | t }}]"
-          placeholder="{{ 'templates.contact.form.comment' | t }}"
-        >
-          {{- form.body -}}
-        </textarea>
-        <label class="form__label field__label" for="ContactForm-body">
-          {{- 'templates.contact.form.comment' | t -}}
-        </label>
-      </div>
-      <div class="contact__button">
-        <button type="submit" class="button">
-          {{ 'templates.contact.form.send' | t }}
-        </button>
-      </div>
-    {%- endform -%}
+      {%- endform -%}
+    </contact-form>
   </div>
 </div>
 

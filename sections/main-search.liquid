@@ -14,8 +14,6 @@
 
 <script src="{{ 'main-search.js' | asset_url }}" defer="defer"></script>
 
-<<<<<<< Updated upstream
-=======
 <script>
   $(document).ready(function() {
     $('.grid__item').each(function() {
@@ -26,7 +24,6 @@
   });
 </script>
 
->>>>>>> Stashed changes
 <style>
   .template-search__header {
     margin-bottom: 3rem;
@@ -273,12 +270,8 @@
             >
               <div class="loading-overlay gradient"></div>
               <ul
-<<<<<<< Updated upstream
-                class="grid product-grid  grid--{{ section.settings.columns_mobile }}-col-tablet-down grid--{{ section.settings.columns_desktop }}-col-desktop"
-=======
                 id="product-grid"
                 class="grid product-grid  grid--{{ section.settings.columns_mobile }}-col-tablet-down grid--{{ section.settings.columns_desktop }}-col-desktop product-list"
->>>>>>> Stashed changes
                 role="list"
               >
                 {%- assign skip_card_product_styles = false -%}

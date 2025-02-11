@@ -1,3 +1,15 @@
+.customer_login form button {
+  margin: 20px 0 20px;
+}
+
+.sign-in-with-shop-provider button {
+  margin: 0 0 20px;
+}
+
+.login-form form button {
+  margin: 20px 0 20px;
+}
+
 #MainContent .login-form {
   max-width: 50rem;
 }
@@ -7,7 +19,7 @@
 }
 .customer:not(.account):not(.order) {
   margin: 0 auto;
-  max-width: 33.4rem;
+  max-width: 37.4rem;
   padding-left: 1.5rem;
   padding-right: 1.5rem;
   text-align: center;
@@ -30,8 +42,13 @@
   margin-top: 4rem;
 }
 
-.customer button {
+.addresses > div button {
   margin: 4rem 0 1.5rem;
+}
+
+.form-address div button {
+  margin-top: 3rem !important;
+  margin-bottom: 3rem;
 }
 
 .customer ul {

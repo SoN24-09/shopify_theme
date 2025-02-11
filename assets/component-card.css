@@ -103,15 +103,25 @@
   text-align: var(--text-alignment);
 }
 .list-product-labels{
+  width: auto;
   display: flex;
-  margin: 10px 0;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 10px -3px;
 }
+
+.product-label {
+  display: flex;
+  justify-content: flex-start;
+  min-width: 63px;
+}
+
 .product-label span{
   display: block;
   width: auto;
-    margin-right: 5px !important;
-    margin-bottom: 5px !important;
-    padding: 8px 16px !important;
+    /* margin-right: 5px !important;
+    margin-bottom: 5px !important; */
+    padding: 5px 9px !important;
 }
 
 .card__media,

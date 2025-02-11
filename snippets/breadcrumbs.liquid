@@ -5,7 +5,7 @@
     <nav class="breadcrumbs" role="navigation" aria-label="breadcrumbs">
       <ol>
         <li>
-          <a href="/" title="Home">ホーム</a>
+          <a href="/" aria-current="page" title="Home">ホーム</a>
         </li>
 
         {% case t %}
@@ -38,9 +38,33 @@
                 <a href="{{ tag_url }}" aria-current="page">{{ current_tags | join: ' + ' }}</a>
               </li>
             {% else %}
-              <li>
-                <a href="{{ collection.url }}" aria-current="page">{{ collection.title }}</a>
-              </li>
+              {% if collection.metafields.custom.parent.value %}
+                {% assign parent_collection = collection.metafields.custom.parent.value %}
+                {% if parent_collection.metafields.custom.parent.value %}
+                  {% assign grandparent_collection = parent_collection.metafields.custom.parent.value %}
+                   <li>
+                      <a href="{{ grandparent_collection.url }}" aria-current="page">{{ grandparent_collection.title }}</a>
+                    </li>
+                   <li>
+                      <a href="{{ parent_collection.url }}" aria-current="page">{{ parent_collection.title }}</a>
+                    </li>
+                    <li>
+                      <a href="{{ collection.url }}">{{ collection.title }}</a>
+                    </li>
+                {% else %}
+                   <li>
+                      <a href="{{ parent_collection.url }}" aria-current="page">{{ parent_collection.title }}</a>
+                    </li>
+                    <li>
+                      <a href="{{ collection.url }}">{{ collection.title }}</a>
+                    </li>
+                {% endif %}
+               
+              {% else %}
+                 <li>
+                  <a href="{{ collection.url }}">{{ collection.title }}</a>
+                </li>
+              {% endif %}
             {% endif %}
 
           {% when 'blog' %}

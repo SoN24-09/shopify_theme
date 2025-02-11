@@ -58,21 +58,30 @@
             >
               {% assign has_color = false %}
               {% assign color_names = settings.color_names | split: ',' %}
+              {% assign color_code = '' %}
+              {% assign matched_color = false %}
               {% if color_names contains option.name %}
                 {% assign has_color = true %}
               {% endif %}
               {%- if has_color -%}
                 {% for color in color_mapping %}
                   {% if color.color_name == value %} 
-                    <span 
-                      class="variant-selector__color"
-                      data-color-value="{{ color.color_codes | escape }}"
-                      style="background-color: {{ color.color_codes | escape }}"
-                    ></span>
+                    {% assign color_code = color.color_codes %}
+                    {% assign matched_color = true %}
+                    {% break %}
                   {% endif %}
                 {% endfor %}
+                {% if matched_color %}
+                  <span
+                    class="variant-selector__color"
+                    data-color-value="{{ color_code | escape }}"
+                    style="background-color: {{ color_code | escape }}"
+                  ></span>
+                {% endif %}
+                {{ value }}
+              {%- else -%}
+                {{ value }}
               {%- endif -%}
-              {{ value }}
             </li>
           {%- endfor -%}
         </ul>

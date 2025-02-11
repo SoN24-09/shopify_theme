@@ -1,0 +1,49 @@
+{% comment %}
+  Main collection product grid collection children.
+  Accepts:
+  - collection: {Object} collection object.
+
+  Usage:
+  {% render 'grid-collection-children', collection: collection %}
+{% endcomment %}
+
+<div class="section-category page-width">
+  {% if collection.metafields.custom.main_children_collections.value %}
+    <h2>{{ collection.title }}</h2>
+    <div class="door_wrap">
+      {% assign children_collections = collection.metafields.custom.main_children_collections.value %}
+      <ul>
+        {% for child_collection in children_collections %}
+          <li>
+            <a
+              href="{{ child_collection.url }}"
+              class="over"
+            >
+              <div class="list-wrap mod-clearfix">
+                {% if child_collection.metafields.custom.item_image.value %}
+                  <div class="img-block">
+                    <img src="/cdn/shop/{{ child_collection.metafields.custom.item_image.value }}" alt="">
+                  </div>
+                {% endif %}
+                <div class="text-block">
+                  {% if child_collection.metafields.custom.item_title.value %}
+                    <h3 class="text-block__title">{{ child_collection.metafields.custom.item_title.value }}</h3>
+                  {% endif %}
+                  {% if child_collection.metafields.custom.item_description.value %}
+                    <p class="text-block__disc">{{ child_collection.metafields.custom.item_description.value }}</p>
+                  {% endif %}
+                </div>
+              </div>
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+</div>
+
+<style>
+  .collection-children .section-category li a:hover h3 {
+    text-decoration: underline;
+  }
+</style>

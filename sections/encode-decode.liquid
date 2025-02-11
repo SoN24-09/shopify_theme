@@ -1,0 +1,131 @@
+<style>
+  /* styles.css */
+.container {
+    width: 90%;
+    max-width: 1440px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+textarea, input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1.5rem;
+  font-family: var(--font-body-family);
+}
+
+textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+input {
+    height: 40px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+button {
+    width: 48%;
+    padding: 10px;
+    font-size: 1.5rem;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#encryptBtn {
+    background-color: #28a745;
+}
+
+#decryptBtn {
+    background-color: #007bff;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+@media (max-width: 500px) {
+    button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .buttons {
+        flex-direction: column;
+    }
+}
+
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+<div class="container">
+      <h1>Encrypt & Decrypt Form</h1>
+      <form id="cryptoForm">
+          <textarea id="inputText" placeholder="Enter text to encrypt/decrypt..."></textarea>
+          <textarea id="outputText" placeholder="Result..." readonly></textarea>
+          <!-- <input type="text" id="secretKey" placeholder="Paste secret key..." /> -->
+          <div class="buttons">
+              <button type="button" id="encryptBtn">Encrypt string →</button>
+              <button type="button" id="decryptBtn">← Decrypt string</button>
+          </div>
+      </form>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded',() => {
+      const key = CryptoJS.enc.Utf8.parse('VxYe84B7zSj4PHsr'); // 16 ký tự
+      const iv = CryptoJS.enc.Utf8.parse('eLyUW4vttpvQdZsf');  // 16 ký tự
+      const encryptAES128CBC = (text, key, iv) => {
+        const encrypted = CryptoJS.AES.encrypt(text, key, {
+            iv: iv,
+            mode: CryptoJS.mode.CBC,
+            padding: CryptoJS.pad.Pkcs7
+        });
+        return encrypted.toString(); // Kết quả base64
+      }
+      const decryptAES128CBC = (encrypted, key, iv) => {
+        const bytes = CryptoJS.AES.decrypt(encrypted, key, {
+            iv: iv,
+            mode: CryptoJS.mode.CBC,
+            padding: CryptoJS.pad.Pkcs7
+        });
+        return bytes.toString(CryptoJS.enc.Utf8);
+      }
+      document.getElementById('encryptBtn').addEventListener('click',() => {
+        var input = document.getElementById('inputText').value
+        document.getElementById('outputText').value = encryptAES128CBC(input,key,iv);
+      })
+      document.getElementById('decryptBtn').addEventListener('click',() => {
+        var input = document.getElementById('inputText').value
+        document.getElementById('outputText').value = decryptAES128CBC(input,key,iv);
+      })
+    })
+  </script>
+{% schema %}
+  {
+    "name": "Encode - decode",
+    "settings": []
+  }
+{% endschema %}

@@ -1,39 +1,5 @@
-<<<<<<< Updated upstream
-<div class="cate_leftmenu">
-  <div class="filter-container">
-    <h2 class="filter-title small-hide">商品を絞り込む</h2>
-    <!-- 常にオープンの「ロットNoから年代検索」 -->
-    <div class="filter-section small-hide">
-      <div class="accordion open" data-toggle="section1">ロットNoから年代検索</div>
-      <div class="panel open" id="section1">
-        <div class="search-box">
-          <form action="/search" method="get" role="search">
-            <input type="text" name="q" class="search-input" placeholder="例：JA-128DOA">
-            <button type="submit" class="search-button"></button>
-=======
-<script>
-  // when ending URL has '/collections/all/#rottoNoSearch' then smooth scroll to #rottoNoSearch and focus on input,
-  document.addEventListener('DOMContentLoaded', function() {
-  if (window.location.href.indexOf('/collections/all/#rottoNoSearch') > -1) {
-      var el = document.getElementById('rottoNoSearch');
-      var highlightElement = document.querySelector('.search-box');
-      scrollSmoothHighlight(el, highlightElement);
-    }
-  });
-
-  function scrollSmoothHighlight (element, highlightElement) {
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-
-    if (highlightElement) {
-      highlightElement.style.boxShadow = '0 0 10px 5px rgba(255, 0, 0, 0.2)';
-      setTimeout(function() {
-        highlightElement.style.boxShadow = '';
-      }, 1500);
-    }
-  }
-</script>
+<script src="{{ 'lot-no-modal.js' | asset_url }}" defer="defer"></script>
+{{ 'lot-no-modal.css' | asset_url | stylesheet_tag }}
 
 <div class="cate_leftmenu">
   <div id="rottoNoSearch" class="filter-container">
@@ -46,12 +12,14 @@
           <form action="/collections/all" method="get" class="search-keyno-form" role="search">
             <input id="rottoNoSearchInput" type="text" name="filter.p.m.custom.production_period" class="search-input input-keyno" placeholder="例：JA-128DOA" maxlength="9">
             <button type="button" class="search-button" id="searchKeyNo"></button>
->>>>>>> Stashed changes
           </form>
         </div>
-        <p class="info-text"><a href="#">ロットNoについて</a></p>
+        <p class="info-text"><button type="button" onclick="openModalLotNoGuide()">ロットNoについて</button></p>
+       
       </div>
     </div>
+
+    {%- render 'lot-no-modal' -%}
 
     {% render 'facets',
       results: collection,

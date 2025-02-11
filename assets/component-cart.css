@@ -197,6 +197,15 @@ cart-items {
   text-align: center;
 }
 
+.cart-text-green {
+  color: #2fa700;
+  margin-top: -15px;
+}
+.cart-text-red {
+  color: #ff0000;
+  margin-top: -15px;
+}
+
 @media screen and (min-width: 750px) {
   .cart-note {
     max-width: 35rem;

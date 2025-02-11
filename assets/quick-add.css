@@ -1,3 +1,8 @@
+.product-list .color-swatch__item {
+    min-width: 18px;
+    min-height: 18px;
+}
+
 .quick-add {
   position: relative;
   grid-row-start: 4;

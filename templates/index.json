@@ -341,7 +341,10 @@
         "featured_collection_dGKGRa",
         "featured_collection_zmtJQH"
       ],
-      "custom_css": [],
+      "custom_css": [
+        ".card__inner {--ratio-percent: 28% !important;}",
+        ".card__information {padding: 0;}"
+      ],
       "settings": {
         "title": "",
         "heading_size": "h1",
@@ -405,7 +408,7 @@
         "featured_collection_FwRRTb": {
           "type": "featured_collection",
           "settings": {
-            "collection": "68"
+            "collection": "タイルシート"
           }
         },
         "featured_collection_NgtJW6": {
@@ -439,6 +442,74 @@
         "padding_bottom": 36
       }
     },
+    "collection_link_list_7dMKmF": {
+      "type": "collection-link-list",
+      "blocks": {
+        "featured_collection_miiWEf": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "仕上げてる棚板"
+          }
+        },
+        "featured_collection_7UiCJP": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "トップページのoitoki"
+          }
+        },
+        "featured_collection_W7zTDi": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "トップページのerabo"
+          }
+        },
+        "featured_collection_hdEpHP": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "ダストボックス"
+          }
+        },
+        "featured_collection_ci9ryr": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "タイルシート"
+          }
+        },
+        "featured_collection_DKV3Ff": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "取手"
+          }
+        }
+      },
+      "block_order": [
+        "featured_collection_miiWEf",
+        "featured_collection_7UiCJP",
+        "featured_collection_W7zTDi",
+        "featured_collection_hdEpHP",
+        "featured_collection_ci9ryr",
+        "featured_collection_DKV3Ff"
+      ],
+      "custom_css": [
+        ".card__information {padding: 0;}",
+        ".card__content {padding: 0 0 10px;}",
+        ".card__inner {--ratio-percent: 28% !important;}"
+      ],
+      "settings": {
+        "title": "",
+        "heading_size": "h1",
+        "columns": "2",
+        "show_title": false,
+        "show_description": true,
+        "href": "",
+        "color_scheme": "",
+        "show_view_all": false,
+        "columns_mobile": "1",
+        "swipe_on_mobile": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
     "collection_pickup_list_eeERVq": {
       "type": "collection-pickup-list",
       "blocks": {
@@ -457,7 +528,7 @@
         "featured_collection_RzBKQw": {
           "type": "featured_collection",
           "settings": {
-            "collection": "68"
+            "collection": "タイルシート"
           }
         },
         "featured_collection_y3yCWf": {
@@ -473,6 +544,7 @@
         "featured_collection_RzBKQw",
         "featured_collection_y3yCWf"
       ],
+      "disabled": true,
       "settings": {
         "title": "",
         "heading_size": "h1",
@@ -583,7 +655,7 @@
     "custom_liquid_96RnNk": {
       "type": "custom-liquid",
       "settings": {
-        "custom_liquid": "<style>\n  /* Top Page Topics */\n  .top-topics-wrapper {\n    text-align: center;\n  }\n\n  .top-topics-wrapper h3.heading span {\n    font-size: 1rem;\n    font-weight: 300;\n    display: block;\n    padding-top: 10px;\n  }\n\n  .top-topics-wrapper ul {\n    padding: 0;\n    margin: 0;\n    list-style: none;\n  }\n\n  .top-topics-wrapper li {\n    padding: 10px 0;\n    border-bottom: 1px solid #ccc;\n    text-align: left;\n    font-size: 1.4rem;\n  }\n\n  .top-topics-wrapper .topics_day {\n    color: #999;\n    font-weight: 400;\n    display: inline-block;\n    padding-right: 10px;\n    font-size: 1.2rem;\n  }\n\n  .top-topics-wrapper .button {\n    margin-top: 40px;\n    font-size: 1.2rem;\n    background: #fff;\n    color: #000;\n  }\n\n  /*トピックスアコーディオン*/\n  .top-topics-wrapper .accordion-section {\n    width: 80%;\n    margin: 0 auto;\n    text-align: left;\n  }\n\n  .top-topics-wrapper .accordion-content {\n    max-height: 8.9em;\n    /* 初期表示で2行分の高さに設定 */\n    overflow: hidden;\n    transition: max-height 0.5s ease-in-out;\n  }\n\n  .top-topics-wrapper .read-more-button {\n    background-color: transparent;\n    cursor: pointer;\n    transition: background-color 0.3s ease, color 0.3s ease;\n  }\n\n  .top-topics-wrapper .read-more-button:hover {\n    background-color: #000;\n    color: #fff;\n  }\n\n  /*トピックス注意事項*/\n  .topics-attention {\n    margin: 20px auto;\n    border: 1px solid #000000;\n    text-align: left;\n  }\n\n  .topics-attention .accordion-title {\n    cursor: pointer;\n    padding: 4px 10px 7px;\n    margin-bottom: 0;\n    transition: background-color 0.3s ease;\n    font-size: 1.4rem;\n    position: relative;\n  }\n\n  .topics-attention .accordion-title:hover {\n    opacity: 0.7;\n  }\n\n  .topics-attention .accordion-title::after {\n    content: '+';\n    position: absolute;\n    right: 15px;\n    top: 4px;\n    transition: transform 0.3s ease;\n    font-size: 13px;\n  }\n\n  .accordion-toggle.active .accordion-title::after {\n    content: '-';\n    position: absolute;\n    right: 15px;\n    top: 4px;\n  }\n\n  .topics-attention .accordion-content {\n    max-height: 0;\n    overflow: hidden;\n    transition: max-height 0.5s ease;\n    margin-bottom: 10px;\n  }\n\n  .topics-attention .accordion-content p {\n    margin: 5px 0;\n    font-size: 1.2rem;\n    padding: 0 20px;\n  }\n\n  .topics-attention .accordion-toggle .accordion-content {\n    max-height: 0;\n    /* アコーディオンを閉じた状態 */\n  }\n\n  .topics-attention .accordion-toggle.active .accordion-content {\n    max-height: 300px;\n    /* アコーディオンを展開した時の最大高さ */\n  }\n\n  @media only screen and (max-width: 768px) {\n    .top-topics-wrapper {\n      padding: 0 3%;\n    }\n\n    .top-topics-wrapper .topics_day {\n      display: block;\n    }\n\n    .top-topics-wrapper .accordion-section {\n      width: 95%;\n      /* 横幅を少し縮める */\n    }\n\n    .top-topics-wrapper .accordion-content {\n      max-height: 12em;\n      /* 2行分の高さに調整 (モバイルのフォントサイズに合わせて) */\n    }\n\n    .top-topics-wrapper .read-more-button {\n      font-size: 14px;\n      /* モバイル用にボタンの文字サイズを調整 */\n    }\n\n    .topics-attention .accordion-section {\n      width: 95%;\n    }\n\n    .topics-attention .accordion-title {\n      font-size: 1.2rem;\n    }\n\n    .topics-attention .accordion-content {\n      max-height: 0;\n    }\n\n    .top-topics-wrapper h3.heading_s {\n      font-size: 1.7rem;\n    }\n  }\n</style>\n\n\n<div id=\"top_topics\" class=\"top-topics-wrapper page-width page-width-desktop accordion-section\">\n  <h3 class=\"heading\">TOPICS<span>お知らせ</span></h3>\n\n  <div class=\"accordion-content\" id=\"accordion-content-2\">\n    <ul class=\"no-bullet\">\n      {% assign news_articles = blogs.news.articles %}\n      {% if news_articles.size > 0 %}\n      {% for article in news_articles limit: 5 %}\n      <li>\n        <a class=\"full-unstyled-link\" href=\"{{ article.url }}\">\n          <span class=\"topics_day\">{{ article.published_at | date: '%Y年%m月%d日' }}</span>\n          {{ article.title }}\n        </a>\n      </li>\n      {% endfor %}\n      {% else %}\n      <p class=\"article-template__no-articles\">{{ 'お知らせはまだありません。' }}</p>\n      {% endif %}\n    </ul>\n  </div>\n  <div class=\"button-wrapper\">\n    <button class=\"read-more-button button button--primary\" id=\"read-more-button-top\">さらに読む ↓</button>\n  </div>\n\n</div>\n\n\n<!--アコーディオンjs-->\n<script type=\"text/javascript\">\n  document.getElementById('read-more-button-top').addEventListener('click', function () {\n    var content = document.getElementById('accordion-content-2');\n    var button = document.getElementById('read-more-button-top');\n\n    // アコーディオンが閉じている場合\n    if (content.style.maxHeight === '8.9em' || content.style.maxHeight === '12em' || content.style.maxHeight === '') {\n      content.style.maxHeight = content.scrollHeight + 'px'; // コンテンツ全体を表示\n      button.textContent = '閉じる  ↑'; // ボタンのテキストを変更\n    } else {\n      content.style.maxHeight = window.innerWidth <= 768 ? '12em' : '8.9em'; // 画面幅によって2行表示の高さを設定\n      button.textContent = 'さらに読む  ↓'; // ボタンのテキストを元に戻す\n    }\n  });\n  // 注意事項\n  document.querySelector('.accordion-toggle .accordion-title').addEventListener('click', function () {\n    const currentItem = this.parentNode;\n\n    // アクティブ状態のトグル\n    if (currentItem.classList.contains('active')) {\n      currentItem.classList.remove('active');\n    } else {\n      currentItem.classList.add('active');\n    }\n  });\n\n</script>",
+        "custom_liquid": "<style>\n  /* Top Page Topics */\n  .top-topics-wrapper {\n    text-align: center;\n  }\n\n  .top-topics-wrapper h3.heading span {\n    font-size: 1rem;\n    font-weight: 300;\n    display: block;\n    padding-top: 10px;\n  }\n\n  .top-topics-wrapper ul {\n    padding: 0;\n    margin: 0;\n    list-style: none;\n  }\n\n  .top-topics-wrapper li {\n    padding: 10px 0;\n    border-bottom: 1px solid #ccc;\n    text-align: left;\n    font-size: 1.4rem;\n  }\n\n  .top-topics-wrapper .topics_day {\n    color: #999;\n    font-weight: 400;\n    display: inline-block;\n    padding-right: 10px;\n    font-size: 1.2rem;\n  }\n\n  .top-topics-wrapper .button {\n    margin-top: 40px;\n    font-size: 1.2rem;\n    background: #fff;\n    color: #000;\n  }\n\n  /*トピックスアコーディオン*/\n  .top-topics-wrapper .accordion-section {\n    width: 80%;\n    margin: 0 auto;\n    text-align: left;\n  }\n\n  .top-topics-wrapper .accordion-content {\n    max-height: 8.9em;\n    /* 初期表示で2行分の高さに設定 */\n    overflow: hidden;\n    transition: max-height 0.5s ease-in-out;\n  }\n\n  .top-topics-wrapper .read-more-button {\n    background-color: transparent;\n    cursor: pointer;\n    transition: background-color 0.3s ease, color 0.3s ease;\n  }\n\n  .top-topics-wrapper .read-more-button:hover {\n    background-color: #000;\n    color: #fff;\n  }\n\n  /*トピックス注意事項*/\n  .topics-attention {\n    margin: 20px auto;\n    border: 1px solid #000000;\n    text-align: left;\n  }\n\n  .topics-attention .accordion-title {\n    cursor: pointer;\n    padding: 4px 10px 7px;\n    margin-bottom: 0;\n    transition: background-color 0.3s ease;\n    font-size: 1.4rem;\n    position: relative;\n  }\n\n  .topics-attention .accordion-title:hover {\n    opacity: 0.7;\n  }\n\n  .topics-attention .accordion-title::after {\n    content: '+';\n    position: absolute;\n    right: 15px;\n    top: 4px;\n    transition: transform 0.3s ease;\n    font-size: 13px;\n  }\n\n  .accordion-toggle.active .accordion-title::after {\n    content: '-';\n    position: absolute;\n    right: 15px;\n    top: 4px;\n  }\n\n  .topics-attention .accordion-content {\n    max-height: 0;\n    overflow: hidden;\n    transition: max-height 0.5s ease;\n    margin-bottom: 10px;\n  }\n\n  .topics-attention .accordion-content p {\n    margin: 5px 0;\n    font-size: 1.2rem;\n    padding: 0 20px;\n  }\n\n  .topics-attention .accordion-toggle .accordion-content {\n    max-height: 0;\n    /* アコーディオンを閉じた状態 */\n  }\n\n  .topics-attention .accordion-toggle.active .accordion-content {\n    max-height: 300px;\n    /* アコーディオンを展開した時の最大高さ */\n  }\n\n  @media only screen and (max-width: 768px) {\n    .top-topics-wrapper {\n      padding: 0 3%;\n    }\n\n    .top-topics-wrapper .topics_day {\n      display: block;\n    }\n\n    .top-topics-wrapper .accordion-section {\n      width: 95%;\n      /* 横幅を少し縮める */\n    }\n\n    .top-topics-wrapper .accordion-content {\n      max-height: 12em;\n      /* 2行分の高さに調整 (モバイルのフォントサイズに合わせて) */\n    }\n\n    .top-topics-wrapper .read-more-button {\n      font-size: 14px;\n      /* モバイル用にボタンの文字サイズを調整 */\n    }\n\n    .topics-attention .accordion-section {\n      width: 95%;\n    }\n\n    .topics-attention .accordion-title {\n      font-size: 1.2rem;\n    }\n\n    .topics-attention .accordion-content {\n      max-height: 0;\n    }\n\n    .top-topics-wrapper h3.heading_s {\n      font-size: 1.7rem;\n    }\n  }\n</style>\n\n\n<div id=\"top_topics\" class=\"top-topics-wrapper page-width page-width-desktop accordion-section\">\n  <h3 class=\"heading\">TOPICS<span>お知らせ</span></h3>\n\n  <div class=\"accordion-content\" id=\"accordion-content-2\">\n    <ul class=\"no-bullet\">\n      {% assign news_articles = blogs.news.articles %}\n      {% if news_articles.size > 0 %}\n      {% for article in news_articles limit: 5 %}\n      <li>\n        <a class=\"full-unstyled-link\" href=\"{{ article.url }}\">\n          <span class=\"topics_day\">{{ article.published_at | date: '%Y年%m月%d日' }}</span>\n          {{ article.title }}\n        </a>\n      </li>\n      {% endfor %}\n      {% else %}\n      <p class=\"article-template__no-articles\">{{ 'お知らせはまだありません。' }}</p>\n      {% endif %}\n    </ul>\n  </div>\n  <div class=\"button-wrapper\">\n    <button class=\"read-more-button button button--primary\" id=\"read-more-button-top\">さらに読む ↓</button>\n  </div>\n\n</div>\n\n\n<!--アコーディオンjs-->\n<script type=\"text/javascript\">\n  document.getElementById('read-more-button-top').addEventListener('click', function () {\n    var content = document.getElementById('accordion-content-2');\n    var button = document.getElementById('read-more-button-top');\n\n    // アコーディオンが閉じている場合\n    if (content.style.maxHeight === '8.9em' || content.style.maxHeight === '12em' || content.style.maxHeight === '') {\n      content.style.maxHeight = content.scrollHeight + 'px'; // コンテンツ全体を表示\n      button.textContent = '閉じる  ↑'; // ボタンのテキストを変更\n    } else {\n      content.style.maxHeight = window.innerWidth <= 768 ? '12em' : '8.9em'; // 画面幅によって2行表示の高さを設定\n      button.textContent = 'さらに読む  ↓'; // ボタンのテキストを元に戻す\n    }\n  });\n  // 注意事項\n  if (document.querySelector('.accordion-toggle .accordion-title')) {\n  document.querySelector('.accordion-toggle .accordion-title').addEventListener('click', function () {\n    const currentItem = this.parentNode;\n\n    // アクティブ状態のトグル\n    if (currentItem.classList.contains('active')) {\n      currentItem.classList.remove('active');\n    } else {\n      currentItem.classList.add('active');\n    }\n  });\n }\n\n\n</script>",
         "color_scheme": "",
         "padding_top": 60,
         "padding_bottom": 52
@@ -601,6 +673,7 @@
     "collection_link_list_ch6qXz",
     "rich_text_H7LA9M",
     "custom_collection_WUtyJK",
+    "collection_link_list_7dMKmF",
     "collection_pickup_list_eeERVq",
     "rich_text_bEU83i",
     "custom_banner_yd3HQL",

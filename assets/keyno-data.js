@@ -1,24 +1,3 @@
-<<<<<<< Updated upstream
-document.addEventListener('DOMContentLoaded', function() {     
-    const nameInput = document.getElementById('nameInput');     
-    const checkButton = document.getElementById('checkButton');
-    const hideByButton = document.getElementById('buyButtonContainer');        
-   
-    nameInput.addEventListener('input', function() {         
-        const inputValue = this.value.trim();              
-
-        if(inputValue.length >= 8 && inputValue.length <= 10) {             
-            checkButton.classList.add('show');
-            hideByButton.classList.remove('buy-button--hidden');        
-        } else {             
-            checkButton.classList.remove('show');  
-            hideByButton.classList.add('buy-button--hidden'); 
-        }     
-    });        
-  
-    checkButton.addEventListener('click', function() {         
-        const keyno = nameInput.value.trim();              
-=======
 document.addEventListener('DOMContentLoaded', function () {
     const keyNoInput = document.getElementById('keyNoInput');
     const hideByButton = document.getElementById('buyButtonContainer');
@@ -34,7 +13,6 @@ document.addEventListener('DOMContentLoaded', function () {
     //         hideByButton.classList.add('buy-button--hidden');
     //     }
     // });
->>>>>>> Stashed changes
 
     // keyNoInput.addEventListener('input', function () {
     //     const inputValue = this.value.trim();

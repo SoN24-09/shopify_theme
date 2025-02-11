@@ -1,0 +1,19 @@
+{% comment %}
+  Renders lot-no guide modal
+
+  Usage:
+  {% render 'lot-no-modal' %}
+{% endcomment %}
+
+<script src="{{ 'lot-no-modal.js' | asset_url }}" defer="defer"></script>
+{{ 'lot-no-modal.css' | asset_url | stylesheet_tag }}
+
+<style></style>
+
+<div id="modalLotNoGuide" class="modal-lot-no">
+  <div class="modal-lot-no-content">
+    <span class="close" onclick="closeModalLotNoGuide()">&times;</span>
+    <h3>ロットNoについて</h3>
+    <iframe src="https://cdn.shopify.com/s/files/1/0915/4474/8324/files/dummy.pdf?v=1737360247" width="100%" height="500px"></iframe>
+  </div>
+</div>

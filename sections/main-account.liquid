@@ -26,6 +26,11 @@
   </div>
 
   <div>
+    <!-- 20250204 subscription add start : shino -->
+			    <div>
+			      <a href="/account?hbSubscriptionPath=/">定期購買一覧</a>
+			    </div>
+	<!-- 20250204 subscription add end : shino -->
     <div>
       <h2>{{ 'customer.orders.title' | t }}</h2>
 
@@ -181,3 +186,10 @@
   ]
 }
 {% endschema %}
+
+  <!-- 20250204 subscription add start : shino -->
+  <div id="huckleberry-subscription-customer-portal-wrap">
+     <p><a href="{{ routes.account_url }}">アカウントに戻る</a></p>
+     <div id="huckleberry-subscription-customer-portal"></div>
+  </div>
+  <!-- 20250204 subscription add end : shino -->

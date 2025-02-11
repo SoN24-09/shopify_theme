@@ -18,6 +18,22 @@
         "color_scheme": "scheme-1"
       }
     },
+    "collection_image_banner_VbACeq": {
+      "type": "collection-image-banner",
+      "settings": {
+        "image": "{{ collection.metafields.custom.wide_image.value }}",
+        "image_overlay_opacity": 0,
+        "image_height": "small",
+        "desktop_content_position": "middle-center",
+        "show_text_box": true,
+        "desktop_content_alignment": "center",
+        "color_scheme": "",
+        "image_behavior": "none",
+        "mobile_content_alignment": "center",
+        "stack_images_on_mobile": false,
+        "show_text_below": false
+      }
+    },
     "product-grid": {
       "type": "main-collection-product-grid",
       "custom_css": [],
@@ -63,6 +79,7 @@
   },
   "order": [
     "banner",
+    "collection_image_banner_VbACeq",
     "product-grid",
     "custom_liquid_MYNgp6",
     "custom_liquid_9FUc34"

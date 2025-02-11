@@ -202,20 +202,6 @@
                   
                   {%- endform -%}
                   {% if product.metafields.custom.keyno %}
-<<<<<<< Updated upstream
-                    <div class="input-container">
-                      <label for="nameInput">KeyNo: </label>
-                      <input
-                        type="text"
-                        name="properties[KeyNo]"
-                        placeholder="名前を入力してください"
-                        form="product-form-{{ section.id }}"
-                        id="nameInput"
-                      > 
-                      <button type="button" id="checkButton" class="check-button">
-                        Check KeyNo
-                      </button>
-=======
                     <div class="input-container keyno-container">
                       <label for="keyNoInput">KeyNo: </label>
                       <div>
@@ -229,7 +215,6 @@
                         >
                         <p id="keyNoInputWarning" style="display:none" class="efo-input-message error">半角数字で入力してください。</p>
                        </div>
->>>>>>> Stashed changes
                     </div>
                   {% endif %}
                  

@@ -1,0 +1,242 @@
+#form_privacy_agreement {
+    width: 16px;
+    height: 16px;
+    margin-bottom: 5px;
+}
+
+.efo-form .efo-dummy-select {
+  display: none;
+}
+
+.cs-gy-bg-title {
+  padding: 15px 20px;
+  background: #eee;
+  font-size: 15px;
+  font-weight: normal;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.register_policy .mCustomScrollbar {
+  margin-bottom: 0;
+  margin-top: 0;
+}
+.register_policy .cs-inner-box-long > p {
+  padding: 0 25px;
+}
+
+.register_policy .efo-input-wrap {
+  padding: 0 25px;
+  margin-top: 30px;
+}
+
+.register_policy .efo-form .select-item-list li {
+  max-width: 100px;
+}
+
+.modal-guide {
+  display: none;
+  position: fixed;
+  z-index: 80;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-guide-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 4rem;
+  border: 1px solid #888;
+  width: 80%;
+  height: auto;
+  max-width: 1100px;
+  border-radius: 0;
+  position: relative;
+}
+
+.modal-guide-content > div {
+  display: none;
+}
+
+/* modal-guide-item */
+.modal-guide-item {
+  display: block;
+}
+
+.modal-guide-item h3 {
+  margin-top: 0;
+}
+
+.modal-guide-item p {
+  font-size: 15px;
+  margin-bottom: 10px;
+}
+
+.modal-guide-item img {
+  width: 100%;
+}
+
+.efo-input-row .cartridge-list {
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.efo-input-row .cartridge-list__cap {
+  margin-top: 10px;
+}
+
+.modal-guide .close {
+  display: block !important;
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  margin-top: -2rem;
+  margin-right: -1rem;
+}
+
+.modal-guide .close:hover,
+.modal-guide .close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.info-text button {
+  background: none;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 0;
+}
+
+@media (max-width: 768px) {
+  .efo-input-required-check-below {
+    position: absolute;
+    bottom: -27px;
+    right: 0;
+  }
+
+  .efo-input-wrap-below {
+    display: flex;
+    align-items: center;
+  }
+
+  .efo-input-container input[type=text].efo-input-zip {
+      min-width: 7em !important;
+      max-width: 7em !important;
+  }
+
+  .cs-pdg-box-20 {
+    margin-left: 20px;
+  }
+
+  .efo-input-container .efo-input-checkbox {
+    width: 100%;
+  }
+
+  .register_policy .efo-input-wrap {
+    padding: 0;
+  }
+  
+  .modal-guide-content {
+    width: 93%;
+    max-width: 95vw;
+    padding: 2rem;
+  }
+
+  .modal-guide-item p {
+    font-size: 14px;
+  }
+
+  .modal-guide .close {
+    font-size: 20px;
+    margin-top: -1rem;
+    margin-right: -0.5rem;
+  }
+}
+
+.register_notification {
+  text-align: left;
+}
+
+.register_policy {
+  text-align: left;
+}
+
+.privacy-block__content {
+  padding-left: 20px;
+}
+
+.mCustomScrollbar {
+  margin: 20px 0px 30px;
+  height: 250px;
+  font-size: 1.3rem;
+  border: 1px solid #ececec;
+  padding: 12px;
+  overflow: auto;
+  position: relative;
+}
+
+.mCSB_container h1 {
+  clear: both;
+  font-size: 153.8%;
+  font-weight: bold;
+  margin: 15px 0 25px;
+  line-height: 1.1;
+}
+.mCSB_container .texttl {
+  background: #e3dac7;
+  margin: 0 0 20px;
+  padding: 11px;
+  position: relative;
+  min-height: 17px;
+}
+.mCSB_container .texttl h1 {
+  border-left: 4px solid #2a2823;
+  padding: 0 0 0 8px;
+  font-size: 138.5%;
+  font-weight: bold;
+}
+.mCSB_container .subtl01 {
+  padding: 0 0 10px;
+  position: relative;
+  border-bottom: 1px solid #ccc;
+  margin: 0 0 15px;
+}
+.mCSB_container .subtl01 h1 {
+  border-left: 4px solid #2a2823;
+  font-weight: bold;
+  font-size: 107.7%;
+  padding: 0 0 0 8px;
+}
+.mCSB_container .subtl01 .link {
+  position: absolute;
+  top: 0;
+  right: 0;
+  line-height: 1.1;
+}
+.mCSB_container .subtl01 .link a {
+  /*background:url(../images/ic_arrow01.gif) no-repeat left;*/
+  padding: 0 0 0 16px;
+  font-size: 92.3%;
+  color: inherit;
+}
+
+.check-agreement {
+  display: block;
+}
+.check-agreement {
+  margin-top: 20px;
+  text-align: center;
+  border: 1px solid #b2a791;
+  padding: 20px;
+  background-color: whitesmoke;
+}

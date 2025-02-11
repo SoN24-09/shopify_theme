@@ -182,18 +182,43 @@
                     色を選択してください
                    </button>
                    <ul class="dropdown-menu">
-                      {% for value in option.values %}
-                         <li class="dropdown-item color"  data-color="{{ color.color_codes }}" >
-                           {% if color_names contains option.name %}
-                              {% for color in color_mapping %}
-                                {% if color.color_name == value %} 
-                                  <div class="color-swatch__item" style="background-color:{{ color.color_codes }}; ">●</div>
-                                {% endif %}
-                              {% endfor %}
-                            {% endif %}
-                           <span>{{ value }}</span>
-                         </li>
-                     {% endfor %} 
+                    {% for value in option.values %}
+                      {% if color_names contains option.name %}
+                        {% assign stripped_value = value | strip %}
+                        {% assign matched_variant = null %}
+                        {% assign color_code = '' %}
+                        {% assign matched_color = false %}
+
+                        {% for color in color_mapping %}
+                          {% assign stripped_color_name = color.color_name | strip %}
+                          {% if stripped_color_name == stripped_value  %} 
+                            {% assign color_code = color.color_codes %}
+                            {% assign matched_color = true %}
+                            {% break %}
+                          {% endif %}
+                        {% endfor %}
+
+                        {% for variant in card_product.variants %}
+                          {% if variant.option1 == value or variant.option2 == value or variant.option3 == value %}
+                            {% assign matched_variant = variant %}
+                            {% break %}
+                          {% endif %}
+                        {% endfor %}
+                        
+                        <li class="dropdown-item color"
+                          data-color="{{ color_code | default: '' }}" 
+                          {% if matched_variant %}
+                            data-variant-id="{{ matched_variant.id }}"
+                            data-sku="{{ matched_variant.sku }}"
+                          {% endif %}
+                        >
+                          {% if matched_color %}
+                            <div class="color-swatch__item 222" style="background-color: {{ color_code }};">●</div>
+                          {% endif %}
+                          <span>{{ stripped_value }}</span>
+                        </li>
+                       {% endif %}
+                    {% endfor %} 
                    </ul>
                    <select class="dropdown-select hidden" data-option="{{ forloop.index }}">
                     {% for value in option.values %}

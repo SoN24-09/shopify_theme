@@ -5,7 +5,8 @@ class VariantSelectors extends HTMLElement {
     this.dropdowns = this.querySelectorAll('.variant-selector__dropdown');
     this.variantSelect = this.querySelector('[data-variant-select]');
     this.productForm = document.querySelector(`#product-form-${this.dataset.section}`);
-    
+    this.options = this.querySelectorAll('.variant-selector__option');
+    this.swatches = [];
     try {
       this.colorMappings = JSON.parse(this.dataset.colorMappings || '{}');
       this.normalizedColorMappings = Object.fromEntries(
@@ -23,6 +24,48 @@ class VariantSelectors extends HTMLElement {
 
     this.setupEventListeners();
     this.setupInitialState();
+    this.getAllSwatch()
+  }
+
+  async getAllSwatch(){
+    var hasNext = false;
+    var cursor = null;
+    do{
+      if(cursor != null){
+        var result = await this.fetchSwatch(cursor);
+      }else{
+        var result = await this.fetchSwatch();
+      }
+      hasNext = result.metaobjects.pageInfo.hasNextPage;
+      cursor = result.metaobjects.pageInfo.endCursor;
+      this.swatches = [...this.swatches, ...result.metaobjects.nodes];
+    }while(hasNext)
+    this.options.forEach(option => {
+      var value = option.dataset.value;
+      var swatch = this.swatches.find(s => s.fields[1].value == value);
+      if(swatch){
+        if(option.querySelector('.variant-selector__color') == null){
+          option.innerHTML = `<span class="variant-selector__color" data-color-value="${swatch.fields[0].value}" style="background-color: ${swatch.fields[0].value}"></span>${value}`
+        }
+      }
+    })
+  }
+
+  async fetchSwatch(cursor = null){
+    var query = `{ metaobjects(type: "product_color_mapping", first: 50) { pageInfo { hasNextPage endCursor } nodes { handle fields { key value }}}}`;
+    if(cursor != null){
+      query = `{ metaobjects(after: "${cursor}",type: "product_color_mapping", first: 50) { pageInfo { hasNextPage endCursor } nodes { handle fields { key value }}}}`;
+    }
+    return await fetch('https://woodone-shuei-prd.myshopify.com/api/2025-01/graphql.json',{
+      headers: {
+          'Content-Type': 'application/json',
+          'X-Shopify-Storefront-Access-Token': '00e0c0894ba6406c5678ef4a26795fd4'
+      },
+      method: 'POST',
+      body: JSON.stringify({
+          query
+      })
+    }).then(res => res.json()).then(res => res.data)
   }
 
   setupInitialState() {
@@ -124,15 +167,15 @@ class VariantSelectors extends HTMLElement {
           const textElement = button.querySelector('[data-option-text]');
           textElement.textContent = selectedValue;
 
-          const activeColorElement = button.querySelector('[data-color]');
-          if (activeColorElement) {
-            const color = this.getColorForValue(selectedValue);
-            if (color) {
-              activeColorElement.style.backgroundColor = color;
-            } else {
-              activeColorElement.style.backgroundColor = 'transparent';
-            }
-          }
+          // const activeColorElement = button.querySelector('[data-color]');
+          // if (activeColorElement) {
+          //   const color = this.getColorForValue(selectedValue);
+          //   if (color) {
+          //     activeColorElement.style.backgroundColor = color;
+          //   } else {
+          //     activeColorElement.style.backgroundColor = 'transparent';
+          //   }
+          // }
 
           this.updateVariantSelection(index, selectedValue);
           dropdown.classList.remove('is-open');
@@ -338,14 +381,14 @@ class VariantSelectors extends HTMLElement {
 
         // Update color when variant changes
         const colorElement = button.querySelector('[data-color]');
-        if (colorElement) {
-          const color = this.getColorForValue(value);
-          if (color) {
-            colorElement.style.backgroundColor = color;
-          } else {
-            colorElement.style.backgroundColor = 'transparent';
-          }
-        }
+        // if (colorElement) {
+        //   const color = this.getColorForValue(value);
+        //   if (color) {
+        //     colorElement.style.backgroundColor = color;
+        //   } else {
+        //     colorElement.style.backgroundColor = 'transparent';
+        //   }
+        // }
       });
     }
   }
@@ -363,14 +406,14 @@ class VariantSelectors extends HTMLElement {
 
       // Update color if exists
       const colorElement = button.querySelector('[data-color]');
-      if (colorElement) {
-        const color = this.getColorForValue(selectedValue);
-        if (color) {
-          colorElement.style.backgroundColor = color;
-        } else {
-          colorElement.style.backgroundColor = 'transparent';
-        }
-      }
+      // if (colorElement) {
+      //   const color = this.getColorForValue(selectedValue);
+      //   if (color) {
+      //     colorElement.style.backgroundColor = color;
+      //   } else {
+      //     colorElement.style.backgroundColor = 'transparent';
+      //   }
+      // }
 
       // Update dropdown options
       const dropdown = button.nextElementSibling;
@@ -380,14 +423,14 @@ class VariantSelectors extends HTMLElement {
         
         // Update option color
         const optionColorElement = option.querySelector('[data-color-value]');
-        if (optionColorElement) {
-          const optionColor = this.getColorForValue(value);
-          if (optionColor) {
-            optionColorElement.style.backgroundColor = optionColor;
-          } else {
-            optionColorElement.style.backgroundColor = 'transparent';
-          }
-        }
+        // if (optionColorElement) {
+        //   const optionColor = this.getColorForValue(value);
+        //   if (optionColor) {
+        //     optionColorElement.style.backgroundColor = optionColor;
+        //   } else {
+        //     optionColorElement.style.backgroundColor = 'transparent';
+        //   }
+        // }
         
         // Update selected state
         if (value === selectedValue) {

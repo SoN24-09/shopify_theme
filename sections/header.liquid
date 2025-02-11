@@ -13,6 +13,22 @@
 
 
 <style>
+  .header-cart-wrapper.pc_only {
+    display: flex !important;
+    /*align-items: center;*/
+  }
+
+  .header-login-wrapper.pc_only .header-login__buttons {
+    max-width: 150px;
+    min-width: 150px;
+    margin: 0 auto;
+  }
+  
+  .header-login-wrapper.pc_only .logged-in {
+    max-width: 168px;
+    min-width: 168px;
+  }
+  
   header-drawer {
     justify-self: start;
     margin-left: -1.2rem;
@@ -255,32 +271,56 @@
       {% endif %}
 
       {%- if shop.customer_accounts_enabled -%}
-        <div
-          href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
-          class="header__icon header__icon--account link focus-inset"
-          rel="nofollow"
-        >
-          {%- if section.settings.enable_customer_avatar -%}
-            <account-icon>
-              {%- if customer and customer.has_avatar? -%}
-                {{ customer | avatar }}
-              {%- else -%}
-                {{'icon-customer.svg' | inline_asset_content }}
-              {%- endif -%}
-            </account-icon>
-          {%- else -%}
-            {{'icon-customer.svg' | inline_asset_content }}
-          {%- endif -%}
-          <span class="visually-hidden">
-            {%- liquid
-              if customer
-                echo 'customer.account_fallback' | t
-              else
-                echo 'customer.log_in' | t
-              endif
-            -%}
-          </span>
+        <input id="loginState" type="hidden" class="hidden" value="{%- if customer -%}logged{%- else -%}{%- endif -%}" >
+        <!-- SP -->
+        <div class="sp_only">
+          <div
+            href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
+            class="header__icon header__icon--account link focus-inset"
+            rel="nofollow"
+          >
+            {%- if section.settings.enable_customer_avatar -%}
+              <account-icon>
+                {%- if customer and customer.has_avatar? -%}
+                  {{ customer | avatar }}
+                {%- else -%}
+                  {{'icon-customer.svg' | inline_asset_content }}
+                {%- endif -%}
+              </account-icon>
+            {%- else -%}
+              {{'icon-customer.svg' | inline_asset_content }}
+            {%- endif -%}
+            <span class="visually-hidden">
+              {%- liquid
+                if customer
+                  echo 'customer.account_fallback' | t
+                else
+                  echo 'customer.log_in' | t
+                endif
+              -%}
+            </span>
+          </div>
         </div>
+        <!-- PC -->
+        {%- if customer -%}
+          <div class="header-login-wrapper pc_only">
+            <div class="header-login__buttons logged-in">
+              <ul>
+                <li><button type="button" class="button_mypage"><a href="/account"><span>マイページ</span></a></button></li>
+                <li><button type="button" class="button_logout"><a href="/account/logout"><span>ログアウト</span></a></button></li>
+              </ul>
+            </div>
+          </div>
+        {%- else -%}
+          <div class="header-login-wrapper pc_only">
+            <div class="header-login__buttons">
+              <ul>       
+                <li><button type="button" class="button_login"><a href="/account/login"><span>ログイン</span></a></button></li>
+                <li><button type="button" class="button_regist"><a href="/account/register"><span>会員登録</span></a></button></li>
+              </ul>
+            </div>
+          </div>
+        {%- endif -%}
       {%- endif -%}
 
       {%- for block in section.blocks -%}
@@ -289,22 +329,24 @@
             {% render block %}
         {%- endcase -%}
       {%- endfor -%}
-      <a href="{{ routes.cart_url }}" class="header__icon header__icon--cart link focus-inset" id="cart-icon-bubble">
-          {% if cart == empty %}
-            {{'icon-cart-black.svg' | inline_asset_content }}
-          {% else %}
-            {{'icon-cart-black.svg' | inline_asset_content }}
-          {% endif %}
-        <span class="visually-hidden">{{ 'templates.cart.cart' | t }}</span>
-        {%- if cart != empty -%}
-          <div class="cart-count-bubble">
-            {%- if cart.item_count < 100 -%}
-              <span aria-hidden="true">{{ cart.item_count }}</span>
-            {%- endif -%}
-            <span class="visually-hidden">{{ 'sections.header.cart_count' | t: count: cart.item_count }}</span>
-          </div>
-        {%- endif -%}
-      </a>
+      <div class="header-login-wrapper header-cart-wrapper pc_only">
+        <a href="{{ routes.cart_url }}" class="header__icon header__icon--cart link focus-inset" id="cart-icon-bubble">
+            {% if cart == empty %}
+              {{'icon-cart-black.svg' | inline_asset_content }}
+            {% else %}
+              {{'icon-cart-black.svg' | inline_asset_content }}
+            {% endif %}
+          <span class="visually-hidden">{{ 'templates.cart.cart' | t }}</span>
+          {%- if cart != empty -%}
+            <div class="cart-count-bubble">
+              {%- if cart.item_count < 100 -%}
+                <span aria-hidden="true">{{ cart.item_count }}</span>
+              {%- endif -%}
+              <span class="visually-hidden">{{ 'sections.header.cart_count' | t: count: cart.item_count }}</span>
+            </div>
+          {%- endif -%}
+        </a>
+      </div>
       <span class="cart-total-price small-hide" data-cart-total>Total: {{ cart.total_price | money_with_currency }}</span>
     </div>
   </header>

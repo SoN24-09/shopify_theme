@@ -16,6 +16,34 @@
 {{ 'component-swatch-input.css' | asset_url | stylesheet_tag }}
 {{ 'component-swatch.css' | asset_url | stylesheet_tag }}
 
+<script>
+  var emptyChoice = `<li class="list-menu__item facets__item"><label for="Filter-filter.p.m.custom.onsite_maintenance-2" class="facets__label facet-checkbox disabled">
+        <input type="checkbox" name="filter.p.m.custom.onsite_maintenance" value="対象"
+        id="Filter-filter.p.m.custom.onsite_maintenance-2" disabled=""><svg width="16px" height="16px"
+        viewBox="0 0 16 16">
+        <rect width="16" height="16" fill="none" stroke="currentColor"></rect>
+        </svg>
+        <div class="svg-wrapper"><svg xmlns="http://www.w3.org/2000/svg" fill="none" class="icon icon-checkmark"
+            viewBox="0 0 12 9">
+            <path fill="currentColor" fill-rule="evenodd"
+            d="M11.35.643a.5.5 0 0 1 .006.707l-6.77 6.886a.5.5 0 0 1-.719-.006L.638 4.845a.5.5 0 1 1 .724-.69l2.872 3.011 6.41-6.517a.5.5 0 0 1 .707-.006z"
+            clip-rule="evenodd"></path>
+        </svg>
+        </div><span class="facet-checkbox__text" aria-hidden="true">
+        <span class="facet-checkbox__text-label">対象</span> (0)
+        </span>
+        <span class="visually-hidden">対象 (0個の商品)
+        </span>
+    </label></li>`;
+
+    $(document).ready(function () {
+        var ul = $('.facets__list-filter');
+        if (ul.children().length == 1) {
+            ul.append(emptyChoice);
+        }
+    });
+</script>
+
 {%- liquid
   assign sort_by = results.sort_by | default: results.default_sort_by
   assign total_active_values = 0
@@ -27,6 +55,121 @@
     assign results_url = '?q=' | append: terms | append: '&options%5Bprefix%5D=last&sort_by=' | append: sort_by
   endif
 -%}
+
+<script>
+  function dropdownKikanUpdate() {
+    var list = document.getElementById('listDropdownOption');
+    var element = document.querySelector('[id^="Details-filter.p.m.custom.production_period-"]');
+    var facetCheckboxText = $(element).find('li .facet-checkbox__text');
+    var facetCheckboxInputValue = $(element).find('li input');
+    var facetCheckboxLabel = $(element).find('li .facets__label');
+    while (list.options.length > 1) {
+      list.remove(1);
+    }
+
+    for (var i = 0; i < facetCheckboxText.length; i++) {
+      var option = document.createElement('option');
+      option.text = facetCheckboxText[i].textContent.trim();
+      option.value = facetCheckboxInputValue[i].id;
+      // let match = facetCheckboxText[i].textContent.trim().match(/^(\d{4}) \((\d+)\)$/);
+      // if (match) {
+      //       option.text = (`${match[1]}年 (${match[2]})`);
+      // }
+      if ($(facetCheckboxLabel[i]).hasClass('disabled')) {
+        option.setAttribute('disabled', 'disabled');
+        option.classList.add('disabled');
+      }
+      list.add(option);
+    }
+
+    var url = new URL(window.location.href);
+    var production_period = url.searchParams.get('filter.p.m.custom.production_period');
+    if (production_period) {
+      for (var i = 0; i < list.options.length; i++) {
+        var value = list.options[i].text.replace(/\s\(\d+\)/, '');
+        if (value == production_period) {
+          list.options[i].setAttribute('selected', 'selected');
+        }
+      }
+    }
+  }
+  
+  $(document).ready(function () {
+    var list = document.getElementById('listDropdownOption');
+    var element = document.querySelector('[id^="Details-filter.p.m.custom.production_period-"]');
+
+
+    // element.hide();
+    dropdownKikanUpdate();
+
+    list.addEventListener('change', function () {
+      var facetCheckboxInput = $(element).find('li input');
+      for (var i = 0; i < facetCheckboxInput.length; i++) {
+        facetCheckboxInput[i].checked = false;
+      }
+
+      var option = list.options[list.selectedIndex].value;
+      if (option == '') {
+        document.getElementById('FacetFiltersForm').submit();
+        return;
+      }
+      var checkbox = document.getElementById(option);
+      checkbox.click();
+    });
+
+
+   $('#FacetFiltersForm').change(function (e) {
+      if (e.target.name != 'filter.p.m.custom.production_period') {
+         setTimeout(function () {
+        dropdownKikanUpdate();
+      }, 2000);
+      }
+  });
+
+  });
+</script>
+
+<style>
+  .listDropdownKikan {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .listDropdownKikan > span {
+    margin-bottom: 5px;
+  }
+  
+  #listDropdownOption {
+    height: 38px;
+    font-family: var(--font-body-family);
+    font-size: 13px;
+    border: 1px solid #ccc;
+    padding: 8px 7px;
+  }
+
+  .kikanDetails {
+    display: none;
+  }
+
+  .facets__disclosure-vertical {
+      border-top: none;
+      margin-right: 0;
+  }
+
+  @media only screen and (max-width: 768px) {
+    #ProductGridContainer {
+      display: none;
+    }
+  }
+  
+</style>
+
+<div class="listDropdownKikan">
+  <span class="facets__summary-label">製造年代</span>
+  <select id="listDropdownOption">
+    <option value="">ー</option>
+  </select>
+</div>
 
 <div class="facets-container{% if filter_type == 'drawer' %} facets-container-drawer{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
   {%- if filter_type == 'vertical' or filter_type == 'horizontal' -%}
@@ -48,52 +191,39 @@
               class="facets__wrapper"
             {% endif %}
           >
-            {% comment %} {%- if filter_type == 'horizontal' and results.filters != empty -%}
-              <h2 class="facets__heading caption-large text-body" id="verticalTitle" tabindex="-1">
-                {{ 'products.facets.filter_by_label' | t }}
-              </h2>
-            {%- endif -%} {% endcomment %}
+            {% comment %}
+              {%- if filter_type == 'horizontal' and results.filters != empty -%}
+                <h2 class="facets__heading caption-large text-body" id="verticalTitle" tabindex="-1">
+                  {{ 'products.facets.filter_by_label' | t }}
+                </h2>
+              {%- endif -%}
+            {% endcomment %}
             {% comment %} Pills are right below the title for filter type vertical {% endcomment %}
-            {% comment %} {%- if filter_type == 'vertical' -%}
-              <div class="active-facets active-facets-desktop">
-                <div class="active-facets-vertical-filter">
-                  {%- unless results.filters == empty -%}
-                    <h2
-                      class="facets__heading facets__heading--vertical caption-large text-body"
-                      id="verticalTitle"
-                      tabindex="-1"
-                    >
-                      {{ 'products.facets.filter_by_label' | t }}
-                    </h2>
-                  {%- endunless -%}
-                  <facet-remove class="active-facets__button-wrapper">
-                    <a href="{{ results_url }}" class="active-facets__button-remove underlined-link">
-                      <span>{{ 'products.facets.clear_all' | t }}</span>
-                    </a>
-                  </facet-remove>
-                </div>
-                {%- for filter in results.filters -%}
-                  {%- for value in filter.active_values -%}
-                    <facet-remove>
-                      <a href="{{ value.url_to_remove }}" class="active-facets__button active-facets__button--light">
-                        <span class="active-facets__button-inner button button--tertiary">
-                          {{ filter.label | escape }}: {{ value.label | escape }}
-                          <span class="svg-wrapper">
-                            {{- 'icon-close-small.svg' | inline_asset_content -}}
-                          </span>
-                          <span class="visually-hidden">{{ 'products.facets.clear_filter' | t }}</span>
-                        </span>
+            {% comment %}
+              {%- if filter_type == 'vertical' -%}
+                <div class="active-facets active-facets-desktop">
+                  <div class="active-facets-vertical-filter">
+                    {%- unless results.filters == empty -%}
+                      <h2
+                        class="facets__heading facets__heading--vertical caption-large text-body"
+                        id="verticalTitle"
+                        tabindex="-1"
+                      >
+                        {{ 'products.facets.filter_by_label' | t }}
+                      </h2>
+                    {%- endunless -%}
+                    <facet-remove class="active-facets__button-wrapper">
+                      <a href="{{ results_url }}" class="active-facets__button-remove underlined-link">
+                        <span>{{ 'products.facets.clear_all' | t }}</span>
                       </a>
                     </facet-remove>
-                  {%- endfor -%}
-                  {% if filter.type == 'price_range' %}
-                    {% assign min = filter.min_value.value %}
-                    {% assign max = filter.max_value.value %}
-                    {%- if min != null or max != null -%}
+                  </div>
+                  {%- for filter in results.filters -%}
+                    {%- for value in filter.active_values -%}
                       <facet-remove>
-                        <a href="{{ filter.url_to_remove }}" class="active-facets__button active-facets__button--light">
+                        <a href="{{ value.url_to_remove }}" class="active-facets__button active-facets__button--light">
                           <span class="active-facets__button-inner button button--tertiary">
-                            {{ min | default: 0 | money }} - {{ max | default: filter.range_max | money }}
+                            {{ filter.label | escape }}: {{ value.label | escape }}
                             <span class="svg-wrapper">
                               {{- 'icon-close-small.svg' | inline_asset_content -}}
                             </span>
@@ -101,11 +231,28 @@
                           </span>
                         </a>
                       </facet-remove>
-                    {%- endif -%}
-                  {% endif %}
-                {%- endfor -%}
-              </div>
-            {%- endif -%} {% endcomment %}
+                    {%- endfor -%}
+                    {% if filter.type == 'price_range' %}
+                      {% assign min = filter.min_value.value %}
+                      {% assign max = filter.max_value.value %}
+                      {%- if min != null or max != null -%}
+                        <facet-remove>
+                          <a href="{{ filter.url_to_remove }}" class="active-facets__button active-facets__button--light">
+                            <span class="active-facets__button-inner button button--tertiary">
+                              {{ min | default: 0 | money }} - {{ max | default: filter.range_max | money }}
+                              <span class="svg-wrapper">
+                                {{- 'icon-close-small.svg' | inline_asset_content -}}
+                              </span>
+                              <span class="visually-hidden">{{ 'products.facets.clear_filter' | t }}</span>
+                            </span>
+                          </a>
+                        </facet-remove>
+                      {%- endif -%}
+                    {% endif %}
+                  {%- endfor -%}
+                </div>
+              {%- endif -%}
+            {% endcomment %}
 
             <script src="{{ 'show-more.js' | asset_url }}" defer="defer"></script>
             {% comment %} Filters for both horizontal and vertical filter {% endcomment %}
@@ -127,14 +274,16 @@
                 {% when 'boolean', 'list' %}
                   <details
                     id="Details-{{ filter.param_name | escape }}-{{ section.id }}"
-                    class="{% if filter_type == 'horizontal' %}disclosure-has-popup facets__disclosure{% else %} facets__disclosure-vertical{% endif %} js-filter"
+                    class="{% if filter.param_name == 'filter.p.m.custom.production_period' %}productionPeriodDetails {% endif %} {% if filter.param_name == 'filter.p.m.custom.manufacturing_period' %}kikanDetails{% endif %} {% if filter_type == 'horizontal' %} disclosure-has-popup facets__disclosure{% else %} facets__disclosure-vertical{% endif %} js-filter"
                     data-index="{{ forloop.index }}"
-                    {% comment %} {% if filter_type == 'vertical' and forloop.index == 1 %}
-                      open
-                    {% endif %} {% endcomment %}
-                     {% if filter.param_name == "filter.p.m.custom.production_period" %}
+                    {% comment %}
+                      {% if filter_type == 'vertical' and forloop.index == 1 %}
+                        open
+                      {% endif %}
+                    {% endcomment %}
+                    {% if filter.param_name == 'filter.p.m.custom.production_period' %}
                       style="display: none;"
-                     {% endif %}
+                    {% endif %}
                   >
                     <summary
                       class="facets__summary caption-large focus-offset"
@@ -192,9 +341,43 @@
                           endif
                         -%}
                         <ul
-                          class="{{ visual_layout_class }}{% if filter_type == 'vertical' %} facets__list--vertical{% else %} facets__list{% endif %} list-unstyled"
+                          class="facets__list-filter {{ visual_layout_class }}{% if filter_type == 'vertical' %} facets__list--vertical{% else %} facets__list{% endif %} list-unstyled"
                           role="list"
                         >
+                          {%- if sorted_values.size == 1 -%}
+                            {% assign value_lable = sorted_values[0] %}
+                            {%- if value_lable.label == '対象外' -%}
+                              <li class="list-menu__item facets__item 123">
+                                <label class="facets__label facet-checkbox facet-checkbox-disible">
+                                  <input
+                                    type="checkbox"
+                                    class="facet-checkbox__input__disible"
+                                    name="target"
+                                    value="target"
+                                    disabled
+                                  >
+                                  <span class="facet-checkbox__text" aria-hidden="true" disabled>
+                                    <span class="facet-checkbox__text-label">対象(0)</span>
+                                  </span>
+                                </label>
+                              </li>
+                            {%- else -%}
+                              <li class="list-menu__item facets__item">
+                                <label class="facets__label facet-checkbox facet-checkbox-disible">
+                                  <input
+                                    type="checkbox"
+                                    class="facet-checkbox__input__disible"
+                                    name="Not Applicable"
+                                    value="not applicable"
+                                    disabled
+                                  >
+                                  <span class="facet-checkbox__text" aria-hidden="true" disabled>
+                                    <span class="facet-checkbox__text-label">対象外 (0)</span>
+                                  </span>
+                                </label>
+                              </li>
+                            {%- endif -%}
+                          {%- endif -%}
                           {%- for value in sorted_values -%}
                             {% liquid
                               assign input_id = 'Filter-' | append: filter.param_name | escape | append: '-' | append: forloop.index
@@ -303,9 +486,11 @@
                     id="Details-{{ filter.param_name | escape }}-{{ section.id }}"
                     class="{% if filter_type == 'horizontal' %}disclosure-has-popup facets__disclosure{% else %} facets__disclosure-vertical{% endif %} js-filter"
                     data-index="{{ forloop.index }}"
-                    {% comment %} {% if filter_type == 'vertical' and forloop.index == 1 %}
-                      open
-                    {% endif %} {% endcomment %}
+                    {% comment %}
+                      {% if filter_type == 'vertical' and forloop.index == 1 %}
+                        open
+                      {% endif %}
+                    {% endcomment %}
                   >
                     <summary class="facets__summary caption-large focus-offset">
                       <div>
@@ -446,7 +631,7 @@
     class="mobile-facets__wrapper{% if filter_type == 'horizontal' or filter_type == 'vertical' %} medium-hide large-up-hide{% endif %}"
     data-breakpoint="mobile"
   >
-    <details class="mobile-facets__disclosure disclosure-has-popup">
+    <details class="{% if filter.param_name == 'filter.p.m.custom.manufacturing_period' %}kikanDetails{% endif %} mobile-facets__disclosure disclosure-has-popup">
       <summary class="mobile-facets__open-wrapper focus-offset">
         <span class="mobile-facets__open{% if filter_type == 'drawer' and enable_filtering == false %} medium-hide large-up-hide{% endif %}">
           <span class="svg-wrapper">
@@ -513,10 +698,12 @@
               {%- if enable_filtering -%}
                 <div class="filter-section">
                   <div class="search-box">
-                      <input type="text" name="q" class="search-input" placeholder="例：JA-128DOA" maxlength="9">
-                      <button type="button" class="search-button"></button>
+                    <input type="text" name="q" class="search-input" placeholder="例：JA-128DOA" maxlength="9">
+                    <button type="button" class="search-button"></button>
                   </div>
-                  <p class="info-text"><a href="#">ロットNoについて</a></p>
+                  <p class="info-text">
+                    <button type="button" onclick="openModalLotNoGuide()">ロットNoについて</button>
+                  </p>
                 </div>
                 {%- for filter in results.filters -%}
                   {% liquid
@@ -532,11 +719,11 @@
                     {% when 'boolean', 'list' %}
                       <details
                         id="Details-Mobile-{{ filter.param_name | escape }}-{{ section.id }}"
-                        class="mobile-facets__details js-filter"
+                        class="xxx {% if filter.param_name == 'filter.p.m.custom.manufacturing_period' %}kikanDetails{% endif %} mobile-facets__details js-filter"
                         data-index="mobile-{{ forloop.index }}"
-                        {% if filter.param_name == "filter.p.m.custom.production_period" %}
+                        {% if filter.param_name == 'filter.p.m.custom.production_period' %}
                           style="display: none;"
-                         {% endif %}
+                        {% endif %}
                       >
                         <summary class="mobile-facets__summary focus-inset">
                           <div>
@@ -727,7 +914,7 @@
                       </details>
                   {% endcase %}
                 {%- endfor -%}
-                {% render 'filter-by-category',mobile: true %}
+                {% render 'filter-by-category', mobile: true %}
               {%- endif -%}
 
               {%- if enable_sorting -%}
@@ -949,3 +1136,17 @@
     </facet-filters-form>
   {%- endif -%}
 </div>
+<style>
+  .facet-checkbox-disible {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  .facet-checkbox__input__disible {
+    opacity: 0.5;
+    margin-right: 0.5rem;
+    position: relative !important;
+    border: 1px solid #ccc !important;
+    top: 0 !important;
+    margin-right: 0.5rem;
+  }
+</style>

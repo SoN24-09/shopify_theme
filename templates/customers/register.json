@@ -11,6 +11,7 @@
   "sections": {
     "image_banner_jD384J": {
       "type": "image-banner",
+      "disabled": true,
       "settings": {
         "image": "shopify://shop_images/userregistration_main_9be7be9e-2540-4635-9344-cfcadfb2fecc.jpg",
         "image_overlay_opacity": 0,
@@ -27,6 +28,7 @@
     },
     "custom_liquid_4qTazA": {
       "type": "custom-liquid",
+      "disabled": true,
       "settings": {
         "custom_liquid": "<div class=\"regist-container\">\n        <div class=\"page-width page-width-desktop\">\n            <div class=\"regist-header\">新しく住宅を建てられた、購入された方へ</div>\n            <h2 class=\"title\">会員登録のご案内</h2>\n            <p class=\"description\">ウッドワンの建具をお持ちの方は、会員登録をしていただくと、様々な特典が受けられます。</p>\n            <div class=\"info-boxes\">\n                <h3>会員登録いただいたお客様へお届けする情報</h3>\n                <div class=\"info-box-flex\">\n\n                    <div class=\"info-box\">\n                        <img src=\"/cdn/shop/files/userregistration_icon01.jpg\" alt=\"製品に関するお知らせ\">\n                        <span>製品に関するお知らせ</span>\n                    </div>\n                    <div class=\"info-box\">\n                        <img src=\"/cdn/shop/files/userregistration_icon02.jpg\" alt=\"アフターサービスのご案内\">\n                        <span>アフターサービスのご案内</span>\n                    </div>\n                    <div class=\"info-box\">\n                        <img src=\"/cdn/shop/files/userregistration_icon03.jpg\" alt=\"購入された製品の情報\">\n                        <span>購入された製品の情報</span>\n                    </div>\n                    <div class=\"info-box\">\n                        <img src=\"/cdn/shop/files/userregistration_icon04.jpg\" alt=\"イベント・キャンペーンのご案内\">\n                        <span>イベント・キャンペーンのご案内</span>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>",
         "color_scheme": "",
